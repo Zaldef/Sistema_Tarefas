@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1695230417 source:c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\main.c
+1695230943 source:c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\main.c
 	<stdlib.h>
 	<stdio.h>
 	"FILA.h"
@@ -7,11 +7,11 @@
 	"DATA.h"
 	<stdbool.h>
 
-1695229199 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\fila.h
+1695231460 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\fila.h
 	"Tarefa.h"
 
-1695229104 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\tarefa.h
+1695231350 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\tarefa.h
 	"DATA.h"
 
-1695228879 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\data.h
+1695231428 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\data.h
 

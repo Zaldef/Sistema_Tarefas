@@ -31,17 +31,17 @@ Fila* CriaFila(){
     return f;
 }
 
-No* ins_fim (No* fim, int A){
+No* ins_fim (No* fim){
     No* p = (No*) malloc(sizeof(No));
-    //p->info = novaTarefa();
+    p->info = novaTarefa();
     p->prox = NULL;
     if (fim != NULL) /* verifica se lista não estava vazia */
     fim->prox = p;
     return p;
 }
 
-void InsereFila(Fila* f, int v){
-    f->fim = ins_fim(f->fim,v);
+void InsereFila(Fila* f){
+    f->fim = ins_fim(f->fim);
     if (f->ini==NULL) /* fila antes vazia? */
     f->ini = f->fim;
 }
@@ -70,7 +70,7 @@ void imprimeFila (Fila* f){
     No* q;
     printf("\n\t\t");
     for (q=f->ini; q!=NULL; q=q->prox){
-        printf("%d - ",q->info);
+//        printf("%d - ",q->info);
     }
     printf("\n");
 }

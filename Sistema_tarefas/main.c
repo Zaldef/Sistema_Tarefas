@@ -7,6 +7,8 @@
 
 #define NUM_CHAR 30
 
+void menu();
+
 int main(){
     Fila *F1 = CriaFila();
     bool end = false;
@@ -18,6 +20,7 @@ int main(){
         switch(opcao){
         case 1:
             printf("Adicionar uma nova tarefa\n");
+            InsereFila(F1);
             break;
         case 2:
             printf("Modificar uma tarefa\n");
