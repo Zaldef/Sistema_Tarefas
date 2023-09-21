@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include "FILA.h"
 #include "TAREFA.h"
-#include "DATA.h"
 #include<stdbool.h>
+#include <time.h>
 
 #define NUM_CHAR 30
 
@@ -17,6 +17,9 @@ int main(){
         int opcao = 0;
         scanf("%d", &opcao);
         system("cls");
+        InsereFilaTeste(F1);
+        InsereFilaTeste(F1);
+        InsereFilaTeste(F1);
         switch(opcao){
         case 1:
             printf("Adicionar uma nova tarefa\n");
@@ -33,6 +36,7 @@ int main(){
             break;
         case 5:
             printf("Listar tarefas pendentes\n");
+            ImprimeFila(F1);
             break;
         case 6:
             printf("Listar tarefas concluidas\n");
@@ -62,3 +66,4 @@ void menu(){
     printf("\n\t7 - Listar tarefas concluidas com e sem atraso");
     printf("\n\t8 - Sair do programa\n");
 }
+

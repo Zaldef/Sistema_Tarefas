@@ -46,6 +46,25 @@ void InsereFila(Fila* f){
     f->ini = f->fim;
 }
 
+No* ins_fimteste(No* fim){
+    No* p = (No*) malloc(sizeof(No));
+    p->info = novaTarefaTeste();
+    p->prox = NULL;
+    if (fim != NULL) /* verifica se lista não estava vazia */
+    fim->prox = p;
+    return p;
+}
+
+void InsereFilaTeste(Fila* f){
+    f->fim = ins_fimteste(f->fim);
+    if (f->ini==NULL) /* fila antes vazia? */
+    f->ini = f->fim;
+}
+
+
+
+
+
 No* retira_ini (No* ini){
     No* p = ini->prox;
     free(ini);
@@ -66,13 +85,13 @@ Tarefa RetiraFila(Fila* f){
     return v;
 }
 
-void imprimeFila (Fila* f){
+void ImprimeFila (Fila* f){
     No* q;
-    printf("\n\t\t");
     for (q=f->ini; q!=NULL; q=q->prox){
-//        printf("%d - ",q->info);
+        ImprimirTarefa(q->info);
+        printf("\n");
     }
-    printf("\n");
+
 }
 
 Fila* liberaFila (Fila* f){
