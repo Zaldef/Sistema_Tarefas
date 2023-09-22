@@ -14,7 +14,7 @@
 
 1695309680 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\data.h
 
-1695387513 source:c:\eu\sistema_tarefas\sistema_tarefas\main.c
+1695389861 source:c:\eu\sistema_tarefas\sistema_tarefas\main.c
 	<stdlib.h>
 	<stdio.h>
 	"FILA.h"
@@ -22,8 +22,8 @@
 	<stdbool.h>
 	<time.h>
 
-1695387823 c:\eu\sistema_tarefas\sistema_tarefas\fila.h
+1695389853 c:\eu\sistema_tarefas\sistema_tarefas\fila.h
 	"Tarefa.h"
 
-1695387810 c:\eu\sistema_tarefas\sistema_tarefas\tarefa.h
+1695389031 c:\eu\sistema_tarefas\sistema_tarefas\tarefa.h
 

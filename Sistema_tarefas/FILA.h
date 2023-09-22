@@ -12,6 +12,7 @@ void imprimeFila (Fila* f)                  IMPRIME A FILA
 void carregarFila(const char *n,Fila* f)    CARREGA UMA FILA SALVADA EXTERNAMENTE
 void salvarFila(const char *n,Fila* f)      SALVA UMA FILA EM ARQUIVO EXTERNO
 */
+
 typedef struct nos{
     Tarefa info;
     struct nos *prox;
