@@ -15,7 +15,6 @@ int main(){
 
     Fila *F1 = CriaFila();
     carregarFila(Arquivo,F1);
-    //salvarFila(Arquivo, F1);
     int opcao = 0;
     bool end = false;
     while(end == false){
@@ -49,6 +48,7 @@ int main(){
             break;
         case 8:
             printf("Sair do programa\n");
+            salvarFila(Arquivo, F1);
             end = true;
             break;
         default:

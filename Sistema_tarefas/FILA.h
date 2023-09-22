@@ -48,12 +48,13 @@ void InsereFila(Fila* f){
 
 void carregarFila(const char *n,Fila* f){
     FILE *arquivo;
-    arquivo = fopen(n, "r");
+    arquivo = fopen(n, "rb");
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo.");
         exit(1);
     }
-    while (!feof(arquivo)) {
+    Tarefa T;
+    while (fread(&T, sizeof(Tarefa), 1, arquivo) == 1) {
         No *novoNo = (No *)malloc(sizeof(No));
 
         if (novoNo == NULL) {
@@ -61,7 +62,7 @@ void carregarFila(const char *n,Fila* f){
             exit(1);
         }
 
-        novoNo->info = carregarTarefa(arquivo);
+        novoNo->info = T;
         novoNo->prox = NULL;
 
         if (f->ini == NULL) {
@@ -72,7 +73,6 @@ void carregarFila(const char *n,Fila* f){
             f->fim = novoNo;
         }
     }
-
     fclose(arquivo);
 }
 
@@ -122,7 +122,7 @@ Fila* liberaFila (Fila* f){
 
 void salvarFila(const char *n,Fila* f){
     FILE *arquivo;
-    arquivo = fopen(n, "wt");
+    arquivo = fopen(n, "wb");
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo.");
         exit(1);
