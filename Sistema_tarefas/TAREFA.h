@@ -18,8 +18,6 @@ typedef struct info{
     int status; //1 atrasada e 0 em dia e -1 pendente
 }Tarefa;
 
-
-
 Tarefa novaTarefa(){
     Tarefa T;
     printf("\n\tDigite o codigo da tarefa: ");
@@ -62,16 +60,5 @@ void imprimirTarefa(Tarefa T){
         printf("\n\tTarefa pendente");
     }
 }
-
-void salvarTarefa(FILE *arquivo, Tarefa tarefa) {
-    fwrite(&tarefa,sizeof(Tarefa),1,arquivo);
-}
-
-Tarefa carregarTarefa(FILE *arquivo){
-    Tarefa tarefa;
-    fread (&tarefa, sizeof(Tarefa), 1, arquivo);
-    return tarefa;
-}
-
 
 #endif // TAREFA_H_INCLUDED

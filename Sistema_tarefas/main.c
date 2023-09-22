@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "FILA.h"
-#include "TAREFA.h"
-#include<stdbool.h>
-#include <time.h>
+#include "FILA.h" // gerenciamento de fila
+#include "TAREFA.h" // gerenciamento de tarefa
+#include<stdbool.h> // trabalhar com booleanos
+#include <time.h> // utilizar hora
 
 #define NUM_CHAR 30
 
