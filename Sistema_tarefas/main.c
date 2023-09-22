@@ -57,6 +57,8 @@ int main(){
             // Salvando data
             salvarFila(Arq_F1, F1);
             salvarFila(Arq_FP, FP);
+            liberaFila(F1);
+            liberaFila(FP);
             end = true;
             break;
         default:
