@@ -10,16 +10,21 @@
 void menu();
 
 int main(){
+    //carregando database
+    const char *Arquivo = "database.txt";
+
     Fila *F1 = CriaFila();
+    InsereFilaTeste(F1);
+    InsereFilaTeste(F1);
+    InsereFilaTeste(F1);
+    salvarFila(F1);
+    int opcao = 0;
     bool end = false;
     while(end == false){
         menu();
-        int opcao = 0;
         scanf("%d", &opcao);
         system("cls");
-        InsereFilaTeste(F1);
-        InsereFilaTeste(F1);
-        InsereFilaTeste(F1);
+
         switch(opcao){
         case 1:
             printf("Adicionar uma nova tarefa\n");
@@ -36,7 +41,7 @@ int main(){
             break;
         case 5:
             printf("Listar tarefas pendentes\n");
-            ImprimeFila(F1);
+            imprimeFila(F1);
             break;
         case 6:
             printf("Listar tarefas concluidas\n");

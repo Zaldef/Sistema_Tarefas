@@ -71,7 +71,7 @@ No* retira_ini (No* ini){
     return p;
 }
 
-Tarefa RetiraFila(Fila* f){
+Tarefa retiraFila(Fila* f){
     Tarefa v;
     if (VaziaFila(f)){
         printf("Fila vazia.\n");
@@ -85,10 +85,10 @@ Tarefa RetiraFila(Fila* f){
     return v;
 }
 
-void ImprimeFila (Fila* f){
+void imprimeFila (Fila* f){
     No* q;
     for (q=f->ini; q!=NULL; q=q->prox){
-        ImprimirTarefa(q->info);
+        imprimirTarefa(q->info);
         printf("\n");
     }
 
@@ -103,6 +103,14 @@ Fila* liberaFila (Fila* f){
     }
     free(f);
     return NULL;
+}
+
+void salvarFila(Fila* f){
+    No* q = f->ini;
+    while(q!=NULL){
+        salvarTarefa(q->info);
+        q = q->prox;
+    }
 }
 
 #endif // FILA_H_INCLUDED

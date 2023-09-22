@@ -61,12 +61,32 @@ Tarefa novaTarefaTeste(){
     return T;
 }
 
-void ImprimirTarefa(Tarefa T){
+void imprimirTarefa(Tarefa T){
     printf("\n\tCodigo da tarefa: %d",T.cod);
     printf("\n\tNome da tarefa: %s",T.name);
     printf("\n\tNome do projeto: %s",T.proj);
     printf("\n\tData de Inicio: %d/%d/%d",T.ini.dia,T.ini.mes,T.ini.ano);
     printf("\n\tData de Termino: %d/%d/%d",T.ter.dia,T.ter.mes,T.ter.ano);
+}
+
+void salvarTarefa(Tarefa tarefa) {
+    FILE *arquivo;
+    arquivo = fopen("database.txt", "ab");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.");
+
+        //return 1;
+    }
+    system("pause");
+    printf("Estou aqui");
+    fprintf(arquivo, "Código: %d\n", tarefa.cod);
+    fprintf(arquivo, "Nome: %s\n", tarefa.name);
+    fprintf(arquivo, "Projeto: %s\n", tarefa.proj);
+    fprintf(arquivo, "Data de Início: %d/%d/%d\n", tarefa.ini.dia, tarefa.ini.mes, tarefa.ini.ano);
+    fprintf(arquivo, "Data de Término: %d/%d/%d\n", tarefa.ter.dia, tarefa.ter.mes, tarefa.ter.ano);
+    fprintf(arquivo, "Status: %d\n", tarefa.status);
+    fprintf(arquivo, "--------------------------------\n");
+    fclose(arquivo);
 }
 
 #endif // TAREFA_H_INCLUDED
