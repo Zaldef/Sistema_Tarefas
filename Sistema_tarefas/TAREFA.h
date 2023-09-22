@@ -71,33 +71,44 @@ void imprimirTarefa(Tarefa T){
 
 void salvarTarefa(FILE *arquivo, Tarefa tarefa) {
 
-    fprintf(arquivo, "Código: %d\n", tarefa.cod);
+    fprintf(arquivo, "Codigo: %d\n", tarefa.cod);
     fprintf(arquivo, "Nome: %s\n", tarefa.name);
     fprintf(arquivo, "Projeto: %s\n", tarefa.proj);
     fprintf(arquivo, "Data de Início: %d/%d/%d\n", tarefa.ini.dia, tarefa.ini.mes, tarefa.ini.ano);
     fprintf(arquivo, "Data de Término: %d/%d/%d\n", tarefa.ter.dia, tarefa.ter.mes, tarefa.ter.ano);
-    fprintf(arquivo, "Status: %d\n", tarefa.status);
-    fprintf(arquivo, "--------------------------------\n");
-
+    fprintf(arquivo, "Status: %d\n\n", tarefa.status);
 }
 
-Tarefa carregarTarefa(const char *nomeArquivo){
-    FILE *arquivo;
-    int linha =20;
-    arquivo = fopen(nomeArquivo, "r");
-    if (arquivo == NULL) {
-        printf("Erro ao abrir o arquivo.");
-        exit(1);
-        //return 1;
-    }
-    Tarefa T;
-    sscanf(linha, "Código: %d", &T.cod);
-    sscanf(linha, "Nome: %s", &T.name);
-    sscanf(linha, "Projeto: %s", T.proj);
-    sscanf(linha, "Data de Início: %d/%d/%d", &T.ini.dia, &T.ini.mes, &T.ini.ano);
-    sscanf(linha, "Data de Término: %d/%d/%d", &T.ter.dia, &T.ter.mes, &T.ter.ano);
-    sscanf(linha, "Status: %d", &T);
+Tarefa carregarTarefa(FILE *arquivo){
+    Tarefa tarefa;
+    char linha[NUM_CHAR + 10]; // Suponha que uma linha tenha no máximo 5 campos de tamanho NUM_CHAR
+    printf("estou aqui %X\n", *arquivo);
+    fscanf(arquivo,"Código: %d", &tarefa.cod);
+    printf("estou aqui %X\n", *arquivo);
+    fscanf(arquivo, "Nome: %[^\n]", tarefa.name);
+    printf("estou aqui %X", *arquivo);
+    fscanf(arquivo, "Projeto: %[^\n]", tarefa.proj);
+    while (fscanf(arquivo, "Data de Início: %d/%d/%d\n", &tarefa.ini.dia, &tarefa.ini.mes, &tarefa.ini.ano) == 3 &&
+       fscanf(arquivo, "Data de Término: %d/%d/%d\n", &tarefa.ter.dia, &tarefa.ter.mes, &tarefa.ter.ano) == 3) {}
 
+    //fgets(linha, sizeof(linha), arquivo);
+    printf("\n%d", tarefa.cod);
+    printf("\n%s", tarefa.name);
+    printf("\n%s", tarefa.proj);
+    printf("Data de Início: %d/%d/%d", tarefa.ini.dia, tarefa.ini.mes, tarefa.ini.ano);
+    system("pause");
+    /*// Use sscanf para extrair os campos da linha e preencher a estrutura Tarefa
+        sscanf(linha, "Código: %d", &tarefa.cod);
+        printf(tarefa.cod);
+
+        sscanf(linha, "Nome: %[^\n]", tarefa.name);
+        sscanf(arquivo, "Projeto: %[^\n]", tarefa.proj);
+        sscanf(linha, "Data de Início: %d/%d/%d", &tarefa.ini.dia, &tarefa.ini.mes, &tarefa.ini.ano);
+        sscanf(linha, "Data de Término: %d/%d/%d", &tarefa.ter.dia, &tarefa.ter.mes, &tarefa.ter.ano);
+        sscanf(linha, "Status: %d", &tarefa.status);
+*/
+    return tarefa;
 }
+
 
 #endif // TAREFA_H_INCLUDED

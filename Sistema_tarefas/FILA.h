@@ -46,19 +46,34 @@ void InsereFila(Fila* f){
     f->ini = f->fim;
 }
 
-No* ins_fimteste(No* fim){
-    No* p = (No*) malloc(sizeof(No));
-    p->info = novaTarefaTeste();
-    p->prox = NULL;
-    if (fim != NULL) /* verifica se lista não estava vazia */
-    fim->prox = p;
-    return p;
-}
+void carregarFila(const char *n,Fila* f){
+    FILE *arquivo;
+    arquivo = fopen(n, "r");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.");
+        exit(1);
+    }
+    while (!feof(arquivo)) {
+        No *novoNo = (No *)malloc(sizeof(No));
 
-void InsereFilaTeste(Fila* f){
-    f->fim = ins_fimteste(f->fim);
-    if (f->ini==NULL) /* fila antes vazia? */
-    f->ini = f->fim;
+        if (novoNo == NULL) {
+            printf("Erro ao alocar memória para nó da fila.\n");
+            exit(1);
+        }
+
+        novoNo->info = carregarTarefa(arquivo);
+        novoNo->prox = NULL;
+
+        if (f->ini == NULL) {
+            f->ini = novoNo;
+            f->fim = novoNo;
+        } else {
+            f->fim->prox = novoNo;
+            f->fim = novoNo;
+        }
+    }
+
+    fclose(arquivo);
 }
 
 
@@ -119,12 +134,6 @@ void salvarFila(const char *n,Fila* f){
     }
     fclose(arquivo);
 }
-void carregarFila(const char *n,Fila* f){
-    No* q = f->ini;
-    while(q!=NULL){
-        salvarTarefa(n,q->info);
-        q = q->prox;
-    }
-}
+
 
 #endif // FILA_H_INCLUDED

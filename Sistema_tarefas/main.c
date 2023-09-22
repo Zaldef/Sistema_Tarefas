@@ -14,10 +14,8 @@ int main(){
     const char *Arquivo = "database.txt";
 
     Fila *F1 = CriaFila();
-    InsereFilaTeste(F1);
-    InsereFilaTeste(F1);
-    InsereFilaTeste(F1);
-    salvarFila(Arquivo, F1);
+    carregarFila(Arquivo,F1);
+    //salvarFila(Arquivo, F1);
     int opcao = 0;
     bool end = false;
     while(end == false){
