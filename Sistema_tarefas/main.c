@@ -17,7 +17,7 @@ int main(){
     InsereFilaTeste(F1);
     InsereFilaTeste(F1);
     InsereFilaTeste(F1);
-    salvarFila(F1);
+    salvarFila(Arquivo, F1);
     int opcao = 0;
     bool end = false;
     while(end == false){

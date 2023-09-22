@@ -105,10 +105,24 @@ Fila* liberaFila (Fila* f){
     return NULL;
 }
 
-void salvarFila(Fila* f){
+void salvarFila(const char *n,Fila* f){
+    FILE *arquivo;
+    arquivo = fopen(n, "wt");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.");
+        exit(1);
+    }
     No* q = f->ini;
     while(q!=NULL){
-        salvarTarefa(q->info);
+        salvarTarefa(arquivo,q->info);
+        q = q->prox;
+    }
+    fclose(arquivo);
+}
+void carregarFila(const char *n,Fila* f){
+    No* q = f->ini;
+    while(q!=NULL){
+        salvarTarefa(n,q->info);
         q = q->prox;
     }
 }

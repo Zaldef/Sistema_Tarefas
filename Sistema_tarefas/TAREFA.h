@@ -69,16 +69,8 @@ void imprimirTarefa(Tarefa T){
     printf("\n\tData de Termino: %d/%d/%d",T.ter.dia,T.ter.mes,T.ter.ano);
 }
 
-void salvarTarefa(Tarefa tarefa) {
-    FILE *arquivo;
-    arquivo = fopen("database.txt", "ab");
-    if (arquivo == NULL) {
-        printf("Erro ao abrir o arquivo.");
+void salvarTarefa(FILE *arquivo, Tarefa tarefa) {
 
-        //return 1;
-    }
-    system("pause");
-    printf("Estou aqui");
     fprintf(arquivo, "Código: %d\n", tarefa.cod);
     fprintf(arquivo, "Nome: %s\n", tarefa.name);
     fprintf(arquivo, "Projeto: %s\n", tarefa.proj);
@@ -86,7 +78,26 @@ void salvarTarefa(Tarefa tarefa) {
     fprintf(arquivo, "Data de Término: %d/%d/%d\n", tarefa.ter.dia, tarefa.ter.mes, tarefa.ter.ano);
     fprintf(arquivo, "Status: %d\n", tarefa.status);
     fprintf(arquivo, "--------------------------------\n");
-    fclose(arquivo);
+
+}
+
+Tarefa carregarTarefa(const char *nomeArquivo){
+    FILE *arquivo;
+    int linha =20;
+    arquivo = fopen(nomeArquivo, "r");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.");
+        exit(1);
+        //return 1;
+    }
+    Tarefa T;
+    sscanf(linha, "Código: %d", &T.cod);
+    sscanf(linha, "Nome: %s", &T.name);
+    sscanf(linha, "Projeto: %s", T.proj);
+    sscanf(linha, "Data de Início: %d/%d/%d", &T.ini.dia, &T.ini.mes, &T.ini.ano);
+    sscanf(linha, "Data de Término: %d/%d/%d", &T.ter.dia, &T.ter.mes, &T.ter.ano);
+    sscanf(linha, "Status: %d", &T);
+
 }
 
 #endif // TAREFA_H_INCLUDED
