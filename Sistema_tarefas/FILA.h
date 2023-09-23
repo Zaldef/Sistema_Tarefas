@@ -2,11 +2,11 @@
 #define FILA_H_INCLUDED
 #include "Tarefa.h"
 
-/* FUNÇÕES DE MANIPULAÇÃO DE PFILA
+/* FUNï¿½ï¿½ES DE MANIPULAï¿½ï¿½O DE PFILA
 Fila* CriaFila()  CRIA A FILA
-int VaziaFila (Fila* f) VERIFICA SE A FILA ESTÁ VAIZA
-void InsereFila (Fila* f, int v) INSERÇÃO
-int RetiraFila (Fila* f) REMOÇÃO
+int VaziaFila (Fila* f) VERIFICA SE A FILA ESTï¿½ VAIZA
+void InsereFila (Fila* f, int v) INSERï¿½ï¿½O
+int RetiraFila (Fila* f) REMOï¿½ï¿½O
 Fila* liberaFila (Fila* f) LIBERA A FILA
 void imprimeFila (Fila* f)IMPRIME A FILA
 */
@@ -35,7 +35,7 @@ No* ins_fim (No* fim){
     No* p = (No*) malloc(sizeof(No));
     p->info = novaTarefa();
     p->prox = NULL;
-    if (fim != NULL) /* verifica se lista não estava vazia */
+    if (fim != NULL) /* verifica se lista nï¿½o estava vazia */
     fim->prox = p;
     return p;
 }
@@ -50,7 +50,7 @@ No* ins_fimteste(No* fim){
     No* p = (No*) malloc(sizeof(No));
     p->info = novaTarefaTeste();
     p->prox = NULL;
-    if (fim != NULL) /* verifica se lista não estava vazia */
+    if (fim != NULL) /* verifica se lista nï¿½o estava vazia */
     fim->prox = p;
     return p;
 }
@@ -104,5 +104,28 @@ Fila* liberaFila (Fila* f){
     free(f);
     return NULL;
 }
+
+void editaFila(Fila* f){
+
+    
+
+    int code =0;
+    printf("Digite o codigo da tarefa que deseja editar:");
+    scanf("%d",&code);
+    
+    No* aux = f->ini;
+    while (aux->info.cod != code)
+    {
+        if (aux==NULL)
+        {
+            printf("Tarefa nÃ£o existe");
+            return;
+        };
+        aux=aux->prox; 
+    }
+    aux->info = editarTarefa(aux->info);
+
+}
+
 
 #endif // FILA_H_INCLUDED
