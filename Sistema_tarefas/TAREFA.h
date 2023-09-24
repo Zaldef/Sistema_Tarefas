@@ -145,14 +145,13 @@ void imprimirTarefa(Tarefa T){
 }
 
 Tarefa editarTarefa(Tarefa old){
-    Tarefa new;
+    Tarefa new = old; // bova tarefa recebe todas as infos da tarefa antiga
     int check = 1;
     int check_data = 1;
     int opcao;
-    char resposta = 'n';
-    new = old;
+    int A = 0;
 
-    while(resposta != 'n' || resposta != 'N'){
+    while(A == 0){
         system("cls");
         imprimirTarefa(new);
         printf("\n\n\tQual informacao deseja alterar?");
@@ -161,7 +160,7 @@ Tarefa editarTarefa(Tarefa old){
         printf("\n\t3 - Data de inicio");
         printf("\n\t4 - Data de termino");
         printf("\n\t5 - Descartar alteracoes");
-        printf("\n\t0 - Sair da edicao\n");
+        printf("\n\t6 - Salvar alteracoes\n");
         scanf("%d", &opcao);
         system("cls");
         switch(opcao){
@@ -259,14 +258,25 @@ Tarefa editarTarefa(Tarefa old){
                 break;
 
             case 5:
-                return old;
-            case 0: return new;
+                A = 1;
+                break;
+            case 6:
+                A = 2;
+                break;
             default:
                 printf("Opcao invalida\n");
-                return old;
         }
     }
+    if( A == 1){
+        return old;
+    }else if(A == 2){
+        return new;
+    }else{
+        printf("ERRO - modificar tarefa");
+        exit(1);
+    }
 }
+
 
 
 #endif // TAREFA_H_INCLUDED
