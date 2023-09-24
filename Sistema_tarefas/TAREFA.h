@@ -18,8 +18,6 @@ typedef struct info{
     int status; //1 atrasada e 0 em dia e -1 pendente
 }Tarefa;
 
-
-
 Tarefa novaTarefa(){
     Tarefa T;
     printf("\n\tDigite o codigo da tarefa: ");
@@ -38,11 +36,13 @@ Tarefa novaTarefa(){
     printf("\tDigite o ano: ");
     scanf("%d",&T.ini.ano);
     printf("\n\tDigite a data de termino: ");
+    printf("\n\tDigite o dia: ");
     scanf("%d",&T.ter.dia);
     printf("\tDigite o mes: ");
     scanf("%d",&T.ter.mes);
     printf("\tDigite o ano: ");
     scanf("%d",&T.ter.ano);
+    T.status = 0;
     return T;
 }
 
@@ -100,6 +100,13 @@ void ImprimirTarefa(Tarefa T){
     printf("\n\tNome do projeto: %s",T.proj);
     printf("\n\tData de Inicio: %d/%d/%d",T.ini.dia,T.ini.mes,T.ini.ano);
     printf("\n\tData de Termino: %d/%d/%d",T.ter.dia,T.ter.mes,T.ter.ano);
+    if(T.status == 0){
+        printf("\n\tTarefa em dia");
+    }else if(T.status == 1){
+        printf("\n\tTarefa atrasada");
+    }else{
+        printf("\n\tTarefa pendente");
+    }
 }
 
 #endif // TAREFA_H_INCLUDED

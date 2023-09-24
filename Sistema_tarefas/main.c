@@ -1,25 +1,32 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "FILA.h"
-#include "TAREFA.h"
-#include<stdbool.h>
-#include <time.h>
+#include "FILA.h" // gerenciamento de fila
+#include "TAREFA.h" // gerenciamento de tarefa
+#include<stdbool.h> // trabalhar com booleanos
+#include <time.h> // utilizar hora
 
 #define NUM_CHAR 30
 
 void menu();
 
 int main(){
-    Fila *F1 = CriaFila();
+    Fila *F1 = CriaFila(); //Criando a Fila principal
+    Fila *FP = CriaFila(); // ''     Fila de pendentes
+    //carregando data
+    const char *Arq_F1 = "database_F1.txt";
+    const char *Arq_FP = "database_FP.txt";
+    carregarFila(Arq_F1,F1);
+    carregarFila(Arq_FP,FP);
+
+    // variaveis do loop principal do program
+    int opcao = 0;
     bool end = false;
+    //loop principal
     while(end == false){
         menu();
-        int opcao = 0;
         scanf("%d", &opcao);
         system("cls");
-        InsereFilaTeste(F1);
-        InsereFilaTeste(F1);
-        InsereFilaTeste(F1);
+
         switch(opcao){
         case 1:
             printf("Adicionar uma nova tarefa\n");
@@ -27,6 +34,7 @@ int main(){
             break;
         case 2:
             printf("Modificar uma tarefa\n");
+            imprimeFila(F1);
             editaFila(F1);
             break;
         case 3:
@@ -37,7 +45,7 @@ int main(){
             break;
         case 5:
             printf("Listar tarefas pendentes\n");
-            ImprimeFila(F1);
+            imprimeFila(FP);
             break;
         case 6:
             printf("Listar tarefas concluidas\n");
@@ -47,6 +55,11 @@ int main(){
             break;
         case 8:
             printf("Sair do programa\n");
+            // Salvando data
+            salvarFila(Arq_F1, F1);
+            salvarFila(Arq_FP, FP);
+            liberaFila(F1);
+            liberaFila(FP);
             end = true;
             break;
         default:
