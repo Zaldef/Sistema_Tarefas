@@ -43,7 +43,7 @@ No* ins_fim (No* fim){
     return p;
 }
 
-void InsereFila(Fila* f){
+void inserirFila(Fila* f){
     f->fim = ins_fim(f->fim);
     if (f->ini==NULL) /* fila antes vazia? */
     f->ini = f->fim;
@@ -81,7 +81,7 @@ Tarefa retiraFila(Fila* f){
 
 }
 
-void imprimeFila (Fila* f){
+void imprimirFila (Fila* f){
     No* q;
     for (q=f->ini; q!=NULL; q=q->prox){
         imprimirTarefa(q->info); //fun��o para imprimir as infos da tarefa
@@ -140,22 +140,30 @@ void salvarFila(const char *n,Fila* f){
     fclose(arq);
 }
 
-void editaFila(Fila* f){
+void editarFila(Fila* f){
     int code =0;
-    printf("/n/tDigite o codigo da tarefa que deseja editar:");
-    scanf("%d",&code);
+    int check = 1;
+
+    do{
+        if (check == 0){
+            printf("\tFalha na leitura do codigo tente novamente.");
+        }
+        printf("\n\tDigite o codigo da tarefa que deseja editar:");
+        fflush(stdin);
+        check = scanf("%d",&code);
+    }while(check == 0);
+
     No* aux = f->ini;
     while (aux->info.cod != code)
     {
-        if (aux==NULL)
+        if (aux->prox == NULL)
         {
             printf("Tarefa não existe");
             return;
         };
-        aux=aux->prox; 
+        aux=aux->prox;
     }
     aux->info = editarTarefa(aux->info);
-
 }
 
 #endif // FILA_H_INCLUDED
