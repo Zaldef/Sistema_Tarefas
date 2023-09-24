@@ -148,10 +148,14 @@ void editarFila(Fila* f){
         if (check == 0){
             printf("\tFalha na leitura do codigo tente novamente.");
         }
+        printf("\n\tCaso deseje sair, digite 0");
         printf("\n\tDigite o codigo da tarefa que deseja editar:");
         fflush(stdin);
         check = scanf("%d",&code);
     }while(check == 0);
+    if (code == 0){
+        return;
+    }
 
     No* aux = f->ini;
     while (aux->info.cod != code)
