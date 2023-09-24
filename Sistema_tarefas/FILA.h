@@ -2,11 +2,11 @@
 #define FILA_H_INCLUDED
 #include "Tarefa.h"
 
-/* FUNÇÕES DE MANIPULAÇÃO DE PFILA
+/* FUNï¿½ï¿½ES DE MANIPULAï¿½ï¿½O DE PFILA
 Fila* CriaFila()                            CRIA A FILA
-int VaziaFila (Fila* f)                     VERIFICA SE A FILA ESTÁ VAIZA
-void InsereFila (Fila* f, int v)            INSERÇÃO
-int RetiraFila (Fila* f)                    REMOÇÃO
+int VaziaFila (Fila* f)                     VERIFICA SE A FILA ESTï¿½ VAIZA
+void InsereFila (Fila* f, int v)            INSERï¿½ï¿½O
+int RetiraFila (Fila* f)                    REMOï¿½ï¿½O
 Fila* liberaFila (Fila* f)                  LIBERA A FILA
 void imprimeFila (Fila* f)                  IMPRIME A FILA
 void carregarFila(const char *n,Fila* f)    CARREGA UMA FILA SALVADA EXTERNAMENTE
@@ -36,7 +36,7 @@ Fila* CriaFila(){
 
 No* ins_fim (No* fim){
     No* p = (No*) malloc(sizeof(No));
-    p->info = novaTarefa(); //chama está função para guardar infos da tarefa
+    p->info = novaTarefa(); //chama estï¿½ funï¿½ï¿½o para guardar infos da tarefa
     p->prox = NULL;
     if (fim != NULL)
     fim->prox = p;
@@ -84,7 +84,7 @@ Tarefa retiraFila(Fila* f){
 void imprimeFila (Fila* f){
     No* q;
     for (q=f->ini; q!=NULL; q=q->prox){
-        imprimirTarefa(q->info); //função para imprimir as infos da tarefa
+        imprimirTarefa(q->info); //funï¿½ï¿½o para imprimir as infos da tarefa
         printf("\n");
     }
 
@@ -100,12 +100,12 @@ void carregarFila(const char *n,Fila* f){
         printf("Erro ao abrir o arquivo.");
         exit(1);
     }
-    // cria um novo nó para cada informação salva no arquivo
+    // cria um novo nï¿½ para cada informaï¿½ï¿½o salva no arquivo
     while(fread(&T, sizeof(Tarefa), 1, arq) == 1){
-        //fread(local aonde vai ser guardado a informação lida, tamanho da informação a ser lida, quantas informaçoes vão ser lidas, daonde vai ser lido)
+        //fread(local aonde vai ser guardado a informaï¿½ï¿½o lida, tamanho da informaï¿½ï¿½o a ser lida, quantas informaï¿½oes vï¿½o ser lidas, daonde vai ser lido)
         No *novoNo = (No *)malloc(sizeof(No));
         if (novoNo == NULL) {
-            printf("Erro ao alocar memória para nó da fila.\n");
+            printf("Erro ao alocar memï¿½ria para nï¿½ da fila.\n");
             exit(1);
         }
 
@@ -134,11 +134,28 @@ void salvarFila(const char *n,Fila* f){
     No* q = f->ini;
     while(q!=NULL){
         fwrite(&q->info,sizeof(Tarefa),1,arq);
-        //fwrite(o que será armazenado, qual o tamanho da infoi a ser salva, quantas infos serao salvas, aonde sera salvo
+        //fwrite(o que serï¿½ armazenado, qual o tamanho da infoi a ser salva, quantas infos serao salvas, aonde sera salvo
         q = q->prox;
     }
     fclose(arq);
 }
 
+void editaFila(Fila* f){
+    int code =0;
+    printf("/n/tDigite o codigo da tarefa que deseja editar:");
+    scanf("%d",&code);
+    No* aux = f->ini;
+    while (aux->info.cod != code)
+    {
+        if (aux==NULL)
+        {
+            printf("Tarefa nÃ£o existe");
+            return;
+        };
+        aux=aux->prox; 
+    }
+    aux->info = editarTarefa(aux->info);
+
+}
 
 #endif // FILA_H_INCLUDED
