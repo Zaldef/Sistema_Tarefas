@@ -35,14 +35,17 @@ int main(){
             printf("Adicionar uma nova tarefa\n");
             inserirFila(F1);
             break;
+
         case 2:
             printf("Modificar uma tarefa\n");
             imprimirFila(F1);
             editarFila(F1);
             break;
+
         case 3:
             printf("Concluir uma tarefa\n");
             break;
+
         case 4:
             printf("Atualizacao do status da tarefa\n");
             break;
@@ -50,13 +53,16 @@ int main(){
             printf("Listar tarefas pendentes\n");
             imprimirFila(FP);
             break;
+
         case 6:
             printf("Listar tarefas concluidas\n");
             imprimirFila(FC);
             break;
+
         case 7:
             printf("Listar tarefas concluidas com e sem atraso\n");
             break;
+
         case 8:
             printf("Sair do programa\n");
             // Salvando data
@@ -77,6 +83,7 @@ int main(){
 }
 
 void menu(){
+    system("cls");
     printf("\n\t1 - Adicionar uma nova tarefa");
     printf("\n\t2 - Modificar uma tarefa");
     printf("\n\t3 - Concluir uma tarefa");

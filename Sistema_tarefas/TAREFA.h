@@ -129,98 +129,6 @@ Tarefa novaTarefa(){
     return T;
 }
 
-Tarefa editarTarefa(Tarefa old){
-    Tarefa new;
-    int check = 1;
-    int check_data = 1;
-    new.cod = old.cod;
-
-    system("cls");
-    printf("\n\tEditando a tarefa %d\n", new.cod);
-
-    printf("\n\tNome anterior da tarefa: %s",old.name);
-    printf("\n\tDigite o novo nome: ");
-    fflush(stdin);
-    gets(new.name);
-
-    printf("\n\tNome anterior do projeto: %s",old.proj);
-    printf("\n\tDigite o novo nome do projeto que a tarefa pertence: ");
-    fflush(stdin);
-    gets(new.proj);
-
-    do{
-        if (check_data == 0){
-            printf("\tFormato de data invalido, tente novamente.");
-        }
-        printf("\n\tData anterior:%02d/%02d/%04d \n",old.ini.dia,old.ini.mes,old.ini.ano);
-        printf("\n\tDigite a nova data de inicio da tarefa: ");
-        check = 1;
-        do{
-            if (check == 0){
-                printf("\tFalha na leitura do numero tente novamente.");
-            }
-            printf("\n\tDigite o novo dia:");
-
-            fflush(stdin);
-            check = scanf("%d",&new.ini.dia);
-        }while(check == 0);
-        do{
-            if (check == 0){
-                printf("\tFalha na leitura do numero tente novamente.");
-            }
-            printf("\tDigite o novo mes: ");
-            fflush(stdin);
-            check = scanf("%d",&new.ini.mes);
-        }while(check == 0);
-        do{
-            if (check == 0){
-                printf("\tFalha na leitura do numero tente novamente.");
-            }
-            printf("\tDigite o novo ano: ");
-            fflush(stdin);
-            check = scanf("%d",&new.ini.ano);
-        }while(check == 0);
-        check_data = DataValida(new.ini.dia, new.ini.mes, new.ini.ano);
-    }while(check_data != 1);
-
-    do{
-        if (check_data == 0){
-            printf("\tFormato de data invalido, tente novamente.");
-        }
-        printf("\n\tData anterior:%02d/%02d/%04d \n",old.ter.dia,old.ter.mes,old.ter.ano);
-        printf("\n\tDigite a nova data de termino da tarefa: ");
-        check = 1;
-        do{
-            if (check == 0){
-                printf("\tFalha na leitura do numero tente novamente.");
-            }
-            printf("\n\tDigite o novo dia:");
-
-            fflush(stdin);
-            check = scanf("%d",&new.ter.dia);
-        }while(check == 0);
-        do{
-            if (check == 0){
-                printf("\tFalha na leitura do numero tente novamente.");
-            }
-            printf("\tDigite o novo mes: ");
-            fflush(stdin);
-            check = scanf("%d",&new.ter.mes);
-        }while(check == 0);
-        do{
-            if (check == 0){
-                printf("\tFalha na leitura do numero tente novamente.");
-            }
-            printf("\tDigite o novo ano: ");
-            fflush(stdin);
-            check = scanf("%d",&new.ter.ano);
-        }while(check == 0);
-        check_data = DataValida(new.ter.dia, new.ter.mes, new.ter.ano);
-    }while(check_data != 1);
-
-    return new;
-}
-
 void imprimirTarefa(Tarefa T){
     printf("\n\tCodigo da tarefa: %d",T.cod);
     printf("\n\tNome da tarefa: %s",T.name);
@@ -235,5 +143,130 @@ void imprimirTarefa(Tarefa T){
         printf("\n\tTarefa pendente");
     }
 }
+
+Tarefa editarTarefa(Tarefa old){
+    Tarefa new;
+    int check = 1;
+    int check_data = 1;
+    int opcao;
+    char resposta = 'n';
+    new = old;
+
+    while(resposta != 'n' || resposta != 'N'){
+        system("cls");
+        imprimirTarefa(new);
+        printf("\n\n\tQual informacao deseja alterar?");
+        printf("\n\t1 - Nome");
+        printf("\n\t2 - Projeto");
+        printf("\n\t3 - Data de inicio");
+        printf("\n\t4 - Data de termino");
+        printf("\n\t5 - Descartar alteracoes");
+        printf("\n\t0 - Sair da edicao\n");
+        scanf("%d", &opcao);
+        system("cls");
+        switch(opcao){
+            case 1:
+                printf("\n\tNome anterior da tarefa: %s",old.name);
+                printf("\n\tDigite o novo nome: ");
+                fflush(stdin);
+                gets(new.name);
+                break;
+
+            case 2:
+                printf("\n\tNome anterior do projeto: %s",old.proj);
+                printf("\n\tDigite o novo nome do projeto que a tarefa pertence: ");
+                fflush(stdin);
+                gets(new.proj);
+                break;
+
+            case 3:
+                do{
+                    if (check_data == 0){
+                        printf("\tFormato de data invalido, tente novamente.");
+                    }
+                    printf("\n\tData de inicio anterior:%02d/%02d/%04d \n",old.ini.dia,old.ini.mes,old.ini.ano);
+                    printf("\n\tDigite a nova data de inicio da tarefa: ");
+                    check = 1;
+
+                    do{
+                        if (check == 0){
+                            printf("\tFalha na leitura do numero tente novamente.");
+                        }
+                        printf("\n\tDigite o novo dia: ");
+                        fflush(stdin);
+                        check = scanf("%d",&new.ini.dia);
+                    }while(check == 0);
+
+                    do{
+                        if (check == 0){
+                            printf("\tFalha na leitura do numero tente novamente.");
+                        }
+                    printf("\tDigite o novo mes: ");
+                    fflush(stdin);
+                    check = scanf("%d",&new.ini.mes);
+                    }while(check == 0);
+
+                    do{
+                        if (check == 0){
+                            printf("\tFalha na leitura do numero tente novamente.");
+                        }
+                        printf("\tDigite o novo ano: ");
+                        fflush(stdin);
+                        check = scanf("%d",&new.ini.ano);
+                    }while(check == 0);
+
+                    check_data = DataValida(new.ini.dia, new.ini.mes, new.ini.ano);
+                }while(check_data != 1);
+                break;
+
+            case 4:
+                do{
+                    if (check_data == 0){
+                        printf("\tFormato de data invalido, tente novamente.");
+                    }
+                    printf("\n\tData de termino anterior:%02d/%02d/%04d \n",old.ter.dia,old.ter.mes,old.ter.ano);
+                    printf("\n\tDigite a nova data de termino da tarefa: ");
+                    check = 1;
+
+                    do{
+                        if (check == 0){
+                            printf("\tFalha na leitura do numero tente novamente.");
+                        }
+                        printf("\n\tDigite o novo dia:");
+                        fflush(stdin);
+                        check = scanf("%d",&new.ter.dia);
+                    }while(check == 0);
+
+                    do{
+                        if (check == 0){
+                            printf("\tFalha na leitura do numero tente novamente.");
+                        }
+                        printf("\tDigite o novo mes: ");
+                        fflush(stdin);
+                        check = scanf("%d",&new.ter.mes);
+                    }while(check == 0);
+
+                    do{
+                        if (check == 0){
+                            printf("\tFalha na leitura do numero tente novamente.");
+                        }
+                        printf("\tDigite o novo ano: ");
+                        fflush(stdin);
+                        check = scanf("%d",&new.ter.ano);
+                    }while(check == 0);
+                    check_data = DataValida(new.ter.dia, new.ter.mes, new.ter.ano);
+                }while(check_data != 1);
+                break;
+
+            case 5:
+                return old;
+            case 0: return new;
+            default:
+                printf("Opcao invalida\n");
+                return old;
+        }
+    }
+}
+
 
 #endif // TAREFA_H_INCLUDED
