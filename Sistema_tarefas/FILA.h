@@ -31,6 +31,7 @@ typedef struct fila{
 // FUN��ES DE MANIPULA��O DE PFILA
 Fila* CriaFila();                            //CRIA A FILA
 int VaziaFila (Fila* f);                     //VERIFICA SE A FILA EST� VAIZA
+No* ins_fim (No* fim, Fila *f);
 void InsereFila (Fila* f, int v);            //INSER��O
 int RetiraFila (Fila* f);                   //REMO��O
 Fila* liberaFila (Fila* f);                  //LIBERA A FILA
@@ -41,7 +42,8 @@ Tarefa novaTarefa();                        //Criando nova tarefa
 void imprimirTarefa(Tarefa T);              //Imprimir Tarefa
 void editarFila(Fila* f);                   //
 Tarefa editarTarefa(Tarefa old);             //
-
+int verificarCod(Fila *f, int t);
+// Funcoes de fila
 int VaziaFila(Fila* f){
     if (f->ini==NULL) return 1;
     return 0;
@@ -53,9 +55,9 @@ Fila* CriaFila(){
     return f;
 }
 
-No* ins_fim (No* fim){
+No* ins_fim (No* fim, Fila *f){
     No* p = (No*) malloc(sizeof(No));
-    p->info = novaTarefa(); //chama est� fun��o para guardar infos da tarefa
+    p->info = novaTarefa(f); //chama est� fun��o para guardar infos da tarefa
     p->prox = NULL;
     if (fim != NULL)
     fim->prox = p;
@@ -63,7 +65,7 @@ No* ins_fim (No* fim){
 }
 
 void inserirFila(Fila* f){
-    f->fim = ins_fim(f->fim);
+    f->fim = ins_fim(f->fim, f);
     if (f->ini==NULL) /* fila antes vazia? */
     f->ini = f->fim;
 }
@@ -188,7 +190,7 @@ void editarFila(Fila* f){
     }
     aux->info = editarTarefa(aux->info);
 }
-
+// Funcoes Tarefa
 int DataValida(int dia, int mes, int ano){
     if(mes < 1 || mes > 12){
         return 0; // Mês inválido
@@ -210,19 +212,25 @@ int DataValida(int dia, int mes, int ano){
     }
 }
 
-Tarefa novaTarefa(){
+Tarefa novaTarefa(Fila *f){
     Tarefa T;
     int check = 1;
     int check_data = 1;
+    int check_cod = 1;
     do{
-        if (check == 0){
-            printf("\tFalha na leitura do codigo tente novamente.");
+        if (check_cod == 0){
+            printf("\t Já existe um tarefa com esse codigo, digite novamente");
         }
-        printf("\n\tDigite o codigo da tarefa: ");
-        fflush(stdin);
-        check = scanf("%d", &T.cod);
-    }while(check == 0);
-
+        do{
+            if (check == 0){
+                printf("\tFalha na leitura do codigo tente novamente.");
+            }
+            printf("\n\tDigite o codigo da tarefa: ");
+            fflush(stdin);
+            check = scanf("%d", &T.cod);
+            check_cod = verificarCod(f, T.cod);
+        }while(check == 0);
+    }while(check_cod == 0);
     printf("\n\tDigite o nome da tarefa: ");
     fflush(stdin);
     gets(T.name);
@@ -438,6 +446,18 @@ Tarefa editarTarefa(Tarefa old){
                 printf("Opcao invalida\n");
         }
     }
+    return old; //caso der erro ele cancela
 }
+
+int verificarCod(Fila *f, int t){
+    No* q;
+    for (q=f->ini; q!=NULL; q=q->prox){
+        if(q->info.cod != t){
+            return 0;
+        }
+    }
+    return 1;
+}
+
 
 #endif // FILA_H_INCLUDED

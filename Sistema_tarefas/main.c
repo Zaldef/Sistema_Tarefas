@@ -18,8 +18,8 @@ int main(){
     const char *Arq_LP = "database_LP.txt";
     const char *Arq_LC = "database_LC.txt";
     carregarFila(Arq_F1,F1);
-    carregarLista(Arq_LP,FP);
-    carregarLista(Arq_LC,FC);
+    //carregarLista(Arq_LP,FP);
+    //carregarLista(Arq_LC,FC);
 
     // variaveis do loop principal do program
     int opcao = 0;
@@ -56,7 +56,9 @@ int main(){
 
         case 6:
             printf("Listar tarefas concluidas\n");
-            //imprimirLista(LC);
+            //1 - imprimir lista completa
+            // 2 - imprimir lista de conc com atraso
+            // 3 - imprimir lista de conc sme atraso
             break;
 
         case 7:
