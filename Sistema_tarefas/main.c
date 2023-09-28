@@ -29,6 +29,7 @@ int main(){
             break;
         case 2:
             printf("Modificar uma tarefa\n");
+            editaFila(F1);
             break;
         case 3:
             printf("Concluir uma tarefa\n");

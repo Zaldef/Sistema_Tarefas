@@ -12,7 +12,7 @@ typedef struct data{
 typedef struct info{
     int cod; //codigo da tarefa
     char name[NUM_CHAR]; // nome da tarefa
-    char proj[NUM_CHAR]; // á qual projeto a tarefa pertence
+    char proj[NUM_CHAR]; // ï¿½ qual projeto a tarefa pertence
     Data ini; //data de inicio
     Data ter; //data de termino
     int status; //1 atrasada e 0 em dia e -1 pendente
@@ -46,7 +46,55 @@ Tarefa novaTarefa(){
     return T;
 }
 
-void imprimirTarefa(Tarefa T){
+Tarefa editarTarefa(Tarefa old){
+    Tarefa new;
+    new.cod = old.cod;
+    
+    printf("\n\tDigite o novo nome da tarefa:\n ");
+    printf("\tnome anterior :%s\n",old.name);
+    printf("\t");
+    fflush(stdin);
+    gets(new.name);
+    printf("\n\tDigite o novo nome do projeto que a tarefa pertence: \n");
+    printf("\tnome anterior:%s\n",old.proj);
+    printf("\t");
+    fflush(stdin);
+    gets(new.proj);
+    printf("\n\tDigite a nova data de inicio da tarefa: ");
+    printf("\n\tData anterior:%d/%d/%d \n",old.ini.dia,old.ini.mes,old.ini.ano);
+    printf("\n\tDigite o novo dia:");
+    scanf("%d",&new.ini.dia);
+    printf("\tDigite o novo mes: ");
+    scanf("%d",&new.ini.mes);
+    printf("\tDigite o novo ano: ");
+    scanf("%d",&new.ini.ano);
+    printf("\n\tDigite a nova data de termino:\n ");
+    printf("\n\tData anterior :%d/%d/%d \n",old.ter.dia,old.ter.mes,old.ter.ano);
+    printf("\tDigite o novo dia:");
+    scanf("%d",&new.ter.dia);
+    printf("\tDigite o mes: ");
+    scanf("%d",&new.ter.mes);
+    printf("\tDigite o ano: ");
+    scanf("%d",&new.ter.ano);
+    return new;
+}
+
+Tarefa novaTarefaTeste(){
+    Tarefa T;
+    char a = 'a';
+    T.cod = 1;
+    T.name[0] = a;
+    T.proj[0] = a;
+    T.ini.ano = 2000;
+    T.ini.mes = 01;
+    T.ini.dia = 01;
+    T.ter.ano = 2000;
+    T.ter.mes = 02;
+    T.ter.dia = 02;
+    return T;
+}
+
+void ImprimirTarefa(Tarefa T){
     printf("\n\tCodigo da tarefa: %d",T.cod);
     printf("\n\tNome da tarefa: %s",T.name);
     printf("\n\tNome do projeto: %s",T.proj);
