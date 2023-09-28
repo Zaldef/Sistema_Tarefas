@@ -11,15 +11,15 @@ void menu();
 
 int main(){
     Fila *F1 = CriaFila(); //Criando a Fila principal
-    Fila *FP = CriaFila(); // ''     Fila de pendentes
-    Fila *FC = CriaFila(); // ''     Fila de concluidos
+    //Fila *LP = CriaLista(); // ''     Lista de pendentes
+    //Fila *LC = CriaLista(); // ''     Lista de concluidos
     //carregando data
     const char *Arq_F1 = "database_F1.txt";
-    const char *Arq_FP = "database_FP.txt";
-    const char *Arq_FC = "database_FC.txt";
+    const char *Arq_LP = "database_LP.txt";
+    const char *Arq_LC = "database_LC.txt";
     carregarFila(Arq_F1,F1);
-    carregarFila(Arq_FP,FP);
-    carregarFila(Arq_FC,FC);
+    carregarLista(Arq_LP,FP);
+    carregarLista(Arq_LC,FC);
 
     // variaveis do loop principal do program
     int opcao = 0;
@@ -51,12 +51,12 @@ int main(){
             break;
         case 5:
             printf("Listar tarefas pendentes\n");
-            imprimirFila(FP);
+            //imprimirLista(LP);
             break;
 
         case 6:
             printf("Listar tarefas concluidas\n");
-            imprimirFila(FC);
+            //imprimirLista(LC);
             break;
 
         case 7:
@@ -67,11 +67,11 @@ int main(){
             printf("Sair do programa\n");
             // Salvando data
             salvarFila(Arq_F1, F1);
-            salvarFila(Arq_FP, FP);
-            salvarFila(Arq_FC, FC);
+            //salvarLista(Arq_LP, LP);
+            //salvarLista(Arq_LC, LC);
             liberaFila(F1);
-            liberaFila(FP);
-            liberaFila(FC);
+            //liberaLista(LP);
+            //liberaLista(LC);
             end = true;
             break;
         default:
