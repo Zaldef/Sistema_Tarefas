@@ -1,25 +1,27 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "FILA.h"
-#include "TAREFA.h"
-#include<stdbool.h>
-#include <time.h>
+#include "FILA.h" // gerenciamento de fila
+#include "TAREFA.h" // gerenciamento de tarefa
+#include<stdbool.h> // trabalhar com booleanos
+#include <time.h> // utilizar hora
 
 #define NUM_CHAR 30
 
 void menu();
 
 int main(){
+    //carregando database
+    const char *Arquivo = "database.txt";
+
     Fila *F1 = CriaFila();
+    carregarFila(Arquivo,F1);
+    int opcao = 0;
     bool end = false;
     while(end == false){
         menu();
-        int opcao = 0;
         scanf("%d", &opcao);
         system("cls");
-        InsereFilaTeste(F1);
-        InsereFilaTeste(F1);
-        InsereFilaTeste(F1);
+
         switch(opcao){
         case 1:
             printf("Adicionar uma nova tarefa\n");
@@ -37,7 +39,7 @@ int main(){
             break;
         case 5:
             printf("Listar tarefas pendentes\n");
-            ImprimeFila(F1);
+            imprimeFila(F1);
             break;
         case 6:
             printf("Listar tarefas concluidas\n");
@@ -47,6 +49,7 @@ int main(){
             break;
         case 8:
             printf("Sair do programa\n");
+            salvarFila(Arquivo, F1);
             end = true;
             break;
         default:
