@@ -11,15 +11,15 @@ void menu();
 
 int main(){
     Fila *F1 = CriaFila(); //Criando a Fila principal
-    //Fila *LP = CriaLista(); // ''     Lista de pendentes
-    //Fila *LC = CriaLista(); // ''     Lista de concluidos
+    Lista *LP = inicializa(); // ''     Lista de pendentes
+    Lista *LC = inicializa(); // ''     Lista de concluidos
     //carregando data
     const char *Arq_F1 = "database_F1.txt";
     const char *Arq_LP = "database_LP.txt";
     const char *Arq_LC = "database_LC.txt";
     carregarFila(Arq_F1,F1);
-    //carregarLista(Arq_LP,FP);
-    //carregarLista(Arq_LC,FC);
+    carregarLista(Arq_LP,LP);
+    carregarLista(Arq_LC,LC);
 
     // variaveis do loop principal do program
     int opcao = 0;
