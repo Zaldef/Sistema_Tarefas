@@ -57,7 +57,7 @@ Fila* CriaFila(){
 
 No* ins_fim (No* fim, Fila *f){
     No* p = (No*) malloc(sizeof(No));
-    p->info = novaTarefa(f); //chama est� fun��o para guardar infos da tarefa
+    p->info = novaTarefa(); //chama esta funcao para guardar infos da tarefa
     p->prox = NULL;
     if (fim != NULL)
     fim->prox = p;
@@ -69,6 +69,7 @@ void inserirFila(Fila* f){
     if (f->ini==NULL) /* fila antes vazia? */
     f->ini = f->fim;
 }
+
 
 Fila* liberaFila (Fila* f){
     No* q = f->ini;
@@ -105,7 +106,7 @@ Tarefa retiraFila(Fila* f){
 void imprimirFila (Fila* f){
     No* q;
     for (q=f->ini; q!=NULL; q=q->prox){
-        imprimirTarefa(q->info); //fun��o para imprimir as infos da tarefa
+        imprimirTarefa(q->info); //funcao para imprimir as infos da tarefa
         printf("\n");
     }
 
@@ -121,12 +122,12 @@ void carregarFila(const char *n,Fila* f){
         printf("Erro ao abrir o arquivo.");
         exit(1);
     }
-    // cria um novo n� para cada informa��o salva no arquivo
+    // cria um novo no para cada informacao salva no arquivo
     while(fread(&T, sizeof(Tarefa), 1, arq) == 1){
-        //fread(local aonde vai ser guardado a informa��o lida, tamanho da informa��o a ser lida, quantas informa�oes v�o ser lidas, daonde vai ser lido)
+        //fread(local aonde vai ser guardado a informacao lida, tamanho da informacao a ser lida, quantas informacoes vao ser lidas, daonde vai ser lido)
         No *novoNo = (No *)malloc(sizeof(No));
         if (novoNo == NULL) {
-            printf("Erro ao alocar mem�ria para n� da fila.\n");
+            printf("Erro ao alocar memoria para n0 da fila.\n");
             exit(1);
         }
 
@@ -155,7 +156,7 @@ void salvarFila(const char *n,Fila* f){
     No* q = f->ini;
     while(q!=NULL){
         fwrite(&q->info,sizeof(Tarefa),1,arq);
-        //fwrite(o que ser� armazenado, qual o tamanho da infoi a ser salva, quantas infos serao salvas, aonde sera salvo
+        //fwrite(o que sera armazenado, qual o tamanho da infoi a ser salva, quantas infos serao salvas, aonde sera salvo
         q = q->prox;
     }
     fclose(arq);
@@ -183,13 +184,14 @@ void editarFila(Fila* f){
     {
         if (aux->prox == NULL)
         {
-            printf("Tarefa não existe");
+            printf("Tarefa nao existe");
             return;
         };
         aux=aux->prox;
     }
     aux->info = editarTarefa(aux->info);
 }
+
 // Funcoes Tarefa
 int DataValida(int dia, int mes, int ano){
     if(mes < 1 || mes > 12){
