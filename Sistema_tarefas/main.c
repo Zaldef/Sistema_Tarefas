@@ -10,13 +10,21 @@
 void menu();
 
 int main(){
-    //carregando database
-    const char *Arquivo = "database.txt";
+    Fila *F1 = CriaFila(); //Criando a Fila principal
+    //Fila *LP = CriaLista(); // ''     Lista de pendentes
+    //Fila *LC = CriaLista(); // ''     Lista de concluidos
+    //carregando data
+    const char *Arq_F1 = "database_F1.txt";
+    const char *Arq_LP = "database_LP.txt";
+    const char *Arq_LC = "database_LC.txt";
+    carregarFila(Arq_F1,F1);
+    //carregarLista(Arq_LP,FP);
+    //carregarLista(Arq_LC,FC);
 
-    Fila *F1 = CriaFila();
-    carregarFila(Arquivo,F1);
+    // variaveis do loop principal do program
     int opcao = 0;
     bool end = false;
+    //loop principal
     while(end == false){
         menu();
         scanf("%d", &opcao);
@@ -25,31 +33,47 @@ int main(){
         switch(opcao){
         case 1:
             printf("Adicionar uma nova tarefa\n");
-            InsereFila(F1);
+            inserirFila(F1);
             break;
+
         case 2:
             printf("Modificar uma tarefa\n");
-            editaFila(F1);
+            imprimirFila(F1);
+            editarFila(F1);
             break;
+
         case 3:
             printf("Concluir uma tarefa\n");
             break;
+
         case 4:
             printf("Atualizacao do status da tarefa\n");
             break;
         case 5:
             printf("Listar tarefas pendentes\n");
-            imprimeFila(F1);
+            //imprimirLista(LP);
             break;
+
         case 6:
             printf("Listar tarefas concluidas\n");
+            //1 - imprimir lista completa
+            // 2 - imprimir lista de conc com atraso
+            // 3 - imprimir lista de conc sme atraso
             break;
+
         case 7:
             printf("Listar tarefas concluidas com e sem atraso\n");
             break;
+
         case 8:
             printf("Sair do programa\n");
-            salvarFila(Arquivo, F1);
+            // Salvando data
+            salvarFila(Arq_F1, F1);
+            //salvarLista(Arq_LP, LP);
+            //salvarLista(Arq_LC, LC);
+            liberaFila(F1);
+            //liberaLista(LP);
+            //liberaLista(LC);
             end = true;
             break;
         default:
@@ -61,6 +85,7 @@ int main(){
 }
 
 void menu(){
+    system("cls");
     printf("\n\t1 - Adicionar uma nova tarefa");
     printf("\n\t2 - Modificar uma tarefa");
     printf("\n\t3 - Concluir uma tarefa");

@@ -31,13 +31,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="DATA.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Unit filename="FILA.h" />
 		<Unit filename="TAREFA.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="database.txt" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
