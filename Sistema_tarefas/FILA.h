@@ -196,10 +196,10 @@ No* inicializa(){
     return NULL;
 }
 
-No* insere (No* recebida, Tarefa valor){
+No* inserirLista (No* recebida, Tarefa valor){
     No *novo ;
     novo= (No*) malloc(sizeof(No));
-    //novo->info = NULL;
+    novo->info = valor;
     novo->prox = recebida;
     return novo;
 }
@@ -216,10 +216,11 @@ void imprimirLista(No* p){
     if(vazia(aux)){
         printf("\n\n\t\t => LISTA VAZIA <==\n\n ");
     }else{
-    printf("\n\n\t\t => ");
-    for (;aux != NULL; aux = aux->prox)
-    imprimirTarefa(aux->info);
-    printf("\n\n");
+    for(;aux != NULL; aux = aux->prox){
+        imprimirTarefa(aux->info);
+        printf("\n");
+    }
+
     }
 }
 
@@ -233,7 +234,8 @@ No* liberaLista(No *receb){
     return NULL;
 }
 
-void carregarLista(const char *n,No* L){
+No* carregarLista(const char *n,No* L){
+    No *aux = NULL;
     FILE *arq = fopen(n, "r");
     // FILE *arq, ponteiro do tipo file que vai percorrer o arquivo
     // fopen(arquivo a ser aberto, r- read_only);
@@ -245,24 +247,20 @@ void carregarLista(const char *n,No* L){
     }
     // cria um novo no para cada informacao salva no arquivo
     while(fread(&T, sizeof(Tarefa), 1, arq) == 1){
-
-            imprimirTarefa(T);
-            system("pause");
-
-
-
         //fread(local aonde vai ser guardado a informacao lida, tamanho da informacao a ser lida, quantas informacoes vao ser lidas, daonde vai ser lido)
         No *novoNo = (No *)malloc(sizeof(No));
         if (novoNo == NULL) {
-            printf("Erro ao alocar memoria para n0 da fila.\n");
+            printf("Erro ao alocar memoria para o no.\n");
             exit(1);
         }
 
         novoNo->info = T;
-        novoNo->prox = L;
+        novoNo->prox = aux;
+        aux = novoNo;
         }
     // fecha o arquivo pois nao necessita mais ser usado
     fclose(arq);
+    return aux;
 }
 
 

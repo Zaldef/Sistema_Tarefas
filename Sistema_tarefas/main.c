@@ -18,8 +18,8 @@ int main(){
     const char *Arq_LP = "database_LP.txt";
     const char *Arq_LC = "database_LC.txt";
     carregarFila(Arq_F1,F1);
-    carregarLista(Arq_LP,LP);
-    carregarLista(Arq_LC,LC);
+    LP = carregarLista(Arq_LP,LP);
+    LC = carregarLista(Arq_LC,LC);
 
     // variaveis do loop principal do program
     int opcao = 0;
@@ -64,10 +64,6 @@ int main(){
             break;
 
         case 7:
-            printf("Listar tarefas concluidas com e sem atraso\n");
-            break;
-
-        case 8:
             printf("Sair do programa\n");
             // Salvando data
             salvarFila(Arq_F1, F1);
@@ -94,7 +90,6 @@ void menu(){
     printf("\n\t4 - Atualizacao do status de uma tarefa");
     printf("\n\t5 - Listar tarefas pendentes");
     printf("\n\t6 - Listar tarefas concluidas");
-    printf("\n\t7 - Listar tarefas concluidas com e sem atraso");
-    printf("\n\t8 - Sair do programa\n");
+    printf("\n\t7 - Sair do programa\n");
 }
 
