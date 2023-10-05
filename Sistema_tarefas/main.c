@@ -11,8 +11,8 @@ void menu();
 
 int main(){
     Fila *F1 = CriaFila(); //Criando a Fila principal
-    Lista *LP = inicializa(); // ''     Lista de pendentes
-    Lista *LC = inicializa(); // ''     Lista de concluidos
+    No *LP = inicializa(); // ''     Lista de pendentes
+    No *LC = inicializa(); // ''     Lista de concluidos
     //carregando data
     const char *Arq_F1 = "database_F1.txt";
     const char *Arq_LP = "database_LP.txt";
@@ -51,14 +51,16 @@ int main(){
             break;
         case 5:
             printf("Listar tarefas pendentes\n");
-            //imprimirLista(LP);
+            imprimirLista(LP);
+            system("pause");
             break;
 
         case 6:
             printf("Listar tarefas concluidas\n");
-            //1 - imprimir lista completa
+            imprimirLista (LC);//1 - imprimir lista completa
             // 2 - imprimir lista de conc com atraso
             // 3 - imprimir lista de conc sme atraso
+            system("pause");
             break;
 
         case 7:
@@ -69,11 +71,11 @@ int main(){
             printf("Sair do programa\n");
             // Salvando data
             salvarFila(Arq_F1, F1);
-            //salvarLista(Arq_LP, LP);
-            //salvarLista(Arq_LC, LC);
+            salvarLista(Arq_LP, LP);
+            salvarLista(Arq_LC, LC);
             liberaFila(F1);
-            //liberaLista(LP);
-            //liberaLista(LC);
+            liberaLista(LP);
+            liberaLista(LC);
             end = true;
             break;
         default:

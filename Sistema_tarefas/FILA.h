@@ -28,13 +28,7 @@ typedef struct fila{
     No * fim;
 } Fila;
 
-struct NO{
-    Tarefa info;
-    struct NO *prox;
-};
-typedef struct NO Lista;
-
-// FUNCOES DE MANIPULA��O DE PFILA
+// prototipos fila
 Fila* CriaFila();                            //CRIA A FILA
 int VaziaFila (Fila* f);                     //VERIFICA SE A FILA EST� VAIZA
 No* ins_fim (No* fim, Fila *f);
@@ -44,8 +38,8 @@ Fila* liberaFila (Fila* f);                  //LIBERA A FILA
 void imprimeFila (Fila* f);                  //IMPRIME A FILA
 void carregarFila(const char *n,Fila* f);    //CARREGA UMA FILA SALVADA EXTERNAMENTE
 void salvarFila(const char *n,Fila* f);      //SALVA UMA FILA EM ARQUIVO EXTERNO
-// Funcoes Tarefa
-Tarefa novaTarefa();                        //Criando nova tarefa
+// Prototipo Tarefa
+Tarefa novaTarefa(Fila* f);                 //Criando nova tarefa
 void imprimirTarefa(Tarefa T);              //Imprimir Tarefa
 void editarFila(Fila* f);                   //
 Tarefa editarTarefa(Tarefa old);             //
@@ -64,7 +58,7 @@ Fila* CriaFila(){
 
 No* ins_fim (No* fim, Fila *f){
     No* p = (No*) malloc(sizeof(No));
-    p->info = novaTarefa(); //chama esta funcao para guardar infos da tarefa
+    p->info = novaTarefa(f); //chama esta funcao para guardar infos da tarefa
     p->prox = NULL;
     if (fim != NULL)
     fim->prox = p;
@@ -198,38 +192,39 @@ void editarFila(Fila* f){
 }
 // Funcoes Lista
 
-Lista* inicializa(){
+No* inicializa(){
     return NULL;
 }
 
-Lista* insere (Lista* recebida, Tarefa valor){
-    Lista *novo ;
-    novo= (Lista*) malloc(sizeof(Lista));
-    novo->info = valor;
+No* insere (No* recebida, Tarefa valor){
+    No *novo ;
+    novo= (No*) malloc(sizeof(No));
+    //novo->info = NULL;
     novo->prox = recebida;
     return novo;
 }
 
-int vazia (Lista *recebida){
+int vazia(No *recebida){
     if (recebida == NULL){
         return 1;
     }
     return 0;
 }
 
-void imprime (Lista* p){
-    if(vazia(p)){
+void imprimirLista(No* p){
+    No* aux = p;
+    if(vazia(aux)){
         printf("\n\n\t\t => LISTA VAZIA <==\n\n ");
     }else{
     printf("\n\n\t\t => ");
-    for (p ; p != NULL; p = p->prox)
-    printf(" %d - ", p->info);
+    for (;aux != NULL; aux = aux->prox)
+    imprimirTarefa(aux->info);
     printf("\n\n");
     }
 }
 
-Lista* libera(Lista *receb){
-    Lista *aux,aux1;
+No* liberaLista(No *receb){
+    No *aux;
     while(receb!= NULL){
         aux=receb;
         receb=receb->prox;
@@ -238,7 +233,7 @@ Lista* libera(Lista *receb){
     return NULL;
 }
 
-void carregaLista(const char *n,Lista* L){
+void carregarLista(const char *n,No* L){
     FILE *arq = fopen(n, "r");
     // FILE *arq, ponteiro do tipo file que vai percorrer o arquivo
     // fopen(arquivo a ser aberto, r- read_only);
@@ -250,6 +245,12 @@ void carregaLista(const char *n,Lista* L){
     }
     // cria um novo no para cada informacao salva no arquivo
     while(fread(&T, sizeof(Tarefa), 1, arq) == 1){
+
+            imprimirTarefa(T);
+            system("pause");
+
+
+
         //fread(local aonde vai ser guardado a informacao lida, tamanho da informacao a ser lida, quantas informacoes vao ser lidas, daonde vai ser lido)
         No *novoNo = (No *)malloc(sizeof(No));
         if (novoNo == NULL) {
@@ -265,7 +266,7 @@ void carregaLista(const char *n,Lista* L){
 }
 
 
-void salvarFila(const char *n,Lista* l){
+void salvarLista(const char *n,No* l){
     FILE *arq;
     arq = fopen(n, "wt");
     if (arq == NULL) {
