@@ -57,7 +57,17 @@ int main(){
 
         case 6:
             printf("Listar tarefas concluidas\n");
-            imprimirLista (LC);//1 - imprimir lista completa
+            imprimirLista (LC);
+
+
+            switch(scanf("%d")){
+
+            case 1:
+
+
+
+            }
+            //1 - imprimir lista completa
             // 2 - imprimir lista de conc com atraso
             // 3 - imprimir lista de conc sme atraso
             system("pause");
