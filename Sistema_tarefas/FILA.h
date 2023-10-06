@@ -32,7 +32,7 @@ typedef struct fila{
 Fila* CriaFila();                            //CRIA A FILA
 int VaziaFila (Fila* f);                     //VERIFICA SE A FILA EST� VAIZA
 No* ins_fim (No* fim, Fila *f);
-void InsereFila (Fila* f, int v);            //INSER��O
+void InsereFila (Fila* f);            //INSER��O
 int RetiraFila (Fila* f);                   //REMO��O
 Fila* liberaFila (Fila* f);                  //LIBERA A FILA
 void imprimeFila (Fila* f);                  //IMPRIME A FILA
@@ -44,6 +44,18 @@ void imprimirTarefa(Tarefa T);              //Imprimir Tarefa
 void editarFila(Fila* f);                   //
 Tarefa editarTarefa(Tarefa old);             //
 int verificarCod(Fila *f, int t);
+Tarefa SelecionarTarefa(Fila* f);
+No* ConcluirTarefa(Fila *f);
+// Protótipo Lista
+No* inicializaLista();
+No* inserirLista(No* recebida, Tarefa valor);
+int verificarVazia(No *recebida);
+void imprimirLista(No* p);
+No* liberaLista(No *receb);
+void carregarLista(const char *n,No* L);
+void salvarLista(const char *n,No* l);
+
+
 // Funcoes de fila
 int VaziaFila(Fila* f){
     if (f->ini==NULL) return 1;
@@ -192,19 +204,27 @@ void editarFila(Fila* f){
 }
 // Funcoes Lista
 
-No* inicializa(){
-    return NULL;
-}
-
-No* insere (No* recebida, Tarefa valor){
-    No *novo ;
-    novo= (No*) malloc(sizeof(No));
-    //novo->info = NULL;
-    novo->prox = recebida;
+No* inicializaLista(){
+    No *novo = (No*) malloc(sizeof(No));
+    novo->prox = NULL;
+    //novo->info = n;
     return novo;
 }
 
-int vazia(No *recebida){
+No* inserirLista(No* recebida, Tarefa valor){
+    No *novo = (No*)malloc(sizeof(No));
+    if (novo == NULL) {
+        printf("Erro ao alocar memória para novo nó.\n");
+        exit(1); // Tratamento de erro
+    }
+
+    novo->info = valor;
+    novo->prox = recebida;
+
+    return novo;
+}
+
+int verificarVazia(No *recebida){
     if (recebida == NULL){
         return 1;
     }
@@ -213,7 +233,7 @@ int vazia(No *recebida){
 
 void imprimirLista(No* p){
     No* aux = p;
-    if(vazia(aux)){
+    if(verificarVazia(aux)){
         printf("\n\n\t\t => LISTA VAZIA <==\n\n ");
     }else{
     printf("\n\n\t\t => ");
@@ -432,6 +452,7 @@ Tarefa editarTarefa(Tarefa old){
         printf("\n\t4 - Data de termino");
         printf("\n\t5 - Descartar alteracoes");
         printf("\n\t6 - Salvar alteracoes\n");
+        //adicionar um print para tarefa concluida
         scanf("%d", &opcao);
         system("cls");
         switch(opcao){
@@ -534,6 +555,7 @@ Tarefa editarTarefa(Tarefa old){
             case 6:
                 return new;
                 break;
+            // mais um case para fazer a conclusão, função que recebe como parametro fila e e retorna uma fila nova com as novas tarefas
             default:
                 printf("Opcao invalida\n");
         }
@@ -551,5 +573,95 @@ int verificarCod(Fila *f, int t){
     return 1;
 }
 
+/*
+void VerificarAtraso(Tarefa **T){
+    Tarefa *aux = T;
+    //Obter data atual do sistema
+    time_t tempoAtual;
+    struct tm *dataAtual;
+    time(&tempoAtual);
+    dataAtual = localtime(&tempoAtual);
+
+    if((aux->ter.dia <= dataAtual->tm_mday) && (aux->ter.mes <= dataAtual->tm_mon)){
+         aux.status = 0; //Tarefa não atrasada
+    }
+
+    aux.status = 1; //Tarefa atrasada
+}*/
+
+
+//Criar funcao que selecionada uma tarefa através da funcao SelecionarTarefa() criada
+//para adionar na Lista e depois apagar essa tarefa da Fila
+
+Tarefa SelecionarTarefa(Fila* f){
+    No* aux = f->ini;
+    int code =0;
+    int flag = 0;
+    int check = 1;
+
+    do{
+        if (check == 0){
+            printf("\tFalha na leitura do codigo tente novamente.");
+        }
+        while(!flag){
+            imprimirTarefa(aux->info);
+            printf("\n");
+            if(aux->prox == NULL){
+                flag = 1;
+            }
+            aux=aux->prox;
+        }
+        printf("\n\tCaso deseje sair, digite 0");
+        printf("\n\tDigite o codigo da tarefa que deseja concluir:");
+        fflush(stdin);
+        check = scanf("%d",&code);
+    }while(check == 0);
+    aux = f->ini;
+    while (aux->info.cod != code)
+    {
+        aux=aux->prox;
+    }
+    return aux->info;
+}
+
+No* ConcluirTarefa(Fila *f){
+    Tarefa new;
+    No *LC = inicializaLista();
+    int opcao;
+    int A = 0;
+
+    //Seleção de tarefas
+    new = SelecionarTarefa(f);
+
+    while(A == 0){
+        system("cls");
+        imprimirTarefa(new);
+        printf("\n\n\tSelecione a opcao a seguir: ");
+        printf("\n\t1 - Concluir Tarefa");
+        printf("\n\t2 - Sair");
+        //adicionar um print para tarefa concluida
+        scanf("%d", &opcao);
+        system("cls");
+        switch(opcao){
+            case 1:
+                LC = inserirLista(LC, new);
+                return LC; //retorna a lista
+                break;
+            case 2:
+                A = 1;
+                break;
+            default:
+                printf("Opcao invalida\n");
+        }
+    }
+    return NULL;
+}
+/*Fila *ExcluirTarefaFila(Fila *F, No *LC){
+    Fila *f = CriaFila();
+    flag = 0;
+    while(!flag){
+        ins_fim(F->fim, f);
+    }
+}*/
 
 #endif // FILA_H_INCLUDED

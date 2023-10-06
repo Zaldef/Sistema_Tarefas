@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "FILA.h" // gerenciamento de fila
 #include "TAREFA.h" // gerenciamento de tarefa
 #include<stdbool.h> // trabalhar com booleanos
@@ -11,8 +12,8 @@ void menu();
 
 int main(){
     Fila *F1 = CriaFila(); //Criando a Fila principal
-    No *LP = inicializa(); // ''     Lista de pendentes
-    No *LC = inicializa(); // ''     Lista de concluidos
+    No *LP = inicializaLista(); // ''     Lista de pendentes
+    No *LC = inicializaLista(); // ''     Lista de concluidos
     //carregando data
     const char *Arq_F1 = "database_F1.txt";
     const char *Arq_LP = "database_LP.txt";
@@ -44,6 +45,7 @@ int main(){
 
         case 3:
             printf("Concluir uma tarefa\n");
+            LC = ConcluirTarefa(F1);
             break;
 
         case 4:
