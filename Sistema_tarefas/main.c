@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "FILA.h" // gerenciamento de fila
-#include "TAREFA.h" // gerenciamento de tarefa
+#include "FILA.h" // gerenciamento de fila/lista
 #include<stdbool.h> // trabalhar com booleanos
 #include <time.h> // utilizar hora
 
@@ -60,13 +59,13 @@ int main(){
             imprimirLista (LC);
 
 
-            switch(scanf("%d")){
+            //switch(scanf("%d")){
 
-            case 1:
+           // case 1:
 
 
-
-            }
+            //break
+            //}
             //1 - imprimir lista completa
             // 2 - imprimir lista de conc com atraso
             // 3 - imprimir lista de conc sme atraso

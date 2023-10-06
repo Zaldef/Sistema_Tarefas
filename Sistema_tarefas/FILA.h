@@ -38,13 +38,23 @@ Fila* liberaFila (Fila* f);                  //LIBERA A FILA
 void imprimeFila (Fila* f);                  //IMPRIME A FILA
 void carregarFila(const char *n,Fila* f);    //CARREGA UMA FILA SALVADA EXTERNAMENTE
 void salvarFila(const char *n,Fila* f);      //SALVA UMA FILA EM ARQUIVO EXTERNO
+void editarFila(Fila* f);                    // edita algum no da fila
+// Funcoes de fila
+No* inicializa();
+No* inserirLista (No* recebida, Tarefa valor);
+int VaziaLista(No *recebida);
+No* liberaLista(No *receb);
+No* carregarLista(const char *n,No* L);
+
 // Prototipo Tarefa
 Tarefa novaTarefa(Fila* f);                 //Criando nova tarefa
 void imprimirTarefa(Tarefa T);              //Imprimir Tarefa
 void editarFila(Fila* f);                   //
 Tarefa editarTarefa(Tarefa old);             //
 int verificarCod(Fila *f, int t);
-// Funcoes de fila
+void imprimirLista(No* p);
+void salvarLista(const char *n,No* l);
+
 int VaziaFila(Fila* f){
     if (f->ini==NULL) return 1;
     return 0;
@@ -204,7 +214,7 @@ No* inserirLista (No* recebida, Tarefa valor){
     return novo;
 }
 
-int vazia(No *recebida){
+int VaziaLista(No *recebida){
     if (recebida == NULL){
         return 1;
     }
@@ -213,7 +223,7 @@ int vazia(No *recebida){
 
 void imprimirLista(No* p){
     No* aux = p;
-    if(vazia(aux)){
+    if(VaziaLista(aux)){
         printf("\n\n\t\t => LISTA VAZIA <==\n\n ");
     }else{
     for(;aux != NULL; aux = aux->prox){
@@ -262,7 +272,6 @@ No* carregarLista(const char *n,No* L){
     fclose(arq);
     return aux;
 }
-
 
 void salvarLista(const char *n,No* l){
     FILE *arq;
@@ -542,7 +551,7 @@ Tarefa editarTarefa(Tarefa old){
 int verificarCod(Fila *f, int t){
     No* q;
     for (q=f->ini; q!=NULL; q=q->prox){
-        if(q->info.cod != t){
+        if(q->info.cod == t){
             return 0;
         }
     }
