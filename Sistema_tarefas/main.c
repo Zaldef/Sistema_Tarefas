@@ -9,14 +9,17 @@
 void menu();
 
 int main(){
-    Fila *F1 = CriaFila(); // Criando a Fila principal
+    Fila *F1 = CriaFila(); // Criando a Fila prioridade alta
+    Fila *F2 = CriaFila(); // Criando a Fila prioridade media
+    Fila *F3 = CriaFila(); // Criando a Fila prioridade baixa
+
     No *LP = inicializa(); // ''     Lista de pendentes
     No *LC = inicializa(); // ''     Lista de concluidos
     // carregando data
-    const char *Arq_F1 = "database_F1.txt";
+    const char *Arq_F3 = "database_F3.txt";
     const char *Arq_LP = "database_LP.txt";
     const char *Arq_LC = "database_LC.txt";
-    carregarFila(Arq_F1,F1);
+    carregarFila(Arq_F3,F3);
     LP = carregarLista(Arq_LP);
     LC = carregarLista(Arq_LC);
 
@@ -33,26 +36,50 @@ int main(){
 
         case 1:
             printf("Adicionar uma nova tarefa\n");
-            inserirFila(F1,LC,LP);
+            Tarefa new = novaTarefa(F1,F2,F3,LC,LP);
+
+             if (new.prioridade == 1)
+            {
+                inserirFila(F1,new);
+            }
+            else if (new.prioridade == 2)
+            {
+                inserirFila(F2,new);
+            }
+            else
+            {
+                inserirFila(F3,new);
+            }
+                     
             break;
 
         case 2:
             printf("Listar tarefas\n");
             imprimirFila(F1);
+            imprimirFila(F2);
+            imprimirFila(F3);
             system("pause");
             break;
 
         case 3:
             printf("Modificar uma tarefa\n");
             imprimirFila(F1);
-            editarFila(F1);
+            imprimirFila(F2);
+            imprimirFila(F3);
+
+            editarFila(F1,F2,F3);
             break;
 
         case 4:
             printf("Concluir uma tarefa\n");
             imprimirFila(F1);
-            LC = ConcluirTarefa(F1,LC);
-            F1 = ExcluirTarefaFila(F1,LC);
+           
+            LC = ConcluirTarefa(F1,F2,F3,LC);
+
+            //F1 = ExcluirTarefaFila(F1,LC);
+            //F2 = ExcluirTarefaFila(F2,LC);
+            //F3 = ExcluirTarefaFila(F3,LC);
+
             break;
 
         case 5:
@@ -73,10 +100,10 @@ int main(){
         case 8:
             printf("Sair do programa\n");
             // Salvando data
-            salvarFila(Arq_F1, F1);
+            salvarFila(Arq_F3, F3);
             salvarLista(Arq_LP, LP);
             salvarLista(Arq_LC, LC);
-            liberaFila(F1);
+            liberaFila(F3);
             liberaLista(LP);
             liberaLista(LC);
             end = true;
