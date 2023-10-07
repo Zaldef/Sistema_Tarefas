@@ -254,53 +254,7 @@ void editarFila(Fila *f, No* lp){
     aux->info = editarTarefa(aux->info);
 }
 
-void excluirNoFila(Fila *f, No *aux) {
-    No *ant = NULL;
-    No *atual = f->ini;
-
-    while (atual != NULL) {
-        if (atual == aux) {
-            if (ant == NULL) {
-                // O nó a ser excluído é o primeiro da fila
-                f->ini = atual->prox;
-                free(atual);
-                return;
-            } else {
-                // O nó a ser excluído não é o primeiro da fila
-                ant->prox = atual->prox;
-                free(atual);
-                return;
-            }
-        }
-        ant = atual;
-        atual = atual->prox;
-    }
-}
-
-No* excluirNoLista(No* l, No* aux) {
-    No* ant = NULL;
-    No* p = l;
-    // Percorre a lista para encontrar o nó com o código desejado
-    while (p != NULL && p != aux) {
-        ant = p;
-        p = p->prox;
-    }
-
-
-    if (p == NULL) return l;
-    // Verifica se o nó a ser excluído é o primeiro da lista
-    if (ant == NULL){
-        l = p->prox;
-    }else{
-        ant->prox = p->prox;
-    }
-    free(p);
-    return l;
-}
-
-
-
-void excluir_geral(Fila *f, No *lp, No *lc){
+void excluir_geral(Fila *f, No **lp, No **lc){
     int code = 0;
     int check = 1;
 
@@ -339,13 +293,13 @@ void excluir_geral(Fila *f, No *lp, No *lc){
 
     // Se a tarefa não foi encontrada na fila principal, verifica nas listas lp e lc
     if (check == 0) {
-        aux = lp;
+        aux = *lp;
         ant = NULL;
         while (aux != NULL) {
             if (aux->info.cod == code) {
                 if (ant == NULL) {
                     // É o primeiro nó da lista lp
-                    lp = aux->prox;
+                    *lp = aux->prox;
                 } else {
                     // Não é o primeiro nó, ajusta o ponteiro do nó anterior
                     ant->prox = aux->prox;
@@ -361,13 +315,13 @@ void excluir_geral(Fila *f, No *lp, No *lc){
 
     // Se a tarefa não foi encontrada na lista lp, verifica na lista lc
     if (check == 0) {
-        aux = lc;
+        aux = *lc;
         ant = NULL;
         while (aux != NULL) {
             if (aux->info.cod == code) {
                 if (ant == NULL) {
                     // É o primeiro nó da lista lc
-                    lc = aux->prox;
+                    *lc = aux->prox;
                 } else {
                     // Não é o primeiro nó, ajusta o ponteiro do nó anterior
                     ant->prox = aux->prox;

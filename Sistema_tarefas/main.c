@@ -82,7 +82,7 @@ int main(){
             imprimirLista(LP);
             printf("\n\t====Lista de tarefas concluidas====\n");
             imprimirLista(LC);
-            excluir_geral(F1,LP,LC);
+            excluir_geral(F1,&LP,&LC);
             break;
 
         case 9:
