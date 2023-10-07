@@ -36,11 +36,14 @@ typedef struct fila
 int VaziaFila (Fila* f);                     //VERIFICA SE A FILA EST� VAIZA
 Fila* CriaFila();                            //CRIA A FILA
 No* ins_fim (No* fim, Fila *f, No *lc, No *lp);
+No* ins_fim_tarefa (No* fim, No *no);
+void InsereFilaTarefa (Fila* f, No *no);
+Fila *ExcluirTarefaFila(Fila *F, No *LC);
 void InserirFila (Fila* f);            //INSER��O
 Fila* liberaFila (Fila* f);                  //LIBERA A FILA
 No* retira_ini (No* ini);
-int RetiraFila (Fila* f);                   //REMO��O
-void imprimeFila (Fila* f);                  //IMPRIME A FILA
+Tarefa RetiraFila (Fila* f);                   //REMO��O
+void imprimirFila (Fila* f);                  //IMPRIME A FILA
 void carregarFila(const char *n,Fila* f);    //CARREGA UMA FILA SALVADA EXTERNAMENTE
 void salvarFila(const char *n,Fila* f);      //SALVA UMA FILA EM ARQUIVO EXTERNO
 void editarFila(Fila* f);                    // edita algum no da fila
@@ -49,11 +52,13 @@ void editarFila(Fila* f);                    // edita algum no da fila
 No* inicializa();
 No* inserirLista (No* recebida, Tarefa valor);
 int VaziaLista(No *recebida);
-No* retira (No* l, int v);
+No* retiraLista (No* l, int v);
 void imprimirLista(No* p);
 No* liberaLista(No *receb);
 No* carregarLista(const char *n);
 void salvarLista(const char *n,No* l);
+Tarefa SelecionarTarefa(Fila* f);
+No* ConcluirTarefa(Fila *f, No *LC);
 
 // Prototipo Tarefa
 int DataValida(int dia, int mes, int ano);
@@ -63,15 +68,13 @@ Tarefa editarTarefa(Tarefa old);             //
 int verificarCod(Fila *f, No *lc, No *lp, int t);
 
 
-int VaziaFila(Fila *f)
-{
+int VaziaFila(Fila *f){
     if (f->ini == NULL)
         return 1;
     return 0;
 }
 
-Fila *CriaFila()
-{
+Fila *CriaFila(){
     Fila *f = (Fila *)malloc(sizeof(Fila));
     f->ini = f->fim = NULL;
     return f;
@@ -86,14 +89,48 @@ No* ins_fim (No* fim, Fila *f, No *lc, No *lp){
     return p;
 }
 
+No* ins_fim_tarefa (No* fim, No *no){
+    No* tarefa = no;
+    No* p = (No*) malloc(sizeof(No));
+    p->info = tarefa->info;
+    p->prox = NULL;
+    if (fim != NULL) /* verifica se lista n�o estava vazia */
+    fim->prox = p;
+    return p;
+}
+
+void InsereFilaTarefa (Fila* f, No *no)
+{
+    f->fim = ins_fim_tarefa(f->fim,no);
+    if (f->ini==NULL) /* fila antes vazia? */
+    f->ini = f->fim;
+}
+
+Fila *ExcluirTarefaFila(Fila *F, No *LC){
+    Fila *f = CriaFila();
+    No *aux = F->ini;
+    int flag = 0;
+    while(!flag){
+        //verifica se o codigo e igual
+        if(aux->info.cod == LC->info.cod){
+            aux = aux->prox;
+        }else{
+            InsereFilaTarefa(f,aux);
+            aux = aux->prox;
+        }
+        if (aux == NULL) flag = 1;
+    }
+    free(F);
+    return f;
+}
+
 void inserirFila(Fila* f, No *lc, No *lp){
     f->fim = ins_fim(f->fim, f, lc, lp);
     if (f->ini==NULL) /* fila antes vazia? */
     f->ini = f->fim;
 }
 
-Fila *liberaFila(Fila *f)
-{
+Fila *liberaFila(Fila *f){
     No *q = f->ini;
     while (q != NULL)
     {
@@ -105,32 +142,28 @@ Fila *liberaFila(Fila *f)
     return NULL;
 }
 
-No *retira_ini(No *ini)
-{
+No *retira_ini(No *ini){
     No *p = ini->prox;
     free(ini);
     return p;
 }
 
-Tarefa retiraFila(Fila *f)
-{
-    Tarefa v;
-    if (VaziaFila(f))
-    {
+Tarefa RetiraFila(Fila *f){
+    Tarefa t;
+    if (VaziaFila(f)){
         printf("Fila vazia.\n");
         exit(0); /* aborta programa */
     }
-    v = f->ini->info;
+    t = f->ini->info;
     f->ini = retira_ini(f->ini);
     if (f->ini == NULL)
     {
         f->fim = NULL;
     }
-    return v;
+    return t;
 }
 
-void imprimirFila(Fila *f)
-{
+void imprimirFila(Fila *f){
     No *q;
     for (q = f->ini; q != NULL; q = q->prox)
     {
@@ -139,8 +172,7 @@ void imprimirFila(Fila *f)
     }
 }
 
-void carregarFila(const char *n, Fila *f)
-{
+void carregarFila(const char *n, Fila *f){
     FILE *arq = fopen(n, "r");
     // FILE *arq, ponteiro do tipo file que vai percorrer o arquivo
     // fopen(arquivo a ser aberto, r- read_only);
@@ -180,8 +212,7 @@ void carregarFila(const char *n, Fila *f)
     fclose(arq);
 }
 
-void salvarFila(const char *n, Fila *f)
-{
+void salvarFila(const char *n, Fila *f){
     FILE *arq;
     arq = fopen(n, "wt");
     if (arq == NULL)
@@ -199,8 +230,7 @@ void salvarFila(const char *n, Fila *f)
     fclose(arq);
 }
 
-void editarFila(Fila *f)
-{
+void editarFila(Fila *f){
     int code = 0;
     int check = 1;
 
@@ -232,10 +262,11 @@ void editarFila(Fila *f)
     }
     aux->info = editarTarefa(aux->info);
 }
-// Funcoes Lista
 
-No *inicializa()
-{
+
+
+// Funcoes Lista
+No *inicializa(){
     return NULL;
 }
 
@@ -250,8 +281,7 @@ int VaziaLista(No *recebida){
  return (recebida == NULL);
 }
 
-
-No* retira (No* l, int v){
+No* retiraLista (No* l, int v){
     No* ant = NULL;
     No* p = l;
     while (p != NULL && p->info.cod != v){
@@ -271,8 +301,7 @@ No* retira (No* l, int v){
     return l;
 }
 
-void imprimirLista(No *p)
-{
+void imprimirLista(No *p){
     No *aux = p;
     if (VaziaLista(aux))
     {
@@ -349,8 +378,7 @@ void imprimirListaConcluidas(No *p){
     }
 }
 
-No *liberaLista(No *receb)
-{
+No *liberaLista(No *receb){
     No *aux;
     while (receb != NULL)
     {
@@ -393,8 +421,7 @@ No* carregarLista(const char *n){
     return aux;
 }
 
-void salvarLista(const char *n, No *l)
-{
+void salvarLista(const char *n, No *l){
     FILE *arq;
     arq = fopen(n, "wt");
     if (arq == NULL)
@@ -412,9 +439,10 @@ void salvarLista(const char *n, No *l)
     fclose(arq);
 }
 
+
+
 // Funcoes Tarefa
-int DataValida(int dia, int mes, int ano)
-{
+int DataValida(int dia, int mes, int ano){
     if (mes < 1 || mes > 12)
     {
         return 0; // Mês inválido
@@ -562,8 +590,7 @@ Tarefa novaTarefa(Fila *f, No *lc, No *lp){
     return T;
 }
 
-void imprimirTarefa(Tarefa T)
-{
+void imprimirTarefa(Tarefa T){
     printf("\n\tCodigo da tarefa: %d", T.cod);
     printf("\n\tNome da tarefa: %s", T.name);
     printf("\n\tNome do projeto: %s", T.proj);
@@ -583,8 +610,7 @@ void imprimirTarefa(Tarefa T)
     }
 }
 
-Tarefa editarTarefa(Tarefa old)
-{
+Tarefa editarTarefa(Tarefa old){
     Tarefa new = old; // bova tarefa recebe todas as infos da tarefa antiga
     int check = 1;
     int check_data = 1;
@@ -726,6 +752,59 @@ Tarefa editarTarefa(Tarefa old)
         }
     }
     return old; // caso der erro ele cancela
+}
+
+Tarefa SelecionarTarefa(Fila* f){
+    No* aux = f->ini;
+    int code =0;
+    int check = 1;
+
+    do{
+        if (check == 0){
+            printf("\tFalha na leitura do codigo tente novamente.");
+        }
+        printf("\n\tCaso deseje sair, digite 0");
+        printf("\n\tDigite o codigo da tarefa que deseja concluir:");
+        fflush(stdin);
+        check = scanf("%d",&code);
+    }while(check == 0);
+    aux = f->ini;
+    while (aux->info.cod != code)
+    {
+        aux=aux->prox;
+    }
+    return aux->info;
+}
+
+No* ConcluirTarefa(Fila *f, No *LC){
+    Tarefa new;
+    int opcao;
+    int A = 0;
+
+    //Seleção de tarefas
+    new = SelecionarTarefa(f);
+
+    while(A == 0){
+        system("cls");
+        imprimirTarefa(new);
+        printf("\n\n\tSelecione a opcao a seguir: ");
+        printf("\n\t1 - Concluir Tarefa");
+        printf("\n\t2 - Sair\n");
+        //adicionar um print para tarefa concluida
+        scanf("%d", &opcao);
+        system("cls");
+        switch(opcao){
+            case 1:
+                return LC = inserirLista(LC, new); //retorna a lista
+                break;
+            case 2:
+                A = 1;
+                break;
+            default:
+                printf("Opcao invalida\n");
+        }
+    }
+    return NULL;
 }
 
 int verificarCod(Fila *f, No *lc, No *lp, int t){
