@@ -286,8 +286,6 @@ No* excluirNoLista(No* l, No* aux) {
         p = p->prox;
     }
 
-    printf("%d", l->info.cod);
-    system("pause");
 
     if (p == NULL) return l;
     // Verifica se o nó a ser excluído é o primeiro da lista
