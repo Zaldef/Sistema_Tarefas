@@ -75,8 +75,17 @@ int main(){
             imprimirListaConcluidas(LC);
             break;
 
-
         case 8:
+            printf("\n\t=========Fila de tarefas===========\n");
+            imprimirFila(F1);
+            printf("\n\t====Lista de tarefas pendentes=====\n");
+            imprimirLista(LP);
+            printf("\n\t====Lista de tarefas concluidas====\n");
+            imprimirLista(LC);
+            excluir_geral(F1,&LP,&LC);
+            break;
+
+        case 9:
             printf("Sair do programa\n");
             // Salvando data
             salvarFila(Arq_F1, F1);
@@ -106,5 +115,6 @@ void menu(){
     printf("\n\t5 - Atualizacao do status de uma tarefa");
     printf("\n\t6 - Listar tarefas pendentes");
     printf("\n\t7 - Listar tarefas concluidas");
-    printf("\n\t8 - Sair do programa\n");
+    printf("\n\t8 - Excluir tarefa");
+    printf("\n\t9 - Sair do programa\n");
 }

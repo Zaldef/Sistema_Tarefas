@@ -143,6 +143,10 @@ Fila *liberarFila(Fila *f){
 
 void imprimirFila(Fila *f){
     No *q;
+    if (VaziaFila(f))
+    {
+        printf("\n\n\t\t ==> FILA VAZIA <==\n\n ");
+    }
     for (q = f->ini; q != NULL; q = q->prox)
     {
         imprimirTarefa(q->info); // funcao para imprimir as infos da tarefa
@@ -250,7 +254,92 @@ void editarFila(Fila *f, No* lp){
     aux->info = editarTarefa(aux->info);
 }
 
+void excluir_geral(Fila *f, No **lp, No **lc){
+    int code = 0;
+    int check = 1;
 
+    do {
+        if (check == 0) {
+            printf("\tFalha na leitura do código, tente novamente.");
+        }
+        printf("\n\tCaso deseje sair, digite 0");
+        printf("\n\tDigite o código da tarefa que deseja excluir:");
+        fflush(stdin);
+        check = scanf("%d", &code); // verificação de leitura
+    } while (check == 0);
+    if (code == 0) return;
+
+    // Busca do código na fila principal
+    No *aux = f->ini;
+    No *ant = NULL;
+    check = 0;
+
+    while (aux != NULL) {
+        if (aux->info.cod == code) {
+            if (ant == NULL) {
+                // É o primeiro nó da lista principal
+                f->ini = aux->prox;
+            } else {
+                // Não é o primeiro nó, ajusta o ponteiro do nó anterior
+                ant->prox = aux->prox;
+            }
+            free(aux);
+            check = 1;
+            break; // Sai do loop, pois a tarefa foi encontrada e excluída
+        }
+        ant = aux;
+        aux = aux->prox;
+    }
+
+    // Se a tarefa não foi encontrada na fila principal, verifica nas listas lp e lc
+    if (check == 0) {
+        aux = *lp;
+        ant = NULL;
+        while (aux != NULL) {
+            if (aux->info.cod == code) {
+                if (ant == NULL) {
+                    // É o primeiro nó da lista lp
+                    *lp = aux->prox;
+                } else {
+                    // Não é o primeiro nó, ajusta o ponteiro do nó anterior
+                    ant->prox = aux->prox;
+                }
+                free(aux);
+                check = 1;
+                break; // Sai do loop, pois a tarefa foi encontrada e excluída
+            }
+            ant = aux;
+            aux = aux->prox;
+        }
+    }
+
+    // Se a tarefa não foi encontrada na lista lp, verifica na lista lc
+    if (check == 0) {
+        aux = *lc;
+        ant = NULL;
+        while (aux != NULL) {
+            if (aux->info.cod == code) {
+                if (ant == NULL) {
+                    // É o primeiro nó da lista lc
+                    *lc = aux->prox;
+                } else {
+                    // Não é o primeiro nó, ajusta o ponteiro do nó anterior
+                    ant->prox = aux->prox;
+                }
+                free(aux);
+                check = 1;
+                break; // Sai do loop, pois a tarefa foi encontrada e excluída
+            }
+            ant = aux;
+            aux = aux->prox;
+        }
+    }
+
+    // Se check ainda for 0, a tarefa não foi encontrada em nenhuma das listas
+    if (check == 0) {
+        printf("Tarefa não encontrada!\n");
+    }
+}
 
 // Funcoes Lista
 No *inicializa(){
@@ -425,7 +514,6 @@ void salvarLista(const char *n, No *l){
     }
     fclose(arq);
 }
-
 
 
 // Funcoes Tarefa
@@ -797,7 +885,7 @@ No* ConcluirTarefa(Fila *f, No *LC){
                 printf("Opcao invalida\n");
         }
     }
-    return NULL;
+    return LC;
 }
 
 int verificarCod(Fila *f, No *lc, No *lp, int t){
