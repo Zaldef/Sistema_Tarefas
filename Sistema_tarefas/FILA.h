@@ -6,68 +6,64 @@
 
 
 // ESTRUTURAS
-typedef struct data
-{
+typedef struct data{
     int dia;
     int mes;
     int ano;
-} Data;
+}Data;
 
-typedef struct info
-{
+typedef struct info{
     int cod;             // codigo da tarefa
     char name[NUM_CHAR]; // nome da tarefa
     char proj[NUM_CHAR]; // qual projeto a tarefa pertence
     Data ini;            // data de inicio
     Data ter;            // data de termino
     int status;          // 1 atrasada e 0 em dia e -1 pendente
-} Tarefa;
+}Tarefa;
 
-typedef struct nos
-{
+typedef struct nos{
     Tarefa info;
     struct nos *prox;
-} No;
+}No;
 
-typedef struct fila
-{
+typedef struct fila{
     No *ini;
     No *fim;
-} Fila;
+}Fila;
 
 // prototipos fila
-int VaziaFila (Fila* f);                     //VERIFICA SE A FILA EST� VAIZA
-Fila* CriaFila();                            //CRIA A FILA
-No* ins_fim (No* fim, Fila *f, No *lc, No *lp);
-No* ins_fim_tarefa (No* fim, No *no);
-void InsereFilaTarefa (Fila* f, No *no);
-Fila *ExcluirTarefaFila(Fila *F, No *LC);
-void InserirFila (Fila* f);            //INSER��O
-Fila* liberarFila (Fila* f);                  //LIBERA A FILA
-void imprimirFila (Fila* f);                  //IMPRIME A FILA
-void carregarFila(const char *n,Fila* f);    //CARREGA UMA FILA SALVADA EXTERNAMENTE
-void salvarFila(const char *n,Fila* f);      //SALVA UMA FILA EM ARQUIVO EXTERNO
-void editarFila(Fila* f);                    // edita algum no da fila
+int VaziaFila (Fila* f);                        //VERIFICA SE A FILA ESTA VAIZA
+Fila* CriaFila();                               //CRIA A FILA
+No* ins_fim (No* fim, Fila *f, No *lc, No *lp); //função auxiliar para criar uma nova tarefa
+No* ins_fim_tarefa (No* fim, No *no);           //função auxiliar para mover uma tarefa ja existente
+void InsereFilaTarefa (Fila* f, No *no);        //função para mover entre filas
+Fila *ExcluirTarefaFila(Fila *F, No *LC);       //retira uma tarefa da fila
+void InserirFila (Fila* f);                     //INSERIR
+Fila* liberarFila (Fila* f);                    //LIBERA A FILA
+void imprimirFila (Fila* f);                    //IMPRIME A FILA
+void carregarFila(const char *n,Fila* f);       //CARREGA UMA FILA SALVADA EXTERNAMENTE
+void salvarFila(const char *n,Fila* f);         //SALVA UMA FILA EM ARQUIVO EXTERNO
+void editarFila(Fila* f, No *lp);                       //EDITAR ALGUM NÓ NA FILA
 
 // prototipos de lista
-No* inicializa();
-No* inserirLista (No* recebida, Tarefa valor);
-int VaziaLista(No *recebida);
-No* retiraLista (No* l, int v);
-void imprimirLista(No* p);
-No* liberaLista(No *receb);
-No* carregarLista(const char *n);
-void salvarLista(const char *n,No* l);
-Tarefa SelecionarTarefa(Fila* f);
-No* ConcluirTarefa(Fila *f, No *LC);
+No* inicializa();                               //INICIALIZA LISTA
+No* inserirLista (No* recebida, Tarefa valor);  //INSERIR
+int VaziaLista(No *recebida);                   //VERIFICA SE A LISTA ESTA VAZIA
+No* retiraLista (No* l, int v);                 //RETIRA DA LISTA
+void imprimirLista(No* p);                      //IMPRIME A FILA
+No* liberaLista(No *receb);                     //LIBERA A LISTA
+No* carregarLista(const char *n);               //CARREGA UMA LISTA SALVADA EXTERNAMENTE
+void salvarLista(const char *n,No* l);          //SALVA UMA LISTA EM ARQUIVO EXTERNO
 
 // Prototipo Tarefa
-int DataValida(int dia, int mes, int ano);
-Tarefa novaTarefa(Fila* f, No *lc, No *lp);                 //Criando nova tarefa
-void imprimirTarefa(Tarefa T);              //Imprimir Tarefa
-Tarefa editarTarefa(Tarefa old);             //
-int verificarCod(Fila *f, No *lc, No *lp, int t);
-void verificarStatus(Fila *f, No *lp);
+int DataValida(int dia, int mes, int ano);          //VERIFICANDO DATA INSERIDA TEM FROMATO VALIDO
+Tarefa novaTarefa(Fila* f, No *lc, No *lp);         //CRIA NOVA TAREFA
+void imprimirTarefa(Tarefa T);                      //IPRIME TAREFA
+Tarefa editarTarefa(Tarefa old);                    //EDITA TAREFA
+int verificarCod(Fila *f, No *lc, No *lp, int t);   //VERIFICA CODIGO DA TAREFA SE ELE JA NAO EXISTE EM OUTRA TAREFAS
+void verificarStatus(Fila *f);                      //VERIFICA O STATUS DE ATRASADA
+Tarefa SelecionarTarefa(Fila* f);                   //BUSCA DE INFORMACOES
+No* ConcluirTarefa(Fila *f, No *LC);                //MUDANÇA DE FILA PARA LISTA DE CONCLUIDAS
 
 
 int VaziaFila(Fila *f){
@@ -83,9 +79,11 @@ Fila *CriaFila(){
 }
 
 No* ins_fim (No* fim, Fila *f, No *lc, No *lp){
+    // criando novo no
     No* p = (No*) malloc(sizeof(No));
-    p->info = novaTarefa(f,lc,lp); //chama esta funcao para guardar infos da tarefa
+    p->info = novaTarefa(f,lc,lp); //chama esta funcao para guardar infos da tarefa lc e lp passados como parametro apenas para verificar cod
     p->prox = NULL;
+    // encadeando na fila
     if (fim != NULL)
         fim->prox = p;
     return p;
@@ -101,8 +99,7 @@ No* ins_fim_tarefa (No* fim, No *no){
     return p;
 }
 
-void InsereFilaTarefa (Fila* f, No *no)
-{
+void InsereFilaTarefa (Fila* f, No *no){
     f->fim = ins_fim_tarefa(f->fim,no);
     if (f->ini==NULL) /* fila antes vazia? */
     f->ini = f->fim;
@@ -127,7 +124,7 @@ Fila *ExcluirTarefaFila(Fila *F, No *LC){
 }
 
 void inserirFila(Fila* f, No *lc, No *lp){
-    f->fim = ins_fim(f->fim, f, lc, lp);
+    f->fim = ins_fim(f->fim, f, lc, lp); //lc e lp passados como parametro apenas para verificar cod
     if (f->ini==NULL) /* fila antes vazia? */
     f->ini = f->fim;
 }
@@ -211,12 +208,11 @@ void salvarFila(const char *n, Fila *f){
     fclose(arq);
 }
 
-void editarFila(Fila *f){
+void editarFila(Fila *f, No* lp){
     int code = 0;
     int check = 1;
 
-    do
-    {
+    do{
         if (check == 0)
         {
             printf("\tFalha na leitura do codigo tente novamente.");
@@ -224,22 +220,32 @@ void editarFila(Fila *f){
         printf("\n\tCaso deseje sair, digite 0");
         printf("\n\tDigite o codigo da tarefa que deseja editar:");
         fflush(stdin);
-        check = scanf("%d", &code);
+        check = scanf("%d", &code); // verificaçãod e leitura
     } while (check == 0);
-    if (code == 0)
-    {
-        return;
-    }
-
+    if(code == 0) return;
+    // busca do codigo na fila principal
     No *aux = f->ini;
-    while (aux->info.cod != code)
-    {
-        if (aux->prox == NULL)
-        {
-            printf("Tarefa nao existe");
+    check = 0;
+    while (check == 0){
+        if(aux->info.cod == code){
+            check = 1; //achou o codigo
+        }else if(aux->prox != NULL){
+            aux = aux->prox; //nao achou proxmio
+        }else{
+            check = -1; //nao achou o codigo
+        }
+    }
+    //chegou ao final da fila, pula pra lista
+    if ( check == -1) aux = lp;
+    while( check == -1){
+        if(aux->info.cod == code){
+            check = 1; //achou o codigo
+        }else if(aux->prox != NULL){
+            aux = aux->prox; //nao achou proxmio
+        }else{
+            printf("Tarefa nao existe !!!");
             return;
-        };
-        aux = aux->prox;
+        }
     }
     aux->info = editarTarefa(aux->info);
 }
@@ -425,7 +431,6 @@ void salvarLista(const char *n, No *l){
 // Funcoes Tarefa
 int DataValida(int dia, int mes, int ano){
     if (mes < 1 || mes > 12) return 0; // Mês inválido
-    if (ano <1900) return 0; // ano invalido
     switch (mes)
     {
     // Meses com 31 dias
@@ -437,7 +442,7 @@ int DataValida(int dia, int mes, int ano){
     case 10:
     case 12:
         return (dia >= 1 && dia <= 31);
-    // Fevereiro (tratamento de ano bissexto)
+    // Fevereiro (ano bissexto)
     case 2:
         if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0))
         {
@@ -462,7 +467,7 @@ Tarefa novaTarefa(Fila *f, No *lc, No *lp){
     {
         if (check_cod == 0)
         {
-            printf("\t Já existe um tarefa com esse codigo, digite novamente");
+            printf("\t Ja existe um tarefa com esse codigo, digite novamente");
         }
         do
         {
@@ -472,8 +477,8 @@ Tarefa novaTarefa(Fila *f, No *lc, No *lp){
             }
             printf("\n\tDigite o codigo da tarefa: ");
             fflush(stdin);
-            check = scanf("%d", &T.cod);
-            check_cod = verificarCod(f,lc,lp, T.cod);
+            check = scanf("%d", &T.cod); //verificacao de leitura
+            check_cod = verificarCod(f,lc,lp, T.cod); //verificacao de codigo
         }while(check == 0);
     }while(check_cod == 0);
     printf("\n\tDigite o nome da tarefa: ");
@@ -499,7 +504,7 @@ Tarefa novaTarefa(Fila *f, No *lc, No *lp){
             }
             printf("\n\tDigite o dia: ");
             fflush(stdin);
-            check = scanf("%d", &T.ini.dia);
+            check = scanf("%d", &T.ini.dia); //verificacao de leitura
         } while (check == 0);
         do
         {
@@ -509,7 +514,7 @@ Tarefa novaTarefa(Fila *f, No *lc, No *lp){
             }
             printf("\tDigite o mes: ");
             fflush(stdin);
-            check = scanf("%d", &T.ini.mes);
+            check = scanf("%d", &T.ini.mes); //verificacao de leitura
         } while (check == 0);
         do
         {
@@ -519,9 +524,9 @@ Tarefa novaTarefa(Fila *f, No *lc, No *lp){
             }
             printf("\tDigite o ano: ");
             fflush(stdin);
-            check = scanf("%d", &T.ini.ano);
+            check = scanf("%d", &T.ini.ano); //verificacao de leitura
         } while (check == 0);
-        check_data = DataValida(T.ini.dia, T.ini.mes, T.ini.ano);
+        check_data = DataValida(T.ini.dia, T.ini.mes, T.ini.ano); //verificacao de data
     } while (check_data != 1);
 
     do
@@ -540,7 +545,7 @@ Tarefa novaTarefa(Fila *f, No *lc, No *lp){
             }
             printf("\n\tDigite o dia: ");
             fflush(stdin);
-            check = scanf("%d", &T.ter.dia);
+            check = scanf("%d", &T.ter.dia); //verificacao de leitura
         } while (check == 0);
         do
         {
@@ -550,7 +555,7 @@ Tarefa novaTarefa(Fila *f, No *lc, No *lp){
             }
             printf("\tDigite o mes: ");
             fflush(stdin);
-            check = scanf("%d", &T.ter.mes);
+            check = scanf("%d", &T.ter.mes); //verificacao de leitura
         } while (check == 0);
         do
         {
@@ -560,9 +565,9 @@ Tarefa novaTarefa(Fila *f, No *lc, No *lp){
             }
             printf("\tDigite o ano: ");
             fflush(stdin);
-            check = scanf("%d", &T.ter.ano);
+            check = scanf("%d", &T.ter.ano); //verificacao de leitura
         } while (check == 0);
-        check_data = DataValida(T.ter.dia, T.ter.mes, T.ter.ano);
+        check_data = DataValida(T.ter.dia, T.ter.mes, T.ter.ano); //verificacao de data
     } while (check_data != 1);
 
     T.status = 0;
@@ -797,18 +802,20 @@ No* ConcluirTarefa(Fila *f, No *LC){
 
 int verificarCod(Fila *f, No *lc, No *lp, int t){
     No* q;
+    //percorre todas as tarefa comparando o codigo, se ja existir retorna 0
+    // Fila principal
     for (q=f->ini; q!=NULL; q=q->prox){
         if(q->info.cod == t){
             return 0;
         }
     }
-
+    // Lista concluidas
     for (q=lc; q!=NULL; q=q->prox){
         if(q->info.cod == t){
             return 0;
         }
     }
-
+    // Lista pendentes
     for (q=lp; q!=NULL; q=q->prox){
         if(q->info.cod == t){
             return 0;
@@ -817,7 +824,7 @@ int verificarCod(Fila *f, No *lc, No *lp, int t){
     return 1;
 }
 
-void verificarStatus(Fila *f, No *lp) {
+void verificarStatus(Fila *f) {
     // Obtendo a data e a hora atuais
     time_t tempoAtual;
     time(&tempoAtual);
@@ -844,73 +851,8 @@ void verificarStatus(Fila *f, No *lp) {
                 faux->info.status = 0; // A tarefa está adiantada
             }
         }
-
-        faux = faux->prox;
-    }
-
-    faux = lp;
-    while (faux != NULL) {
-        time_t tempoTerminoTarefa;
-        struct tm DataTerminoTarefa;
-        memset(&DataTerminoTarefa, 0, sizeof(struct tm)); // setando todos os campos com 0
-        DataTerminoTarefa.tm_year = faux->info.ter.ano - 1900; // Ano
-        DataTerminoTarefa.tm_mon = faux->info.ter.mes - 1;     // Mês (0 a 11)
-        DataTerminoTarefa.tm_mday = faux->info.ter.dia;
-        tempoTerminoTarefa = mktime(&DataTerminoTarefa);
-        //cai dentro if provavelmente por receber datas menores que 1900, que na conversao se torna um int negativo
-        if(tempoTerminoTarefa == -1){
-            // Erro na conversão da data
-            faux->info.status = 1; // Status -1 para atrasada
-        }else{
-            // Compare as datas
-            if(tempoAtual > tempoTerminoTarefa){
-                faux->info.status = 1; // A tarefa está atrasada
-            }else{
-                faux->info.status = 0; // A tarefa está adiantada
-            }
-        }
-
         faux = faux->prox;
     }
 }
-
-
-    /* Atualize o status das tarefas na fila 'f'
-    No *faux = f->ini;
-    while (faux != NULL) {
-        DataTermino.tm_year = faux->info.ter.ano - 1900; // Ano
-        DataTermino.tm_mon = faux->info.ter.mes - 1;     // Mês (0 a 11)
-        DataTermino.tm_mday = faux->info.ter.dia;       // Dia
-        printf("\n\tData de Termino: %02d/%02d/%04d", faux->info.ter.dia, faux->info.ter.mes, faux->info.ter.ano);
-        mktime(tempoInfo
-        // Compara as datas
-        printf("%f\n\n",difftime(mktime(tempoInfo), mktime(&DataTermino)));
-        if (difftime(mktime(tempoInfo), mktime(&DataTermino)) > 0) {
-            faux->info.status = -1; // A tarefa está atrasada
-            printf("--->Estou AQUI <---");
-            system("pause");
-        } else {
-            faux->info.status = 0; // A tarefa não está atrasada
-        }
-
-        faux = faux->prox;
-    }
-
-    // Agora, atualize o status das tarefas na lista encadeada 'lp'
-    No *laux = lp;
-    while (laux != NULL) {
-        DataTermino.tm_year = laux->info.ter.ano - 1900; // Ano
-        DataTermino.tm_mon = laux->info.ter.mes - 1;     // Mês (0 a 11)
-        DataTermino.tm_mday = laux->info.ter.dia;       // Dia
-
-        // Compara as datas
-        if (difftime(mktime(tempoInfo), mktime(&DataTermino)) > 0) {
-            laux->info.status = -1; // A tarefa está atrasada
-        } else {
-            laux->info.status = 0; // A tarefa não está atrasada
-        }
-        laux = laux->prox;
-    }*/
-
 
 #endif // FILA_H_INCLUDED

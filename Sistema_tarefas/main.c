@@ -30,25 +30,28 @@ int main(){
         menu();
         scanf("%d", &opcao);
         system("cls");
-        verificarStatus(F1,LP); // função que roda as Fila principal e a Lista de pendentes, atualizando seus status de atrasada
+        verificarStatus(F1); // função que roda s Fila principal atualizando seus status de atrasada
 
         switch (opcao){
 
         case 1:
             printf("Adicionar uma nova tarefa\n");
-            inserirFila(F1,LC,LP);
+            inserirFila(F1,LC,LP); // a nova tarefa é inserida em F1, mas é passado LC e LP, para verificação de codigo
             break;
 
         case 2:
             printf("Listar tarefas\n");
-            imprimirFila(F1);
+            imprimirFila(F1); //imprime lista completa de tarefas
             system("pause");
             break;
 
         case 3:
             printf("Modificar uma tarefa\n");
+            printf("\n\t=========Fila de tarefas==========\n");
             imprimirFila(F1);
-            editarFila(F1);
+            printf("\n\t====Lista de tarefas pendentes====\n");
+            imprimirLista(LP);
+            editarFila(F1,LP); //modifica alguma tarefa
             break;
 
         case 4:
