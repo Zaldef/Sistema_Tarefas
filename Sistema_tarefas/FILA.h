@@ -2,6 +2,7 @@
 #define FILA_H_INCLUDED
 #define NUM_CHAR 30
 #include <time.h>    // utilizar hora
+#include <string.h>
 
 
 // ESTRUTURAS
@@ -423,10 +424,8 @@ void salvarLista(const char *n, No *l){
 
 // Funcoes Tarefa
 int DataValida(int dia, int mes, int ano){
-    if (mes < 1 || mes > 12)
-    {
-        return 0; // Mês inválido
-    }
+    if (mes < 1 || mes > 12) return 0; // Mês inválido
+    if (ano <1900) return 0; // ano invalido
     switch (mes)
     {
     // Meses com 31 dias
@@ -821,21 +820,56 @@ int verificarCod(Fila *f, No *lc, No *lp, int t){
 void verificarStatus(Fila *f, No *lp) {
     // Obtendo a data e a hora atuais
     time_t tempoAtual;
-    struct tm *tempoInfo;
-    struct tm DataTermino;
     time(&tempoAtual);
-    tempoInfo = localtime(&tempoAtual);
 
-    // Atualize o status das tarefas na fila 'f'
+    // atualizando as tarefas na fila
+    No *faux = f->ini;
+    while (faux != NULL) {
+        time_t tempoTerminoTarefa;
+        struct tm DataTerminoTarefa;
+
+        memset(&DataTerminoTarefa, 0, sizeof(struct tm)); // setando todos os campos com 0
+        DataTerminoTarefa.tm_year = faux->info.ter.ano - 1900; // Ano
+        DataTerminoTarefa.tm_mon = faux->info.ter.mes - 1;     // Mês (0 a 11)
+        DataTerminoTarefa.tm_mday = faux->info.ter.dia;
+
+
+
+        tempoTerminoTarefa = mktime(&DataTerminoTarefa);
+
+        if(tempoTerminoTarefa == -1){
+            // Erro na conversão da data
+            faux->info.status = 1; // Status -2 para erro na data
+            printf("--->Estou AQUI <---");
+            system("pause");
+        }else{
+            // Compare as datas
+            if(tempoAtual > tempoTerminoTarefa){
+                faux->info.status = 1; // A tarefa está atrasada
+            }else{
+                faux->info.status = 0; // A tarefa está adiantada
+            }
+        }
+
+        faux = faux->prox;
+    }
+}
+
+
+    /* Atualize o status das tarefas na fila 'f'
     No *faux = f->ini;
     while (faux != NULL) {
         DataTermino.tm_year = faux->info.ter.ano - 1900; // Ano
         DataTermino.tm_mon = faux->info.ter.mes - 1;     // Mês (0 a 11)
         DataTermino.tm_mday = faux->info.ter.dia;       // Dia
-
+        printf("\n\tData de Termino: %02d/%02d/%04d", faux->info.ter.dia, faux->info.ter.mes, faux->info.ter.ano);
+        mktime(tempoInfo
         // Compara as datas
+        printf("%f\n\n",difftime(mktime(tempoInfo), mktime(&DataTermino)));
         if (difftime(mktime(tempoInfo), mktime(&DataTermino)) > 0) {
             faux->info.status = -1; // A tarefa está atrasada
+            printf("--->Estou AQUI <---");
+            system("pause");
         } else {
             faux->info.status = 0; // A tarefa não está atrasada
         }
@@ -856,10 +890,8 @@ void verificarStatus(Fila *f, No *lp) {
         } else {
             laux->info.status = 0; // A tarefa não está atrasada
         }
-        system("pause");
-        printf("%d", laux->info.status);
         laux = laux->prox;
-    }
-}
+    }*/
+
 
 #endif // FILA_H_INCLUDED
