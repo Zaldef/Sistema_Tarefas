@@ -33,31 +33,35 @@ typedef struct fila
 } Fila;
 
 // prototipos fila
-Fila *CriaFila();       // CRIA A FILA
-int VaziaFila(Fila *f); // VERIFICA SE A FILA EST� VAIZA
-No *ins_fim(No *fim, Fila *f);
-void InsereFila(Fila *f, int v);           // INSER��O
-int RetiraFila(Fila *f);                   // REMO��O
-Fila *liberaFila(Fila *f);                 // LIBERA A FILA
-void imprimeFila(Fila *f);                 // IMPRIME A FILA
-void carregarFila(const char *n, Fila *f); // CARREGA UMA FILA SALVADA EXTERNAMENTE
-void salvarFila(const char *n, Fila *f);   // SALVA UMA FILA EM ARQUIVO EXTERNO
-void editarFila(Fila *f);                  // edita algum no da fila
-// Funcoes de fila
-No *inicializa();
-No *inserirLista(No *recebida, Tarefa valor);
+int VaziaFila (Fila* f);                     //VERIFICA SE A FILA EST� VAIZA
+Fila* CriaFila();                            //CRIA A FILA
+No* ins_fim (No* fim, Fila *f, No *lc, No *lp);
+void InserirFila (Fila* f);            //INSER��O
+Fila* liberaFila (Fila* f);                  //LIBERA A FILA
+No* retira_ini (No* ini);
+int RetiraFila (Fila* f);                   //REMO��O
+void imprimeFila (Fila* f);                  //IMPRIME A FILA
+void carregarFila(const char *n,Fila* f);    //CARREGA UMA FILA SALVADA EXTERNAMENTE
+void salvarFila(const char *n,Fila* f);      //SALVA UMA FILA EM ARQUIVO EXTERNO
+void editarFila(Fila* f);                    // edita algum no da fila
+
+// prototipos de lista
+No* inicializa();
+No* inserirLista (No* recebida, Tarefa valor);
 int VaziaLista(No *recebida);
-No *liberaLista(No *receb);
-No *carregarLista(const char *n);
+No* retira (No* l, int v);
+void imprimirLista(No* p);
+No* liberaLista(No *receb);
+No* carregarLista(const char *n);
+void salvarLista(const char *n,No* l);
 
 // Prototipo Tarefa
-Tarefa novaTarefa(Fila *f);      // Criando nova tarefa
-void imprimirTarefa(Tarefa T);   // Imprimir Tarefa
-void editarFila(Fila *f);        //
-Tarefa editarTarefa(Tarefa old); //
-int verificarCod(Fila *f, int t);
-void imprimirLista(No *p);
-void salvarLista(const char *n, No *l);
+int DataValida(int dia, int mes, int ano);
+Tarefa novaTarefa(Fila* f, No *lc, No *lp);                 //Criando nova tarefa
+void imprimirTarefa(Tarefa T);              //Imprimir Tarefa
+Tarefa editarTarefa(Tarefa old);             //
+int verificarCod(Fila *f, No *lc, No *lp, int t);
+
 
 int VaziaFila(Fila *f)
 {
@@ -73,21 +77,19 @@ Fila *CriaFila()
     return f;
 }
 
-No *ins_fim(No *fim, Fila *f)
-{
-    No *p = (No *)malloc(sizeof(No));
-    p->info = novaTarefa(f); // chama esta funcao para guardar infos da tarefa
+No* ins_fim (No* fim, Fila *f, No *lc, No *lp){
+    No* p = (No*) malloc(sizeof(No));
+    p->info = novaTarefa(f,lc,lp); //chama esta funcao para guardar infos da tarefa
     p->prox = NULL;
     if (fim != NULL)
         fim->prox = p;
     return p;
 }
 
-void inserirFila(Fila *f)
-{
-    f->fim = ins_fim(f->fim, f);
-    if (f->ini == NULL) /* fila antes vazia? */
-        f->ini = f->fim;
+void inserirFila(Fila* f, No *lc, No *lp){
+    f->fim = ins_fim(f->fim, f, lc, lp);
+    if (f->ini==NULL) /* fila antes vazia? */
+    f->ini = f->fim;
 }
 
 Fila *liberaFila(Fila *f)
@@ -237,22 +239,36 @@ No *inicializa()
     return NULL;
 }
 
-No *inserirLista(No *recebida, Tarefa valor)
-{
-    No *novo;
-    novo = (No *)malloc(sizeof(No));
+No* inserirLista (No* recebida, Tarefa valor){
+    No *novo = (No*) malloc(sizeof(No));
     novo->info = valor;
     novo->prox = recebida;
     return novo;
 }
 
-int VaziaLista(No *recebida)
-{
-    if (recebida == NULL)
-    {
-        return 1;
+int VaziaLista(No *recebida){
+ return (recebida == NULL);
+}
+
+
+No* retira (No* l, int v){
+    No* ant = NULL;
+    No* p = l;
+    while (p != NULL && p->info.cod != v){
+        ant = p;
+        p = p->prox;
     }
-    return 0;
+ /* verifica se achou elemento */
+    if (p == NULL)
+    return l; /* não achou: retorna lista original */
+    /* retira elemento */
+    if (ant == NULL) {
+        l = p->prox; // retira elemento do inicio
+    }else{
+        ant->prox = p->prox; // retira elemento do meio da lista
+    }
+    free(p);
+    return l;
 }
 
 void imprimirLista(No *p)
@@ -325,8 +341,7 @@ No *liberaLista(No *receb)
     return NULL;
 }
 
-No *carregarLista(const char *n)
-{
+No* carregarLista(const char *n){
     No *aux = NULL;
     FILE *arq = fopen(n, "r");
     // FILE *arq, ponteiro do tipo file que vai percorrer o arquivo
@@ -411,8 +426,7 @@ int DataValida(int dia, int mes, int ano)
     }
 }
 
-Tarefa novaTarefa(Fila *f)
-{
+Tarefa novaTarefa(Fila *f, No *lc, No *lp){
     Tarefa T;
     int check = 1;
     int check_data = 1;
@@ -432,9 +446,9 @@ Tarefa novaTarefa(Fila *f)
             printf("\n\tDigite o codigo da tarefa: ");
             fflush(stdin);
             check = scanf("%d", &T.cod);
-            check_cod = verificarCod(f, T.cod);
-        } while (check == 0);
-    } while (check_cod == 0);
+            check_cod = verificarCod(f,lc,lp, T.cod);
+        }while(check == 0);
+    }while(check_cod == 0);
     printf("\n\tDigite o nome da tarefa: ");
     fflush(stdin);
     gets(T.name);
@@ -694,13 +708,22 @@ Tarefa editarTarefa(Tarefa old)
     return old; // caso der erro ele cancela
 }
 
-int verificarCod(Fila *f, int t)
-{
-    No *q;
-    for (q = f->ini; q != NULL; q = q->prox)
-    {
-        if (q->info.cod == t)
-        {
+int verificarCod(Fila *f, No *lc, No *lp, int t){
+    No* q;
+    for (q=f->ini; q!=NULL; q=q->prox){
+        if(q->info.cod == t){
+            return 0;
+        }
+    }
+
+    for (q=lc; q!=NULL; q=q->prox){
+        if(q->info.cod == t){
+            return 0;
+        }
+    }
+
+    for (q=lp; q!=NULL; q=q->prox){
+        if(q->info.cod == t){
             return 0;
         }
     }
