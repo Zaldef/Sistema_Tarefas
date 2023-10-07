@@ -304,60 +304,86 @@ void excluir_geral(Fila *f, No *lp, No *lc){
     int code = 0;
     int check = 1;
 
-    do{
-        if (check == 0)
-        {
-            printf("\tFalha na leitura do codigo tente novamente.");
+    do {
+        if (check == 0) {
+            printf("\tFalha na leitura do código, tente novamente.");
         }
         printf("\n\tCaso deseje sair, digite 0");
-        printf("\n\tDigite o codigo da tarefa que deseja excluir:");
+        printf("\n\tDigite o código da tarefa que deseja excluir:");
         fflush(stdin);
-        check = scanf("%d", &code); // verificaçãod e leitura
+        check = scanf("%d", &code); // verificação de leitura
     } while (check == 0);
-    if(code == 0) return;
-    // busca do codigo na fila principal
+    if (code == 0) return;
+
+    // Busca do código na fila principal
     No *aux = f->ini;
-    if(f-> ini != NULL){
-      check = 0;
-    }else{
-        check = -1;
-    }
-    while (check == 0){
-        if(aux->info.cod == code){
-            check = 1; //achou o codigo
-            excluirNoFila(f, aux);
-        }else if(aux->prox != NULL){
-            aux = aux->prox; //nao achou proxmio
-        }else{
-            check = -1; //nao achou o codigo
-        }
-    }
-    //chegou ao final da fila, pula pra lista pendentes
-    if ( check == -1) aux = lp;
-    while( check == -1){
-        if(aux->info.cod == code){
-            check = 1; //achou o codigo
-            lp = excluirNoLista(lp,aux);
-        }else if(aux->prox != NULL){
-            aux = aux->prox; //nao achou proxmio
-        }else{
-           check = 0; //nao achou o codigo
-        }
-    }
-    //chegou ao final da fila, pula pra lista concluidos
+    No *ant = NULL;
+    check = 0;
 
-    if ( check == 0) aux = lc;
-    while( check == 0){
-        if(aux->info.cod == code){
-            check = 1; //achou o codigo
-
-            lc = excluirNoLista(lc,aux);
-        }else if(aux->prox != NULL){
-            aux = aux->prox; //nao achou proxmio
-        }else{
-            printf("Tarefa nao existe !!!");
-            return;
+    while (aux != NULL) {
+        if (aux->info.cod == code) {
+            if (ant == NULL) {
+                // É o primeiro nó da lista principal
+                f->ini = aux->prox;
+            } else {
+                // Não é o primeiro nó, ajusta o ponteiro do nó anterior
+                ant->prox = aux->prox;
+            }
+            free(aux);
+            check = 1;
+            break; // Sai do loop, pois a tarefa foi encontrada e excluída
         }
+        ant = aux;
+        aux = aux->prox;
+    }
+
+    // Se a tarefa não foi encontrada na fila principal, verifica nas listas lp e lc
+    if (check == 0) {
+        aux = lp;
+        ant = NULL;
+        while (aux != NULL) {
+            if (aux->info.cod == code) {
+                if (ant == NULL) {
+                    // É o primeiro nó da lista lp
+                    lp = aux->prox;
+                } else {
+                    // Não é o primeiro nó, ajusta o ponteiro do nó anterior
+                    ant->prox = aux->prox;
+                }
+                free(aux);
+                check = 1;
+                break; // Sai do loop, pois a tarefa foi encontrada e excluída
+            }
+            ant = aux;
+            aux = aux->prox;
+        }
+    }
+
+    // Se a tarefa não foi encontrada na lista lp, verifica na lista lc
+    if (check == 0) {
+        aux = lc;
+        ant = NULL;
+        while (aux != NULL) {
+            if (aux->info.cod == code) {
+                if (ant == NULL) {
+                    // É o primeiro nó da lista lc
+                    lc = aux->prox;
+                } else {
+                    // Não é o primeiro nó, ajusta o ponteiro do nó anterior
+                    ant->prox = aux->prox;
+                }
+                free(aux);
+                check = 1;
+                break; // Sai do loop, pois a tarefa foi encontrada e excluída
+            }
+            ant = aux;
+            aux = aux->prox;
+        }
+    }
+
+    // Se check ainda for 0, a tarefa não foi encontrada em nenhuma das listas
+    if (check == 0) {
+        printf("Tarefa não encontrada!\n");
     }
 }
 
