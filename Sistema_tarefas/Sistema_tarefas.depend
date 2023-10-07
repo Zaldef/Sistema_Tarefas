@@ -30,3 +30,12 @@
 1695565137 c:\eu\sistema_tarefas\sistema_tarefas\\\tarefa.h
 	"/FILA.h"
 
+1696641689 source:c:\users\thay4\onedrive\documentos\github\sistema_tarefas\sistema_tarefas\main.c
+	<stdlib.h>
+	<stdio.h>
+	"FILA.h"
+	<stdbool.h>
+	<time.h>
+
+1696642357 c:\users\thay4\onedrive\documentos\github\sistema_tarefas\sistema_tarefas\fila.h
+

@@ -33,13 +33,17 @@ Fila* CriaFila();                            //CRIA A FILA
 int VaziaFila (Fila* f);                     //VERIFICA SE A FILA EST� VAIZA
 No* ins_fim (No* fim, Fila *f);
 void InsereFila (Fila* f, int v);            //INSER��O
+No* ins_fim_tarefa (No* fim, No *no);
+void InsereFilaTarefa (Fila* f, No *no);
+Fila *ExcluirTarefaFila(Fila *F, No *LC); //EXCLUIR TAREFA
 int RetiraFila (Fila* f);                   //REMO��O
 Fila* liberaFila (Fila* f);                  //LIBERA A FILA
 void imprimeFila (Fila* f);                  //IMPRIME A FILA
 void carregarFila(const char *n,Fila* f);    //CARREGA UMA FILA SALVADA EXTERNAMENTE
 void salvarFila(const char *n,Fila* f);      //SALVA UMA FILA EM ARQUIVO EXTERNO
 void editarFila(Fila* f);                    // edita algum no da fila
-// Funcoes de fila
+
+// Prototipos listas
 No* inicializa();
 No* inserirLista (No* recebida, Tarefa valor);
 int VaziaLista(No *recebida);
@@ -54,6 +58,9 @@ Tarefa editarTarefa(Tarefa old);             //
 int verificarCod(Fila *f, int t);
 void imprimirLista(No* p);
 void salvarLista(const char *n,No* l);
+Tarefa SelecionarTarefa(Fila* f);
+No* ConcluirTarefa(Fila *f, No *LC);
+
 
 int VaziaFila(Fila* f){
     if (f->ini==NULL) return 1;
@@ -80,6 +87,26 @@ void inserirFila(Fila* f){
     if (f->ini==NULL) /* fila antes vazia? */
     f->ini = f->fim;
 }
+
+//////////////////////////////////////////////
+//CRIADO PARA INSERÇAO DE TAREFA NA FILA
+No* ins_fim_tarefa (No* fim, No *no)
+{   No* tarefa = no;
+    No* p = (No*) malloc(sizeof(No));
+    p->info = tarefa->info;
+    p->prox = NULL;
+    if (fim != NULL) /* verifica se lista n�o estava vazia */
+    fim->prox = p;
+    return p;
+}
+
+void InsereFilaTarefa (Fila* f, No *no)
+{
+    f->fim = ins_fim_tarefa(f->fim,no);
+    if (f->ini==NULL) /* fila antes vazia? */
+    f->ini = f->fim;
+}
+/////////////////////////////////////////////
 
 Fila* liberaFila (Fila* f){
     No* q = f->ini;
@@ -207,7 +234,7 @@ No* inicializa(){
 }
 
 No* inserirLista (No* recebida, Tarefa valor){
-    No *novo ;
+    No *novo;
     novo= (No*) malloc(sizeof(No));
     novo->info = valor;
     novo->prox = recebida;
@@ -556,6 +583,87 @@ int verificarCod(Fila *f, int t){
         }
     }
     return 1;
+}
+
+Tarefa SelecionarTarefa(Fila* f){
+    No* aux = f->ini;
+    int code =0;
+    int flag = 0;
+    int check = 1;
+
+    do{
+        if (check == 0){
+            printf("\tFalha na leitura do codigo tente novamente.");
+        }
+        while(!flag){
+            imprimirTarefa(aux->info);
+            printf("\n");
+            if(aux->prox == NULL){
+                flag = 1;
+            }
+            aux=aux->prox;
+        }
+        printf("\n\tCaso deseje sair, digite 0");
+        printf("\n\tDigite o codigo da tarefa que deseja concluir:");
+        fflush(stdin);
+        check = scanf("%d",&code);
+    }while(check == 0);
+    aux = f->ini;
+    while (aux->info.cod != code)
+    {
+        aux=aux->prox;
+    }
+    return aux->info;
+}
+
+No* ConcluirTarefa(Fila *f, No *LC){
+    Tarefa new;
+    int opcao;
+    int A = 0;
+
+    //Seleção de tarefas
+    new = SelecionarTarefa(f);
+
+    while(A == 0){
+        system("cls");
+        imprimirTarefa(new);
+        printf("\n\n\tSelecione a opcao a seguir: ");
+        printf("\n\t1 - Concluir Tarefa");
+        printf("\n\t2 - Sair\n");
+        //adicionar um print para tarefa concluida
+        scanf("%d", &opcao);
+        system("cls");
+        switch(opcao){
+            case 1:
+                return LC = inserirLista(LC, new); //retorna a lista
+                break;
+            case 2:
+                A = 1;
+                break;
+            default:
+                printf("Opcao invalida\n");
+        }
+    }
+    return NULL;
+}
+
+Fila *ExcluirTarefaFila(Fila *F, No *LC){
+    Fila *f = CriaFila();
+    No *aux = F->ini;
+    int flag = 0;
+    while(!flag){
+            //verifica se o codigo e igual
+            if(aux->info.cod == LC->info.cod){
+                aux = aux->prox;
+            }
+            InsereFilaTarefa(f,aux);
+            aux = aux->prox;
+            if (aux == NULL){
+                flag = 1;
+            }
+    }
+    free(F);
+    return f;
 }
 
 

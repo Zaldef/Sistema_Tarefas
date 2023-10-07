@@ -43,6 +43,8 @@ int main(){
 
         case 3:
             printf("Concluir uma tarefa\n");
+            LC = ConcluirTarefa(F1,LC);
+            F1 = ExcluirTarefaFila(F1,LC);
             break;
 
         case 4:
