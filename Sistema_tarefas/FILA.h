@@ -1,6 +1,8 @@
 #ifndef FILA_H_INCLUDED
 #define FILA_H_INCLUDED
 #define NUM_CHAR 30
+#include <time.h>    // utilizar hora
+
 
 // ESTRUTURAS
 typedef struct data
@@ -40,9 +42,7 @@ No* ins_fim_tarefa (No* fim, No *no);
 void InsereFilaTarefa (Fila* f, No *no);
 Fila *ExcluirTarefaFila(Fila *F, No *LC);
 void InserirFila (Fila* f);            //INSER��O
-Fila* liberaFila (Fila* f);                  //LIBERA A FILA
-No* retira_ini (No* ini);
-Tarefa RetiraFila (Fila* f);                   //REMO��O
+Fila* liberarFila (Fila* f);                  //LIBERA A FILA
 void imprimirFila (Fila* f);                  //IMPRIME A FILA
 void carregarFila(const char *n,Fila* f);    //CARREGA UMA FILA SALVADA EXTERNAMENTE
 void salvarFila(const char *n,Fila* f);      //SALVA UMA FILA EM ARQUIVO EXTERNO
@@ -66,6 +66,7 @@ Tarefa novaTarefa(Fila* f, No *lc, No *lp);                 //Criando nova taref
 void imprimirTarefa(Tarefa T);              //Imprimir Tarefa
 Tarefa editarTarefa(Tarefa old);             //
 int verificarCod(Fila *f, No *lc, No *lp, int t);
+void verificarStatus(Fila *f, No *lp);
 
 
 int VaziaFila(Fila *f){
@@ -130,7 +131,7 @@ void inserirFila(Fila* f, No *lc, No *lp){
     f->ini = f->fim;
 }
 
-Fila *liberaFila(Fila *f){
+Fila *liberarFila(Fila *f){
     No *q = f->ini;
     while (q != NULL)
     {
@@ -140,27 +141,6 @@ Fila *liberaFila(Fila *f){
     }
     free(f);
     return NULL;
-}
-
-No *retira_ini(No *ini){
-    No *p = ini->prox;
-    free(ini);
-    return p;
-}
-
-Tarefa RetiraFila(Fila *f){
-    Tarefa t;
-    if (VaziaFila(f)){
-        printf("Fila vazia.\n");
-        exit(0); /* aborta programa */
-    }
-    t = f->ini->info;
-    f->ini = retira_ini(f->ini);
-    if (f->ini == NULL)
-    {
-        f->fim = NULL;
-    }
-    return t;
 }
 
 void imprimirFila(Fila *f){
@@ -780,6 +760,11 @@ No* ConcluirTarefa(Fila *f, No *LC){
     Tarefa new;
     int opcao;
     int A = 0;
+    // variaveis de tempo
+    time_t tempoAtual;
+    struct tm *tempoInfo;
+    time(&tempoAtual);          // Obtém o tempo atual em segundos desde a época
+    tempoInfo = localtime(&tempoAtual); // Converte para uma estrutura tm
 
     //Seleção de tarefas
     new = SelecionarTarefa(f);
@@ -795,7 +780,11 @@ No* ConcluirTarefa(Fila *f, No *LC){
         system("cls");
         switch(opcao){
             case 1:
-                return LC = inserirLista(LC, new); //retorna a lista
+                LC = inserirLista(LC, new); //retorna a lista
+                LC->info.ter.dia = tempoInfo->tm_mday;
+                LC->info.ter.mes = tempoInfo->tm_mon + 1; // Os meses são de 0 a 11, então adicionamos 1
+                LC->info.ter.ano = tempoInfo->tm_year + 1900; // Os anos são desde 1900
+                return LC;
                 break;
             case 2:
                 A = 1;
@@ -827,6 +816,50 @@ int verificarCod(Fila *f, No *lc, No *lp, int t){
         }
     }
     return 1;
+}
+
+void verificarStatus(Fila *f, No *lp) {
+    // Obtendo a data e a hora atuais
+    time_t tempoAtual;
+    struct tm *tempoInfo;
+    struct tm DataTermino;
+    time(&tempoAtual);
+    tempoInfo = localtime(&tempoAtual);
+
+    // Atualize o status das tarefas na fila 'f'
+    No *faux = f->ini;
+    while (faux != NULL) {
+        DataTermino.tm_year = faux->info.ter.ano - 1900; // Ano
+        DataTermino.tm_mon = faux->info.ter.mes - 1;     // Mês (0 a 11)
+        DataTermino.tm_mday = faux->info.ter.dia;       // Dia
+
+        // Compara as datas
+        if (difftime(mktime(tempoInfo), mktime(&DataTermino)) > 0) {
+            faux->info.status = -1; // A tarefa está atrasada
+        } else {
+            faux->info.status = 0; // A tarefa não está atrasada
+        }
+
+        faux = faux->prox;
+    }
+
+    // Agora, atualize o status das tarefas na lista encadeada 'lp'
+    No *laux = lp;
+    while (laux != NULL) {
+        DataTermino.tm_year = laux->info.ter.ano - 1900; // Ano
+        DataTermino.tm_mon = laux->info.ter.mes - 1;     // Mês (0 a 11)
+        DataTermino.tm_mday = laux->info.ter.dia;       // Dia
+
+        // Compara as datas
+        if (difftime(mktime(tempoInfo), mktime(&DataTermino)) > 0) {
+            laux->info.status = -1; // A tarefa está atrasada
+        } else {
+            laux->info.status = 0; // A tarefa não está atrasada
+        }
+        system("pause");
+        printf("%d", laux->info.status);
+        laux = laux->prox;
+    }
 }
 
 #endif // FILA_H_INCLUDED

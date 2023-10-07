@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "FILA.h"    // gerenciamento de fila/lista
 #include <stdbool.h> // trabalhar com booleanos
-#include <time.h>    // utilizar hora
+
 
 #define NUM_CHAR 30
 
@@ -28,6 +28,7 @@ int main(){
         menu();
         scanf("%d", &opcao);
         system("cls");
+        verificarStatus(F1,LP);
 
         switch (opcao){
 
@@ -76,7 +77,7 @@ int main(){
             salvarFila(Arq_F1, F1);
             salvarLista(Arq_LP, LP);
             salvarLista(Arq_LC, LC);
-            liberaFila(F1);
+            liberarFila(F1);
             liberaLista(LP);
             liberaLista(LC);
             end = true;
