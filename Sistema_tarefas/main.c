@@ -12,14 +12,14 @@ void menu();
 
 int main(){
     Fila *F1 = CriaFila(); //Criando a Fila principal
-    No *LP = inicializaLista(); // ''     Lista de pendentes
+    //No *LP = inicializaLista(); // ''     Lista de pendentes
     No *LC = inicializaLista(); // ''     Lista de concluidos
     //carregando data
     const char *Arq_F1 = "database_F1.txt";
-    const char *Arq_LP = "database_LP.txt";
+//    const char *Arq_LP = "database_LP.txt";
     const char *Arq_LC = "database_LC.txt";
     carregarFila(Arq_F1,F1);
-    carregarLista(Arq_LP,LP);
+//    carregarLista(Arq_LP,LP);
     carregarLista(Arq_LC,LC);
 
     // variaveis do loop principal do program
@@ -46,6 +46,7 @@ int main(){
         case 3:
             printf("Concluir uma tarefa\n");
             LC = ConcluirTarefa(F1);
+            F1 = ExcluirTarefaFila(F1,LC);
             break;
 
         case 4:
@@ -53,7 +54,7 @@ int main(){
             break;
         case 5:
             printf("Listar tarefas pendentes\n");
-            imprimirLista(LP);
+//            imprimirLista(LP);
             system("pause");
             break;
 
@@ -73,10 +74,10 @@ int main(){
             printf("Sair do programa\n");
             // Salvando data
             salvarFila(Arq_F1, F1);
-            salvarLista(Arq_LP, LP);
+//            salvarLista(Arq_LP, LP);
             salvarLista(Arq_LC, LC);
             liberaFila(F1);
-            liberaLista(LP);
+//            liberaLista(LP);
             liberaLista(LC);
             end = true;
             break;
