@@ -8,8 +8,7 @@
 
 void menu();
 
-int main()
-{
+int main(){
     Fila *F1 = CriaFila(); // Criando a Fila principal
     No *LP = inicializa(); // ''     Lista de pendentes
     No *LC = inicializa(); // ''     Lista de concluidos
@@ -25,14 +24,13 @@ int main()
     int opcao = 0;
     bool end = false;
     // loop principal
-    while (end == false)
-    {
+    while (end == false){
         menu();
         scanf("%d", &opcao);
         system("cls");
 
-        switch (opcao)
-        {
+        switch (opcao){
+
         case 1:
             printf("Adicionar uma nova tarefa\n");
             inserirFila(F1,LC,LP);
@@ -65,26 +63,9 @@ int main()
             break;
 
         case 7:
-            printf("Selecione uma das opcoes\n");
-            printf("1 - imprimir lista completa\n");
-            printf("2 - imprimir lista de conc com atraso\n");
-            printf("3 - imprimir lista de conc sme atraso\n");
-            int opcao_LC;
-            scanf("%d", &opcao_LC);
-            switch (opcao_LC)
-            {
+            imprimirListaConcluidas(LC);
+            break;
 
-                
-
-            case 1:
-                imprimirLista(LC);
-                break;
-            case 2:
-                imprimirListaConcluidas(LC, opcao_LC);
-                break;
-            case 3:
-                imprimirListaConcluidas(LC, opcao_LC);
-                break;
 
         case 8:
             printf("Sair do programa\n");
@@ -105,6 +86,7 @@ int main()
     }
     return 0;
 }
+
 
 void menu(){
     system("cls");

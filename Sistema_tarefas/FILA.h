@@ -289,43 +289,63 @@ void imprimirLista(No *p)
     }
 }
 
-void imprimirListaConcluidas(No *p,int opcao)
-{
+void imprimirListaConcluidas(No *p){
+    printf("Listar tarefas concluidas\n");
+    printf("\n\tSelecione uma das opcoes");
+    printf("\n\t1 - Imprimir lista de concluidas completa");
+    printf("\n\t2 - Imprimir lista de concluidas com atraso");
+    printf("\n\t3 - Imprimir lista de concluidas sem atraso");
+    printf("\n\t0 - Retornar\n");
+
+    int opcao_LC;
+    scanf("%d", &opcao_LC);
     No *aux = p;
-    if (VaziaLista(aux))
-    {
-        printf("\n\n\t\t => LISTA VAZIA <==\n\n ");
-    }
-    else
-    {
-        if (opcao == 2)
-        {
 
-             while (aux != NULL)
-             {
-                Tarefa tarefa_comp = aux->info;
-                if(tarefa_comp.status == 1)
-                imprimirTarefa (aux->info);
-                printf("\n");
-               aux = aux->prox;
+    switch (opcao_LC){
+
+        case 1:
+            system("cls");
+            imprimirLista(p);
+            system("pause");
+            break;
+
+        case 2:
+            system("cls");
+            if (VaziaLista(aux)){
+                printf("\n\n\t\t => LISTA VAZIA <==\n\n ");
+            }else{
+                while (aux != NULL){
+                    Tarefa tarefa_comp = aux->info;
+                    if(tarefa_comp.status == 1)
+                    imprimirTarefa (aux->info);
+                    printf("\n");
+                    aux = aux->prox;
+                }
+            }
+            system("pause");
+            break;
+
+        case 3:
+            system("cls");
+            if (VaziaLista(aux)){
+                printf("\n\n\t\t => LISTA VAZIA <==\n\n ");
+            }else{
+                while (aux != NULL){
+                    Tarefa tarefa_comp = aux->info;
+                    if(tarefa_comp.status == 0) imprimirTarefa (aux->info);
+                    printf("\n");
+                    aux = aux->prox;
+                }
              }
-              
-            
-        }
+            system("pause");
+            break;
 
-        if (opcao == 3)
-        {
+            case 0:
+                break;
 
-            while (aux != NULL)
-             {
-                Tarefa tarefa_comp = aux->info;
-                if(tarefa_comp.status == 0)
-                imprimirTarefa (aux->info);
-                printf("\n");
-                aux = aux->prox;
-             }
-           
-        }
+            default:
+                printf("Opcao invalida\n");
+                break;
     }
 }
 
