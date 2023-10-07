@@ -13,14 +13,15 @@
 
 1695309680 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\data.h
 
-1696655938 source:c:\eu\sistema_tarefas\sistema_tarefas\main.c
+1696689965 source:c:\eu\sistema_tarefas\sistema_tarefas\main.c
 	<stdlib.h>
 	<stdio.h>
 	"FILA.h"
 	<stdbool.h>
-	<time.h>
 
-1696656509 c:\eu\sistema_tarefas\sistema_tarefas\fila.h
+1696689974 c:\eu\sistema_tarefas\sistema_tarefas\fila.h
+	<time.h>
+	<string.h>
 
 1695567221 c:\eu\sistema_tarefas\sistema_tarefas\tarefa.h
 
