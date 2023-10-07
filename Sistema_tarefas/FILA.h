@@ -143,6 +143,10 @@ Fila *liberarFila(Fila *f){
 
 void imprimirFila(Fila *f){
     No *q;
+    if (VaziaFila(f))
+    {
+        printf("\n\n\t\t ==> FILA VAZIA <==\n\n ");
+    }
     for (q = f->ini; q != NULL; q = q->prox)
     {
         imprimirTarefa(q->info); // funcao para imprimir as infos da tarefa
@@ -250,7 +254,114 @@ void editarFila(Fila *f, No* lp){
     aux->info = editarTarefa(aux->info);
 }
 
+void excluirNoFila(Fila *f, No *aux) {
+    No *ant = NULL;
+    No *atual = f->ini;
 
+    while (atual != NULL) {
+        if (atual == aux) {
+            if (ant == NULL) {
+                // O nó a ser excluído é o primeiro da fila
+                f->ini = atual->prox;
+                free(atual);
+                return;
+            } else {
+                // O nó a ser excluído não é o primeiro da fila
+                ant->prox = atual->prox;
+                free(atual);
+                return;
+            }
+        }
+        ant = atual;
+        atual = atual->prox;
+    }
+}
+
+No* excluirNoLista(No* l, No* aux) {
+    No* ant = NULL;
+    No* p = l;
+    // Percorre a lista para encontrar o nó com o código desejado
+    while (p != NULL && p != aux) {
+        ant = p;
+        p = p->prox;
+    }
+
+    printf("%d", l->info.cod);
+    system("pause");
+
+    if (p == NULL) return l;
+    // Verifica se o nó a ser excluído é o primeiro da lista
+    if (ant == NULL){
+        l = p->prox;
+    }else{
+        ant->prox = p->prox;
+    }
+    free(p);
+    return l;
+}
+
+
+
+void excluir_geral(Fila *f, No *lp, No *lc){
+    int code = 0;
+    int check = 1;
+
+    do{
+        if (check == 0)
+        {
+            printf("\tFalha na leitura do codigo tente novamente.");
+        }
+        printf("\n\tCaso deseje sair, digite 0");
+        printf("\n\tDigite o codigo da tarefa que deseja excluir:");
+        fflush(stdin);
+        check = scanf("%d", &code); // verificaçãod e leitura
+    } while (check == 0);
+    if(code == 0) return;
+    // busca do codigo na fila principal
+    No *aux = f->ini;
+    if(f-> ini != NULL){
+      check = 0;
+    }else{
+        check = -1;
+    }
+    while (check == 0){
+        if(aux->info.cod == code){
+            check = 1; //achou o codigo
+            excluirNoFila(f, aux);
+        }else if(aux->prox != NULL){
+            aux = aux->prox; //nao achou proxmio
+        }else{
+            check = -1; //nao achou o codigo
+        }
+    }
+    //chegou ao final da fila, pula pra lista pendentes
+    if ( check == -1) aux = lp;
+    while( check == -1){
+        if(aux->info.cod == code){
+            check = 1; //achou o codigo
+            lp = excluirNoLista(lp,aux);
+        }else if(aux->prox != NULL){
+            aux = aux->prox; //nao achou proxmio
+        }else{
+           check = 0; //nao achou o codigo
+        }
+    }
+    //chegou ao final da fila, pula pra lista concluidos
+
+    if ( check == 0) aux = lc;
+    while( check == 0){
+        if(aux->info.cod == code){
+            check = 1; //achou o codigo
+
+            lc = excluirNoLista(lc,aux);
+        }else if(aux->prox != NULL){
+            aux = aux->prox; //nao achou proxmio
+        }else{
+            printf("Tarefa nao existe !!!");
+            return;
+        }
+    }
+}
 
 // Funcoes Lista
 No *inicializa(){
@@ -425,7 +536,6 @@ void salvarLista(const char *n, No *l){
     }
     fclose(arq);
 }
-
 
 
 // Funcoes Tarefa
@@ -797,7 +907,7 @@ No* ConcluirTarefa(Fila *f, No *LC){
                 printf("Opcao invalida\n");
         }
     }
-    return NULL;
+    return LC;
 }
 
 int verificarCod(Fila *f, No *lc, No *lp, int t){
