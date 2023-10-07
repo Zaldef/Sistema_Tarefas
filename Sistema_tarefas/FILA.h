@@ -29,31 +29,35 @@ typedef struct fila{
 } Fila;
 
 // prototipos fila
-Fila* CriaFila();                            //CRIA A FILA
 int VaziaFila (Fila* f);                     //VERIFICA SE A FILA EST� VAIZA
+Fila* CriaFila();                            //CRIA A FILA
 No* ins_fim (No* fim, Fila *f);
-void InsereFila (Fila* f, int v);            //INSER��O
-int RetiraFila (Fila* f);                   //REMO��O
+void InserirFila (Fila* f);            //INSER��O
 Fila* liberaFila (Fila* f);                  //LIBERA A FILA
+No* retira_ini (No* ini);
+int RetiraFila (Fila* f);                   //REMO��O
 void imprimeFila (Fila* f);                  //IMPRIME A FILA
 void carregarFila(const char *n,Fila* f);    //CARREGA UMA FILA SALVADA EXTERNAMENTE
 void salvarFila(const char *n,Fila* f);      //SALVA UMA FILA EM ARQUIVO EXTERNO
 void editarFila(Fila* f);                    // edita algum no da fila
-// Funcoes de fila
+
+// prototipos de lista
 No* inicializa();
 No* inserirLista (No* recebida, Tarefa valor);
 int VaziaLista(No *recebida);
+void imprimirLista(No* p);
 No* liberaLista(No *receb);
-No* carregarLista(const char *n,No* L);
+No* carregarLista(const char *n);
+void salvarLista(const char *n,No* l);
 
 // Prototipo Tarefa
+int DataValida(int dia, int mes, int ano);
 Tarefa novaTarefa(Fila* f);                 //Criando nova tarefa
 void imprimirTarefa(Tarefa T);              //Imprimir Tarefa
-void editarFila(Fila* f);                   //
 Tarefa editarTarefa(Tarefa old);             //
 int verificarCod(Fila *f, int t);
-void imprimirLista(No* p);
-void salvarLista(const char *n,No* l);
+
+
 
 int VaziaFila(Fila* f){
     if (f->ini==NULL) return 1;
@@ -244,7 +248,7 @@ No* liberaLista(No *receb){
     return NULL;
 }
 
-No* carregarLista(const char *n,No* L){
+No* carregarLista(const char *n){
     No *aux = NULL;
     FILE *arq = fopen(n, "r");
     // FILE *arq, ponteiro do tipo file que vai percorrer o arquivo

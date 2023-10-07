@@ -17,8 +17,8 @@ int main(){
     const char *Arq_LP = "database_LP.txt";
     const char *Arq_LC = "database_LC.txt";
     carregarFila(Arq_F1,F1);
-    LP = carregarLista(Arq_LP,LP);
-    LC = carregarLista(Arq_LC,LC);
+    LP = carregarLista(Arq_LP);
+    LC = carregarLista(Arq_LC);
 
     // variaveis do loop principal do program
     int opcao = 0;
