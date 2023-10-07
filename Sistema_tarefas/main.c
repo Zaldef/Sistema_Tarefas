@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "FILA.h" // gerenciamento de fila
-#include "TAREFA.h" // gerenciamento de tarefa
+#include "FILA.h" // gerenciamento de fila/lista
 #include<stdbool.h> // trabalhar com booleanos
 #include <time.h> // utilizar hora
 
@@ -11,15 +10,15 @@ void menu();
 
 int main(){
     Fila *F1 = CriaFila(); //Criando a Fila principal
-    //Fila *LP = CriaLista(); // ''     Lista de pendentes
-    //Fila *LC = CriaLista(); // ''     Lista de concluidos
+    No *LP = inicializa(); // ''     Lista de pendentes
+    No *LC = inicializa(); // ''     Lista de concluidos
     //carregando data
     const char *Arq_F1 = "database_F1.txt";
     const char *Arq_LP = "database_LP.txt";
     const char *Arq_LC = "database_LC.txt";
     carregarFila(Arq_F1,F1);
-    //carregarLista(Arq_LP,FP);
-    //carregarLista(Arq_LC,FC);
+    LP = carregarLista(Arq_LP,LP);
+    LC = carregarLista(Arq_LC,LC);
 
     // variaveis do loop principal do program
     int opcao = 0;
@@ -51,29 +50,37 @@ int main(){
             break;
         case 5:
             printf("Listar tarefas pendentes\n");
-            //imprimirLista(LP);
+            imprimirLista(LP);
+            system("pause");
             break;
 
         case 6:
             printf("Listar tarefas concluidas\n");
+            imprimirLista (LC);
+
+
+            //switch(scanf("%d")){
+
+           // case 1:
+
+
+            //break
+            //}
             //1 - imprimir lista completa
             // 2 - imprimir lista de conc com atraso
             // 3 - imprimir lista de conc sme atraso
+            system("pause");
             break;
 
         case 7:
-            printf("Listar tarefas concluidas com e sem atraso\n");
-            break;
-
-        case 8:
             printf("Sair do programa\n");
             // Salvando data
             salvarFila(Arq_F1, F1);
-            //salvarLista(Arq_LP, LP);
-            //salvarLista(Arq_LC, LC);
+            salvarLista(Arq_LP, LP);
+            salvarLista(Arq_LC, LC);
             liberaFila(F1);
-            //liberaLista(LP);
-            //liberaLista(LC);
+            liberaLista(LP);
+            liberaLista(LC);
             end = true;
             break;
         default:
@@ -92,7 +99,6 @@ void menu(){
     printf("\n\t4 - Atualizacao do status de uma tarefa");
     printf("\n\t5 - Listar tarefas pendentes");
     printf("\n\t6 - Listar tarefas concluidas");
-    printf("\n\t7 - Listar tarefas concluidas com e sem atraso");
-    printf("\n\t8 - Sair do programa\n");
+    printf("\n\t7 - Sair do programa\n");
 }
 
