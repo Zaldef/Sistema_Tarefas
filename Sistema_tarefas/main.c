@@ -1,18 +1,19 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "FILA.h" // gerenciamento de fila/lista
-#include<stdbool.h> // trabalhar com booleanos
-#include <time.h> // utilizar hora
+#include "FILA.h"    // gerenciamento de fila/lista
+#include <stdbool.h> // trabalhar com booleanos
+#include <time.h>    // utilizar hora
 
 #define NUM_CHAR 30
 
 void menu();
 
-int main(){
-    Fila *F1 = CriaFila(); //Criando a Fila principal
+int main()
+{
+    Fila *F1 = CriaFila(); // Criando a Fila principal
     No *LP = inicializa(); // ''     Lista de pendentes
     No *LC = inicializa(); // ''     Lista de concluidos
-    //carregando data
+    // carregando data
     const char *Arq_F1 = "database_F1.txt";
     const char *Arq_LP = "database_LP.txt";
     const char *Arq_LC = "database_LC.txt";
@@ -23,13 +24,15 @@ int main(){
     // variaveis do loop principal do program
     int opcao = 0;
     bool end = false;
-    //loop principal
-    while(end == false){
+    // loop principal
+    while (end == false)
+    {
         menu();
         scanf("%d", &opcao);
         system("cls");
 
-        switch(opcao){
+        switch (opcao)
+        {
         case 1:
             printf("Adicionar uma nova tarefa\n");
             inserirFila(F1,LC,LP);
@@ -62,22 +65,26 @@ int main(){
             break;
 
         case 7:
-            printf("Listar tarefas concluidas\n");
-            imprimirLista (LC);
+            printf("Selecione uma das opcoes\n");
+            printf("1 - imprimir lista completa\n");
+            printf("2 - imprimir lista de conc com atraso\n");
+            printf("3 - imprimir lista de conc sme atraso\n");
+            int opcao_LC;
+            scanf("%d", &opcao_LC);
+            switch (opcao_LC)
+            {
 
+                
 
-            //switch(scanf("%d")){
-
-           // case 1:
-
-
-            //break
-            //}
-            //1 - imprimir lista completa
-            // 2 - imprimir lista de conc com atraso
-            // 3 - imprimir lista de conc sme atraso
-            system("pause");
-            break;
+            case 1:
+                imprimirLista(LC);
+                break;
+            case 2:
+                imprimirListaConcluidas(LC, opcao_LC);
+                break;
+            case 3:
+                imprimirListaConcluidas(LC, opcao_LC);
+                break;
 
         case 8:
             printf("Sair do programa\n");
@@ -110,4 +117,3 @@ void menu(){
     printf("\n\t7 - Listar tarefas concluidas");
     printf("\n\t8 - Sair do programa\n");
 }
-
