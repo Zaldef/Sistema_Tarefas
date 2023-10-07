@@ -827,21 +827,40 @@ void verificarStatus(Fila *f, No *lp) {
     while (faux != NULL) {
         time_t tempoTerminoTarefa;
         struct tm DataTerminoTarefa;
-
         memset(&DataTerminoTarefa, 0, sizeof(struct tm)); // setando todos os campos com 0
         DataTerminoTarefa.tm_year = faux->info.ter.ano - 1900; // Ano
         DataTerminoTarefa.tm_mon = faux->info.ter.mes - 1;     // Mês (0 a 11)
         DataTerminoTarefa.tm_mday = faux->info.ter.dia;
-
-
-
         tempoTerminoTarefa = mktime(&DataTerminoTarefa);
-
+        //cai dentro if provavelmente por receber datas menores que 1900, que na conversao se torna um int negativo
         if(tempoTerminoTarefa == -1){
             // Erro na conversão da data
-            faux->info.status = 1; // Status -2 para erro na data
-            printf("--->Estou AQUI <---");
-            system("pause");
+            faux->info.status = 1; // Status -1 para atrasada
+        }else{
+            // Compare as datas
+            if(tempoAtual > tempoTerminoTarefa){
+                faux->info.status = 1; // A tarefa está atrasada
+            }else{
+                faux->info.status = 0; // A tarefa está adiantada
+            }
+        }
+
+        faux = faux->prox;
+    }
+
+    faux = lp;
+    while (faux != NULL) {
+        time_t tempoTerminoTarefa;
+        struct tm DataTerminoTarefa;
+        memset(&DataTerminoTarefa, 0, sizeof(struct tm)); // setando todos os campos com 0
+        DataTerminoTarefa.tm_year = faux->info.ter.ano - 1900; // Ano
+        DataTerminoTarefa.tm_mon = faux->info.ter.mes - 1;     // Mês (0 a 11)
+        DataTerminoTarefa.tm_mday = faux->info.ter.dia;
+        tempoTerminoTarefa = mktime(&DataTerminoTarefa);
+        //cai dentro if provavelmente por receber datas menores que 1900, que na conversao se torna um int negativo
+        if(tempoTerminoTarefa == -1){
+            // Erro na conversão da data
+            faux->info.status = 1; // Status -1 para atrasada
         }else{
             // Compare as datas
             if(tempoAtual > tempoTerminoTarefa){

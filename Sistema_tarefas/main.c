@@ -12,6 +12,7 @@ int main(){
     Fila *F1 = CriaFila(); // Criando a Fila principal
     No *LP = inicializa(); // ''     Lista de pendentes
     No *LC = inicializa(); // ''     Lista de concluidos
+
     // carregando data
     const char *Arq_F1 = "database_F1.txt";
     const char *Arq_LP = "database_LP.txt";
@@ -23,12 +24,13 @@ int main(){
     // variaveis do loop principal do program
     int opcao = 0;
     bool end = false;
+
     // loop principal
     while (end == false){
         menu();
         scanf("%d", &opcao);
         system("cls");
-        verificarStatus(F1,LP);
+        verificarStatus(F1,LP); // função que roda as Fila principal e a Lista de pendentes, atualizando seus status de atrasada
 
         switch (opcao){
 
