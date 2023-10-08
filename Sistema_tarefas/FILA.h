@@ -525,6 +525,37 @@ void salvarLista(const char *n, No *l){
     fclose(arq);
 }
 
+No* inserirListaOrdenada (No* l, Tarefa valor){
+    No *novo = (No*) malloc(sizeof(No));
+    No *aux  = l;
+    novo->info = valor;
+    if(aux == NULL){
+        novo->prox = l;
+    }else{
+        if()
+
+
+
+
+
+    }
+
+
+    return novo;
+}
+int comparaData(No *A, No *B){ // retorna 1 se A for maior, 0 se B maior
+
+    if(A->info.ter.ano > B->info.ter.ano){
+        return 1;
+    }else if(A->info.ter.ano < B->info.ter.ano){
+        return 0;
+    }else if(A->info.ter.mes > B->info.ter.mes){
+        return 1;
+    }
+
+
+
+}
 
 // Funcoes Tarefa
 int DataValida(int dia, int mes, int ano){
@@ -966,7 +997,6 @@ void verificarStatus(Fila *f) {
         faux = faux->prox;
     }
 }
-
     // função para alterar o status da tarefa para pendente
 No* TarefaPendente(Fila *f, No *LP){
     Tarefa new;
