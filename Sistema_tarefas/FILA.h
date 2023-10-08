@@ -263,7 +263,7 @@ void excluir_geral(Fila *f, No **lp, No **lc){
             printf("\tFalha na leitura do código, tente novamente.");
         }
         printf("\n\tCaso deseje sair, digite 0");
-        printf("\n\tDigite o código da tarefa que deseja excluir:");
+        printf("\n\tDigite o codigo da tarefa que deseja excluir:");
         fflush(stdin);
         check = scanf("%d", &code); // verificação de leitura
     } while (check == 0);
@@ -467,6 +467,7 @@ No *liberaLista(No *receb){
 
 No* carregarLista(const char *n){
     No *aux = NULL;
+    No* ultimo = NULL;
     FILE *arq = fopen(n, "r");
     // FILE *arq, ponteiro do tipo file que vai percorrer o arquivo
     // fopen(arquivo a ser aberto, r- read_only);
@@ -489,8 +490,13 @@ No* carregarLista(const char *n){
         }
 
         novoNo->info = T;
-        novoNo->prox = aux;
-        aux = novoNo;
+        novoNo->prox = NULL;
+        if(ultimo == NULL){
+            aux = novoNo;
+        }else{
+            ultimo->prox = novoNo;
+        }
+        ultimo = novoNo;
     }
     // fecha o arquivo pois nao necessita mais ser usado
     fclose(arq);
@@ -555,7 +561,7 @@ Tarefa novaTarefa(Fila *f, No *lc, No *lp){
     {
         if (check_cod == 0)
         {
-            printf("\t Ja existe um tarefa com esse codigo, digite novamente");
+            printf("\t Nao pode ou ja existe uma tarefa com esse codigo, digite novamente");
         }
         do
         {
@@ -830,6 +836,13 @@ Tarefa SelecionarTarefa(Fila* f){
     No* aux = f->ini;
     int code =0;
     int check = 1;
+    Tarefa erro;
+    memset(&erro, 0, sizeof(Tarefa));  //setando tarefa erro com 0 em todos os campos
+
+    if(aux == NULL){
+        system("pause");
+        return erro; //caso nao ache o codigo retorna erro(tarefa nula)
+    }
 
     do{
         if (check == 0){
@@ -840,10 +853,15 @@ Tarefa SelecionarTarefa(Fila* f){
         fflush(stdin);
         check = scanf("%d",&code);
     }while(check == 0);
+    if(code == 0) return erro; //caso seja digitado 0 retorna erro(tarefa nula)
     aux = f->ini;
-    while (aux->info.cod != code)
-    {
+    while (aux->info.cod != code){
         aux=aux->prox;
+        if(aux == NULL){
+            printf("\n\tTarefa nao encontrada\n\n\t");
+            system("pause");
+            return erro; //caso nao ache o codigo retorna erro(tarefa nula)
+        }
     }
     return aux->info;
 }
@@ -860,6 +878,7 @@ No* ConcluirTarefa(Fila *f, No *LC){
 
     //Seleção de tarefas
     new = SelecionarTarefa(f);
+    if(new.cod == 0) return LC;
 
     while(A == 0){
         system("cls");
@@ -890,6 +909,7 @@ No* ConcluirTarefa(Fila *f, No *LC){
 
 int verificarCod(Fila *f, No *lc, No *lp, int t){
     No* q;
+    if(t <= 0) return 0;// nao pode tarefas com numeros negativos
     //percorre todas as tarefa comparando o codigo, se ja existir retorna 0
     // Fila principal
     for (q=f->ini; q!=NULL; q=q->prox){

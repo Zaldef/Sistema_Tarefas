@@ -57,8 +57,12 @@ int main(){
         case 4:
             printf("Concluir uma tarefa\n");
             imprimirFila(F1);
-            LC = ConcluirTarefa(F1,LC);
-            F1 = ExcluirTarefaFila(F1,LC);
+            if(F1->ini == NULL){
+                system("pause");
+            }else{
+                LC = ConcluirTarefa(F1,LC);
+                F1 = ExcluirTarefaFila(F1,LC);
+            }
             break;
 
         case 5:
