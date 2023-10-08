@@ -67,19 +67,37 @@ int main(){
 
         case 5:
             printf("Atualizacao do status da tarefa\n");
+            imprimirFila(F1);
+            if(F1->ini == NULL){
+                system("pause");
+            }else{
+                LP = TarefaPendente(F1,LP);
+                F1 = ExcluirTarefaFila(F1,LP); //exclui todas as tarefas que estão na lista de pendentes da fila
+            }
             break;
 
-        case 6:
+            case 6:
+            printf("Atualizacao do status da tarefa\n");
+            imprimirFila(F1);
+            if(F1->ini == NULL){
+                system("pause");
+            }else{
+                //LP = RemoverTarefaPendente(LP);
+                //InsereFilaTarefa(F1,LP);
+            }
+            break;
+
+        case 7:
             printf("Listar tarefas pendentes\n");
             imprimirLista(LP);
             system("pause");
             break;
 
-        case 7:
+        case 8:
             imprimirListaConcluidas(LC);
             break;
 
-        case 8:
+        case 9:
             printf("\n\t=========Fila de tarefas===========\n");
             imprimirFila(F1);
             printf("\n\t====Lista de tarefas pendentes=====\n");
@@ -89,7 +107,7 @@ int main(){
             excluir_geral(F1,&LP,&LC);
             break;
 
-        case 9:
+        case 10:
             printf("Sair do programa\n");
             // Salvando data
             salvarFila(Arq_F1, F1);
@@ -116,9 +134,10 @@ void menu(){
     printf("\n\t2 - Listar tarefas");
     printf("\n\t3 - Modificar uma tarefa");
     printf("\n\t4 - Concluir uma tarefa");
-    printf("\n\t5 - Atualizacao do status de uma tarefa");
-    printf("\n\t6 - Listar tarefas pendentes");
-    printf("\n\t7 - Listar tarefas concluidas");
-    printf("\n\t8 - Excluir tarefa");
-    printf("\n\t9 - Sair do programa\n");
+    printf("\n\t5 - Adicionar tarefa pendente");
+    printf("\n\t6 - Remover tarefa pendente");
+    printf("\n\t7 - Listar tarefas pendentes");
+    printf("\n\t8 - Listar tarefas concluidas");
+    printf("\n\t9 - Excluir tarefa");
+    printf("\n\t10 - Sair do programa\n");
 }
