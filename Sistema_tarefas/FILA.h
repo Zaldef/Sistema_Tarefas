@@ -39,7 +39,7 @@ Fila* CriaFila();                            //CRIA A FILA
 No* ins_fim (No* fim, Tarefa new);
 No* ins_fim_tarefa (No* fim, No *no);
 void InsereFilaTarefa (Fila* f, No *no);
-Fila *ExcluirTarefaFila(Fila *F, No *LC);
+void ExcluirTarefaFila(Fila *f1,Fila *f2,Fila *f3, No *LC);
 void InserirFila (Fila* f,Tarefa new);            //INSER��O
 Fila* liberaFila (Fila* f);                  //LIBERA A FILA
 No* retira_ini (No* ini);
@@ -47,7 +47,7 @@ Tarefa RetiraFila (Fila* f);                   //REMO��O
 void imprimirFila (Fila* f);                  //IMPRIME A FILA
 void carregarFila(const char *n,Fila* f);    //CARREGA UMA FILA SALVADA EXTERNAMENTE
 void salvarFila(const char *n,Fila* f);      //SALVA UMA FILA EM ARQUIVO EXTERNO
-void editarFila(Fila* f1,Fila* f2,Fila* f3);                    // edita algum no da fila
+void editarFila(Fila* f1,Fila* f2,Fila* f3);// edita algum no da fila
 
 // prototipos de lista
 No* inicializa();
@@ -107,23 +107,57 @@ void InsereFilaTarefa (Fila* f, No *no)
     f->ini = f->fim;
 }
 
-Fila *ExcluirTarefaFila(Fila *F, No *LC){
-    Fila *f = CriaFila();
+Fila *new_Fila(Fila *F,No*LC){
+
+    Fila* new = CriaFila();
+    imprimirFila(F);
+    system("pause");
+
+
     No *aux = F->ini;
-    int flag = 0;
-    while(!flag){
-        //verifica se o codigo e igual
-        if(aux->info.cod == LC->info.cod){
-            aux = aux->prox;
-        }else{
-            InsereFilaTarefa(f,aux);
-            aux = aux->prox;
-        }
-        if (aux == NULL) flag = 1;
-    }
-    free(F);
-    return f;
+            while (aux != NULL) {
+                // Verifica se o código é igual
+                if (aux->info.cod != LC->info.cod) {
+                    InsereFilaTarefa(new, aux);
+
+                }
+                aux = aux->prox;
+            }
+
+
+            // Libera a memória da fila original
+
+            //free(F);
+
+            imprimirFila(new);
+            system("pause");
+            imprimirFila(F);
+            system("pause");
+
+            // Substitui a fila original pela nova fila
+            return new;
+
 }
+
+void ExcluirTarefaFila(Fila *f1, Fila *f2, Fila *f3, No *LC) {
+    Fila *Vetor[3];
+
+    Vetor[0] = f1;
+    Vetor[1] = f2;
+    Vetor[2] = f3;
+
+    for (int i = 0; i < 3; i++) {
+
+        if (Vetor[i]->ini != NULL) {
+            Vetor[i]=new_Fila(Vetor[i],LC);
+        }
+
+    }
+}
+
+
+
+
 
 void inserirFila(Fila* f, Tarefa new){
     f->fim = ins_fim(f->fim, new);

@@ -73,13 +73,12 @@ int main(){
         case 4:
             printf("Concluir uma tarefa\n");
             imprimirFila(F1);
+            imprimirFila(F2);
+            imprimirFila(F3);
            
             LC = ConcluirTarefa(F1,F2,F3,LC);
-
-            //F1 = ExcluirTarefaFila(F1,LC);
-            //F2 = ExcluirTarefaFila(F2,LC);
-            //F3 = ExcluirTarefaFila(F3,LC);
-
+            ExcluirTarefaFila(F1,F2,F3,LC);
+            
             break;
 
         case 5:
