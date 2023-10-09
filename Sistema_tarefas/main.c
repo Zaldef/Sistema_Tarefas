@@ -12,6 +12,7 @@ int main(){
     Fila *F1 = CriaFila(); // Criando a Fila principal
     No *LP = inicializa(); // ''     Lista de pendentes
     No *LC = inicializa(); // ''     Lista de concluidos
+    Tarefa AuxT;
 
     // carregando data
     const char *Arq_F1 = "database_F1.txt";
@@ -60,8 +61,11 @@ int main(){
             if(F1->ini == NULL){
                 system("pause");
             }else{
-                LC = ConcluirTarefa(F1,LC);
-                F1 = ExcluirTarefaFila(F1,LC);
+                AuxT = SelecionarTarefa(F1);
+                if(AuxT.cod != 0){
+                    LC = ConcluirTarefa(AuxT,LC);
+                    F1 = ExcluirTarefaFila(F1,LC);
+                }
             }
             break;
 
@@ -71,8 +75,11 @@ int main(){
             if(F1->ini == NULL){
                 system("pause");
             }else{
-                LP = TarefaPendente(F1,LP);
-                F1 = ExcluirTarefaFila(F1,LP); //exclui todas as tarefas que estão na lista de pendentes da fila
+                AuxT = SelecionarTarefa(F1);
+                if(AuxT.cod != 0){
+                    LP = TarefaPendente(AuxT,LP);
+                    F1 = ExcluirTarefaFila(F1,LP);
+                }
             }
             break;
 
