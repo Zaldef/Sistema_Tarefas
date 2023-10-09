@@ -1,11 +1,11 @@
 # depslib dependency file v1.0
-1696865645 source:c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\main.c
+1696874892 source:c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\main.c
 	<stdlib.h>
 	<stdio.h>
 	"FILA.h"
 	<stdbool.h>
 
-1696867128 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\fila.h
+1696874891 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\fila.h
 	<time.h>
 	<string.h>
 

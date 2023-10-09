@@ -49,7 +49,7 @@ Tarefa SelecionarTarefa_F_LP(Fila* f, No *lp);  //EDITAR ALGUM NÓ NA FILA
 No* inicializa();                               //INICIALIZA LISTA
 No* inserirLista (No* recebida, Tarefa valor);  //INSERIR
 int VaziaLista(No *recebida);                   //VERIFICA SE A LISTA ESTA VAZIA
-No* retiraTarefaPendente (No* l, Tarefa t);     //RETIRA TAREFA PENDENTE DA LISTA
+void retiraTarefaPendente (No** l, Tarefa t);     //RETIRA TAREFA PENDENTE DA LISTA
 void imprimirLista(No* p);                      //IMPRIME A FILA
 void imprimirListaConcluidas(No *p);            //IMPRIME LISTAS DE CONCLUIDAS
 No* liberaLista(No *receb);                     //LIBERA A LISTA
@@ -68,6 +68,7 @@ int verificarCod(Fila *f, No *lc, No *lp, int t);   //VERIFICA CODIGO DA TAREFA 
 void verificarStatus(Fila *f);                      //VERIFICA O STATUS DE ATRASADA
 No* TarefaPendente(Tarefa t, No *LP);               //MUDANÇA DE STATUS PARA PENDENTE
 int comparaData(No *A, No *B);                      //COMPARA DATA DE TERMINO DE DOIS NÓS
+Tarefa SelecionarTarefaLista(No *lp);               //SELECIONAR TAREFA DE UMA LISTA
 
 
 int VaziaFila(Fila *f){
@@ -288,10 +289,10 @@ void excluir_geral(Fila *f, No **lp, No **lc){
     No *ant = NULL;
     check = 0;
 
-    while (aux != NULL) {
-        if (aux->info.cod == code) {
+    while (aux != NULL){
+        if (aux->info.cod == code){
             if (ant == NULL) {
-                // É o primeiro nó da lista principal
+                // É o primeiro nó da fila principal
                 f->ini = aux->prox;
             } else {
                 // Não é o primeiro nó, ajusta o ponteiro do nó anterior
@@ -371,26 +372,6 @@ int VaziaLista(No *recebida){
  return (recebida == NULL);
 }
 
-No* retiraTarefaPendente (No* l, Tarefa t){
-    No* ant = inicializa();
-    No* p = l;
-    while (p != NULL && p->info.cod != t.cod){
-        ant = p;
-        p = p->prox;
-    }
- /* verifica se achou elemento */
-    if (p == NULL)
-    return l; /* não achou: retorna lista original */
-    /* retira elemento */
-    if (ant == NULL) {
-        l = p->prox; // retira elemento do inicio
-    }else{
-        ant->prox = p->prox; // retira elemento do meio da lista
-    }
-    free(p);
-    return l;
-}
-
 void imprimirLista(No *p){
     No *aux = p;
     if (VaziaLista(aux))
@@ -401,7 +382,6 @@ void imprimirLista(No *p){
     {
         for (; aux != NULL; aux = aux->prox)
         {
-
             imprimirTarefa(aux->info);
             printf("\n");
         }
@@ -554,7 +534,28 @@ No* inserirListaOrdenada (No* l, Tarefa valor){
     return l;
 }
 
-
+void retiraTarefaPendente(No** l, Tarefa t){
+    No *aux = *l;
+    No *ant = NULL;
+    int check = 0;
+    while (check == 0) {
+        if (aux->info.cod == t.cod) {
+            if (ant == NULL) {
+                // É o primeiro nó da lista lp
+                *l = aux->prox;
+            } else {
+                // Não é o primeiro nó, ajusta o ponteiro do nó anterior
+                ant->prox = aux->prox;
+            }
+            free(aux);
+            check = 1;
+        }
+        if(check == 0){
+            ant = aux;
+            aux = aux->prox;
+        }
+    }
+}
 // Funcoes Tarefa
 int DataValida(int dia, int mes, int ano){
     if (mes < 1 || mes > 12) return 0; // Mês inválido
@@ -900,8 +901,6 @@ Tarefa SelecionarTarefa(Fila* f){
 }
 
 No* ConcluirTarefa(Tarefa t, No *LC){
-    int opcao;
-    int A = 0;
     // variaveis de tempo
     time_t tempoAtual;
     struct tm *tempoInfo;
@@ -969,10 +968,8 @@ void verificarStatus(Fila *f) {
         faux = faux->prox;
     }
 }
-    // função para alterar o status da tarefa para pendente
-No* TarefaPendente(Tarefa t, No *LP){
-    int opcao;
-    int A = 0;
+
+No* TarefaPendente(Tarefa t, No *LP){ // função para alterar o status da tarefa para pendente
     t.status = -1;
     LP = inserirListaOrdenada(LP, t); //retorna a lista
     return LP; // retorna a lista pendente com a tarefa
@@ -996,4 +993,38 @@ int comparaData(No *A, No *B){ // retorna 1 se A for maior, 0 se B maior
         return 1; //data de termino identicas
     }
 }
+
+Tarefa SelecionarTarefaLista(No *lp){
+    int code = 0;
+    int check = 1;
+    Tarefa erro;
+    memset(&erro, 0, sizeof(Tarefa));  //setando tarefa erro com 0 em todos os campos
+
+    do{
+        if (check == 0)
+        {
+            printf("\tFalha na leitura do codigo tente novamente.");
+        }
+        printf("\n\tCaso deseje sair, digite 0");
+        printf("\n\tDigite o codigo da tarefa que deseja editar:");
+        fflush(stdin);
+        check = scanf("%d", &code); // verificaçãod e leitura
+    } while (check == 0);
+    if(code == 0) return erro;
+
+    // busca do codigo na fila principal
+    No *aux = lp;
+    while( check == 1){
+        if(aux->info.cod == code){
+            check = 0; //achou o codigo
+        }else if(aux->prox != NULL){
+            aux = aux->prox; //nao achou proxmio
+        }else{
+            printf("Tarefa nao existe !!!");
+            return erro;
+        }
+    }
+    return aux->info;
+}
+
 #endif // FILA_H_INCLUDED
