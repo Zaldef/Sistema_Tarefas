@@ -95,9 +95,8 @@ No* ins_fim (No* fim, Fila *f, No *lc, No *lp){
 }
 
 No* ins_fim_tarefa (No* fim, No *no){
-    No* tarefa = no;
     No* p = (No*) malloc(sizeof(No));
-    p->info = tarefa->info;
+    p->info = no->info;
     p->prox = NULL;
     if (fim != NULL) /* verifica se lista n�o estava vazia */
     fim->prox = p;
@@ -106,6 +105,21 @@ No* ins_fim_tarefa (No* fim, No *no){
 
 void InsereFilaTarefa (Fila* f, No *no){
     f->fim = ins_fim_tarefa(f->fim,no);
+    if (f->ini==NULL) /* fila antes vazia? */
+    f->ini = f->fim;
+}
+
+No* ins_fim_tarefa_pendente(No* fim, Tarefa t){
+    No* p = (No*) malloc(sizeof(No));
+    p->info = t;
+    p->prox = NULL;
+    if (fim != NULL) /* verifica se lista n�o estava vazia */
+    fim->prox = p;
+    return p;
+}
+
+void InsereFilaTarefaPendente (Fila* f, Tarefa t){
+    f->fim = ins_fim_tarefa_pendente(f->fim,t);
     if (f->ini==NULL) /* fila antes vazia? */
     f->ini = f->fim;
 }

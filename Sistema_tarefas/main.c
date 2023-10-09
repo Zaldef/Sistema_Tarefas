@@ -100,7 +100,7 @@ int main(){
                 AuxT = SelecionarTarefaLista(LP);
                 if(AuxT.cod != 0){
                     retiraTarefaPendente(&LP,AuxT);
-                    //InsereFilaTarefa(F1,);
+                    InsereFilaTarefaPendente(F1,AuxT);
                 }
             }
             break;
