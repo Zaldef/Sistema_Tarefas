@@ -51,23 +51,22 @@ No* inserirLista (No* recebida, Tarefa valor);  //INSERIR
 int VaziaLista(No *recebida);                   //VERIFICA SE A LISTA ESTA VAZIA
 No* retiraTarefaPendente (No* l, Tarefa t);     //RETIRA TAREFA PENDENTE DA LISTA
 void imprimirLista(No* p);                      //IMPRIME A FILA
+void imprimirListaConcluidas(No *p);            //IMPRIME LISTAS DE CONCLUIDAS
 No* liberaLista(No *receb);                     //LIBERA A LISTA
 No* carregarLista(const char *n);               //CARREGA UMA LISTA SALVADA EXTERNAMENTE
 void salvarLista(const char *n,No* l);          //SALVA UMA LISTA EM ARQUIVO EXTERNO
-No *OrdenarListaData(No * lista);               //ORGANIZA A FILA DE ACORDO COM A DATA TÉRMINO
-No* RemoverTarefaPendente(No *LP);              //REMOVER TAREFA DA LISTA DE PENDENTE
+No* inserirListaOrdenada (No* l, Tarefa valor);  //INSERE DE FORMA ORDENA NA LISTA
 
 // Prototipo Tarefa
 int DataValida(int dia, int mes, int ano);          //VERIFICANDO DATA INSERIDA TEM FROMATO VALIDO
 Tarefa novaTarefa(Fila* f, No *lc, No *lp);         //CRIA NOVA TAREFA
 void imprimirTarefa(Tarefa T);                      //IPRIME TAREFA
 Tarefa editarTarefa(Tarefa old);                    //EDITA TAREFA
-int verificarCod(Fila *f, No *lc, No *lp, int t);   //VERIFICA CODIGO DA TAREFA SE ELE JA NAO EXISTE EM OUTRA TAREFAS
-void verificarStatus(Fila *f);                      //VERIFICA O STATUS DE ATRASADA
 Tarefa SelecionarTarefa(Fila* f);                   //BUSCA DE INFORMACOES
 No* ConcluirTarefa(Tarefa t, No *LC);               //MUDANÇA DE FILA PARA LISTA DE CONCLUIDAS
+int verificarCod(Fila *f, No *lc, No *lp, int t);   //VERIFICA CODIGO DA TAREFA SE ELE JA NAO EXISTE EM OUTRA TAREFAS
+void verificarStatus(Fila *f);                      //VERIFICA O STATUS DE ATRASADA
 No* TarefaPendente(Tarefa t, No *LP);               //MUDANÇA DE STATUS PARA PENDENTE
-Tarefa SelecionarTarefaPendente(No* f);             //ESCOLHA DA TAREFA PENDENTE
 int comparaData(No *A, No *B);                      //COMPARA DATA DE TERMINO DE DOIS NÓS
 
 
@@ -545,24 +544,6 @@ No* inserirListaOrdenada (No* l, Tarefa valor){
     return l;
 }
 
-int comparaData(No *A, No *B){ // retorna 1 se A for maior, 0 se B maior
-
-    if(A->info.ter.ano > B->info.ter.ano){
-        return 1;
-    }else if(A->info.ter.ano < B->info.ter.ano){
-        return 0;
-    }else if(A->info.ter.mes > B->info.ter.mes){
-        return 1;
-    }else if(A->info.ter.mes < B->info.ter.mes){
-        return 0;
-    }else if(A->info.ter.dia > B->info.ter.dia){
-        return 1;
-    }else if(A->info.ter.dia < B->info.ter.dia){
-        return 0;
-    }else{
-        return 1; //data de termino identicas
-    }
-}
 
 // Funcoes Tarefa
 int DataValida(int dia, int mes, int ano){
@@ -1029,96 +1010,22 @@ No* TarefaPendente(Tarefa t, No *LP){
     return LP;
 }
 
-/*No* RemoverTarefaPendente(No *LP){
-    Tarefa new;
-    int opcao;
-    int A = 0;
+int comparaData(No *A, No *B){ // retorna 1 se A for maior, 0 se B maior
 
-    //Seleção de tarefas
-    new = SelecionarTarefaPendente(LP);
-    if(new.cod == 0) return LP;
-
-    while(A == 0){
-        system("cls");
-        imprimirLista(LP);
-        printf("\n\n\tSelecione a opcao a seguir: ");
-        printf("\n\t1 - Mudar o status para  NAO PENDENTE.");
-        printf("\n\t2 - Sair\n");
-        //adicionar um print para tarefa concluida
-        scanf("%d", &opcao);
-        system("cls");
-        switch(opcao){
-            case 1:
-                LP = retiraTarefaPendente(LP,new);
-                return LP;
-                break;
-            case 2:
-                A = 1;
-                break;
-            default:
-                printf("Opcao invalida\n");
-        }
+    if(A->info.ter.ano > B->info.ter.ano){
+        return 1;
+    }else if(A->info.ter.ano < B->info.ter.ano){
+        return 0;
+    }else if(A->info.ter.mes > B->info.ter.mes){
+        return 1;
+    }else if(A->info.ter.mes < B->info.ter.mes){
+        return 0;
+    }else if(A->info.ter.dia > B->info.ter.dia){
+        return 1;
+    }else if(A->info.ter.dia < B->info.ter.dia){
+        return 0;
+    }else{
+        return 1; //data de termino identicas
     }
-    return LP;
-}*/
-
-/*Tarefa SelecionarTarefaPendente(No* f){
-    No* aux = f;
-    int code =0;
-    int check = 1;
-    Tarefa erro;
-    memset(&erro, 0, sizeof(Tarefa));  //setando tarefa erro com 0 em todos os campos
-
-    if(aux == NULL){
-        system("pause");
-        return erro; //caso nao ache o codigo retorna erro(tarefa nula)
-    }
-
-    do{
-        if (check == 0){
-            printf("\tFalha na leitura do codigo tente novamente.");
-        }
-        printf("\n\tCaso deseje sair, digite 0");
-        printf("\n\tDigite o codigo da tarefa:");
-        fflush(stdin);
-        check = scanf("%d",&code);
-    }while(check == 0);
-    if(code == 0) return erro; //caso seja digitado 0 retorna erro(tarefa nula)
-    aux = f;
-    while (aux->info.cod != code){
-        aux=aux->prox;
-        if(aux == NULL){
-            printf("\n\tTarefa nao encontrada\n\n\t");
-            system("pause");
-            return erro; //caso nao ache o codigo retorna erro(tarefa nula)
-        }
-    }
-    return aux->info;
-}*/
-
-/*No *OrdenarListaData(No *lista){
-    No *aux = inicializa();
-    No *l = lista;
-    Tarefa data_maior;
-    while(l != NULL){
-        if(l->info.ter.dia >= data_maior.ter.dia &&
-           l->info.ter.mes >= data_maior.ter.mes &&
-           l->info.ter.ano >= data_maior.ter.ano){
-            data_maior = l->info;
-           }
-        l=l->prox;
-    }
-    while(l != NULL){
-        if(l->info.ter.dia <= data_maior.ter.dia &&
-           l->info.ter.mes <= data_maior.ter.mes &&
-           l->info.ter.ano <= data_maior.ter.ano){
-                aux=inserirLista(l,l->info);
-           }
-           l=l->prox;
-           aux=aux->prox;
-    }
-    return aux;
-
-}*/
-
+}
 #endif // FILA_H_INCLUDED
