@@ -907,31 +907,10 @@ No* ConcluirTarefa(Tarefa t, No *LC){
     struct tm *tempoInfo;
     time(&tempoAtual);          // Obtém o tempo atual em segundos desde a época
     tempoInfo = localtime(&tempoAtual); // Converte para uma estrutura tm
-
-    while(A == 0){
-        system("cls");
-            imprimirTarefa(t);
-            printf("\n\n\tSelecione a opcao a seguir: ");
-            printf("\n\t1 - Concluir Tarefa");
-            printf("\n\t2 - Sair\n");
-            //adicionar um print para tarefa concluida
-            scanf("%d", &opcao);
-            system("cls");
-        switch(opcao){
-            case 1:
-                LC = inserirLista(LC, t); //retorna a lista
-                LC->info.ter.dia = tempoInfo->tm_mday;
-                LC->info.ter.mes = tempoInfo->tm_mon + 1; // Os meses são de 0 a 11, então adicionamos 1
-                LC->info.ter.ano = tempoInfo->tm_year + 1900; // Os anos são desde 1900
-                return LC;
-                break;
-            case 2:
-                A = 1;
-                break;
-            default:
-                printf("Opcao invalida\n");
-        }
-    }
+    LC = inserirLista(LC, t); //retorna a lista
+    LC->info.ter.dia = tempoInfo->tm_mday;
+    LC->info.ter.mes = tempoInfo->tm_mon + 1; // Os meses são de 0 a 11, então adicionamos 1
+    LC->info.ter.ano = tempoInfo->tm_year + 1900; // Os anos são desde 1900
     return LC;
 }
 
@@ -994,30 +973,9 @@ void verificarStatus(Fila *f) {
 No* TarefaPendente(Tarefa t, No *LP){
     int opcao;
     int A = 0;
-
-    while(A == 0){
-        system("cls");
-        imprimirTarefa(t);
-        printf("\n\n\tSelecione a opcao a seguir: ");
-        printf("\n\t1 - Mudar o status para PENDENTE.");
-        printf("\n\t2 - Sair\n");
-        //adicionar um print para tarefa concluida
-        scanf("%d", &opcao);
-        system("cls");
-        switch(opcao){
-            case 1:
-                t.status = -1;
-                LP = inserirListaOrdenada(LP, t); //retorna a lista
-                return LP; // retorna a lista pendente com a tarefa
-                break;
-            case 2:
-                A = 1;
-                break;
-            default:
-                printf("Opcao invalida\n");
-        }
-    }
-    return LP;
+    t.status = -1;
+    LP = inserirListaOrdenada(LP, t); //retorna a lista
+    return LP; // retorna a lista pendente com a tarefa
 }
 
 int comparaData(No *A, No *B){ // retorna 1 se A for maior, 0 se B maior
