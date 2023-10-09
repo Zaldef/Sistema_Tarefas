@@ -233,9 +233,13 @@ Tarefa SelecionarTarefa_F_LP(Fila *f, No* lp){
         check = scanf("%d", &code); // verificaçãod e leitura
     } while (check == 0);
     if(code == 0) return erro;
+
     // busca do codigo na fila principal
     No *aux = f->ini;
     check = 0;
+    if( aux == NULL){
+       return erro; //FILA VAZIA RETORNANDO
+    }
     while (check == 0){
         if(aux->info.cod == code){
             check = 1; //achou o codigo
