@@ -52,7 +52,15 @@ int main(){
             imprimirFila(F1);
             printf("\n\t====Lista de tarefas pendentes====\n");
             imprimirLista(LP);
-            editarFila(F1,LP); //modifica alguma tarefa
+
+            if(F1->ini == NULL && LP == NULL){
+                system("pause");
+            }else{
+                AuxT = SelecionarTarefa_F_LP(F1,LP);
+                if(AuxT.cod != 0){
+                    editarTarefa(AuxT); //modifica alguma tarefa
+                }
+            }
             break;
 
         case 4:

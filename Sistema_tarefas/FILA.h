@@ -43,7 +43,7 @@ Fila* liberarFila (Fila* f);                    //LIBERA A FILA
 void imprimirFila (Fila* f);                    //IMPRIME A FILA
 void carregarFila(const char *n,Fila* f);       //CARREGA UMA FILA SALVADA EXTERNAMENTE
 void salvarFila(const char *n,Fila* f);         //SALVA UMA FILA EM ARQUIVO EXTERNO
-void editarFila(Fila* f, No *lp);                       //EDITAR ALGUM NÓ NA FILA
+Tarefa SelecionarTarefa_F_LP(Fila* f, No *lp);  //EDITAR ALGUM NÓ NA FILA
 
 // prototipos de lista
 No* inicializa();                               //INICIALIZA LISTA
@@ -216,9 +216,11 @@ void salvarFila(const char *n, Fila *f){
     fclose(arq);
 }
 
-void editarFila(Fila *f, No* lp){
+Tarefa SelecionarTarefa_F_LP(Fila *f, No* lp){
     int code = 0;
     int check = 1;
+    Tarefa erro;
+    memset(&erro, 0, sizeof(Tarefa));  //setando tarefa erro com 0 em todos os campos
 
     do{
         if (check == 0)
@@ -230,7 +232,7 @@ void editarFila(Fila *f, No* lp){
         fflush(stdin);
         check = scanf("%d", &code); // verificaçãod e leitura
     } while (check == 0);
-    if(code == 0) return;
+    if(code == 0) return erro;
     // busca do codigo na fila principal
     No *aux = f->ini;
     check = 0;
@@ -243,8 +245,12 @@ void editarFila(Fila *f, No* lp){
             check = -1; //nao achou o codigo
         }
     }
+
     //chegou ao final da fila, pula pra lista
     if ( check == -1) aux = lp;
+    if( aux == NULL){
+       return erro; //LISTA VAZIA RETORNANDO
+    }
     while( check == -1){
         if(aux->info.cod == code){
             check = 1; //achou o codigo
@@ -252,10 +258,10 @@ void editarFila(Fila *f, No* lp){
             aux = aux->prox; //nao achou proxmio
         }else{
             printf("Tarefa nao existe !!!");
-            return;
+            return erro;
         }
     }
-    aux->info = editarTarefa(aux->info);
+    return aux->info;
 }
 
 void excluir_geral(Fila *f, No **lp, No **lc){
