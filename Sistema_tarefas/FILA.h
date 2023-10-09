@@ -362,23 +362,22 @@ int VaziaLista(No *recebida){
 }
 
 No* retiraTarefaPendente (No* l, Tarefa t){
-    No* ant = inicializa();
+    No* aux = inicializa();
     No* p = l;
-    while (p != NULL && p->info.cod != t.cod){
-        ant = p;
-        p = p->prox;
+
+    if(p == NULL){
+        printf("/n/n/tFila de pendente nao existe!");
+        return p;
     }
- /* verifica se achou elemento */
-    if (p == NULL)
-    return l; /* não achou: retorna lista original */
-    /* retira elemento */
-    if (ant == NULL) {
-        l = p->prox; // retira elemento do inicio
-    }else{
-        ant->prox = p->prox; // retira elemento do meio da lista
+
+    while (p != NULL){
+            if(p->info.cod != t.cod){
+                inserirLista(aux,t);
+            }
+            p = p->prox;
+            aux = aux->prox;
     }
-    free(p);
-    return l;
+    return aux;
 }
 
 void imprimirLista(No *p){
@@ -983,7 +982,7 @@ No* TarefaPendente(Fila *f, No *LP){
         imprimirTarefa(new);
         printf("\n\n\tSelecione a opcao a seguir: ");
         printf("\n\t1 - Mudar o status para PENDENTE.");
-        printf("\n\t3 - Sair\n");
+        printf("\n\t2 - Sair\n");
         //adicionar um print para tarefa concluida
         scanf("%d", &opcao);
         system("cls");
@@ -1003,8 +1002,9 @@ No* TarefaPendente(Fila *f, No *LP){
     return LP;
 }
 
-/*No* RemoverTarefaPendente(No *LP){
+No* RemoverTarefaPendente(No *LP){
     Tarefa new;
+    No* LNP = inicializa();
     int opcao;
     int A = 0;
 
@@ -1023,8 +1023,9 @@ No* TarefaPendente(Fila *f, No *LP){
         system("cls");
         switch(opcao){
             case 1:
+                LNP = inserirLista(LNP, new); //retorna a lista com a tarefa não pendente
                 LP = retiraTarefaPendente(LP,new);
-                return LP;
+                return LNP;
                 break;
             case 2:
                 A = 1;
@@ -1033,10 +1034,10 @@ No* TarefaPendente(Fila *f, No *LP){
                 printf("Opcao invalida\n");
         }
     }
-    return LP;
-}*/
+    return NULL;
+}
 
-/*Tarefa SelecionarTarefaPendente(No* f){
+Tarefa SelecionarTarefaPendente(No* f){
     No* aux = f;
     int code =0;
     int check = 1;
@@ -1068,31 +1069,6 @@ No* TarefaPendente(Fila *f, No *LP){
         }
     }
     return aux->info;
-}*/
-
-/*No *OrdenarListaData(No *lista){
-    No *aux = inicializa();
-    No *l = lista;
-    Tarefa data_maior;
-    while(l != NULL){
-        if(l->info.ter.dia >= data_maior.ter.dia &&
-           l->info.ter.mes >= data_maior.ter.mes &&
-           l->info.ter.ano >= data_maior.ter.ano){
-            data_maior = l->info;
-           }
-        l=l->prox;
-    }
-    while(l != NULL){
-        if(l->info.ter.dia <= data_maior.ter.dia &&
-           l->info.ter.mes <= data_maior.ter.mes &&
-           l->info.ter.ano <= data_maior.ter.ano){
-                aux=inserirLista(l,l->info);
-           }
-           l=l->prox;
-           aux=aux->prox;
-    }
-    return aux;
-
-}*/
+}
 
 #endif // FILA_H_INCLUDED

@@ -78,12 +78,11 @@ int main(){
 
             case 6:
             printf("Atualizacao do status da tarefa\n");
-            imprimirFila(F1);
-            if(F1->ini == NULL){
+            imprimirLista(LP);
+            if(LP == NULL){
                 system("pause");
             }else{
-                //LP = RemoverTarefaPendente(LP);
-                //InsereFilaTarefa(F1,LP);
+                InsereFilaTarefa(F1,RemoverTarefaPendente(LP));
             }
             break;
 
