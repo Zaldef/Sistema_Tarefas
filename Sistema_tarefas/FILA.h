@@ -527,17 +527,59 @@ void salvarLista(const char *n, No *l){
 }
 
 No* inserirListaOrdenada (No* l, Tarefa valor){
-    No *novo = (No*) malloc(sizeof(No));
-    No *aux  = l;
-    No *prox = l->prox;
+    No *novo = (No*)malloc(sizeof(No));
     novo->info = valor;
-    if(aux == NULL){
+    novo->prox = NULL;
+    No *aux = l;
+    if (l == NULL || comparaData(aux, novo) == 1) {
         novo->prox = l;
+        return novo;
+    }
+
+    while (aux->prox != NULL && comparaData((aux->prox), novo) == 0) {
+        aux = aux->prox;
+    }
+
+    novo->prox = aux->prox;
+    aux->prox = novo;
+
+    return l;
+}
+    /*if (l == NULL || comparaData(&(l->info), &valor) == 1) {
+        novo->prox = l;
+        return novo;
+    }
+
+    No *atual = l;
+    while (atual->prox != NULL && comparaData(&(atual->prox->info), &valor) == 0) {
+        atual = atual->prox;
+    }
+
+    novo->prox = atual->prox;
+    atual->prox = novo;
+
+    return l;
+}*/
+
+
+    /*No *novo = (No*) malloc(sizeof(No));
+    novo->info = valor;
+    No *aux  = l;
+    No *prox;
+
+    if(aux == NULL){
+        prox = NULL;
     }else{
-        if(comparaData(aux,novo) == 0){
+        prox = l->prox;
+    }
+    if(aux == NULL){ //inserindo no começo
+        novo->prox = l;
+        return novo;
+    }else{
+        if(comparaData(aux,novo) == 0){//novo mais velho que aux
             l = novo;
             novo->prox = aux;
-        }else if(comparaData(aux,novo) == 1 && comparaData(prox,novo) == 0 && prox != NULL){
+        }else if(comparaData(aux,novo) == 1 && comparaData(prox,novo) == 0 && prox != NULL){//se aux for maior que novo e prox for menor que novo
             aux->prox = novo;
             novo->prox = prox;
         }else if(comparaData(aux,novo) == 1 && prox == NULL){
@@ -546,7 +588,7 @@ No* inserirListaOrdenada (No* l, Tarefa valor){
         }
     }
     return l;
-}
+}*/
 int comparaData(No *A, No *B){ // retorna 1 se A for maior, 0 se B maior
 
     if(A->info.ter.ano > B->info.ter.ano){
@@ -1011,7 +1053,7 @@ No* TarefaPendente(Tarefa t, No *LP){
         imprimirTarefa(t);
         printf("\n\n\tSelecione a opcao a seguir: ");
         printf("\n\t1 - Mudar o status para PENDENTE.");
-        printf("\n\t3 - Sair\n");
+        printf("\n\t2 - Sair\n");
         //adicionar um print para tarefa concluida
         scanf("%d", &opcao);
         system("cls");
