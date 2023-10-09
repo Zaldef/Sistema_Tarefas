@@ -12,6 +12,7 @@ int main(){
     Fila *F1 = CriaFila(); // Criando a Fila principal
     No *LP = inicializa(); // ''     Lista de pendentes
     No *LC = inicializa(); // ''     Lista de concluidos
+    Tarefa AuxT;
 
     // carregando data
     const char *Arq_F1 = "database_F1.txt";
@@ -51,7 +52,15 @@ int main(){
             imprimirFila(F1);
             printf("\n\t====Lista de tarefas pendentes====\n");
             imprimirLista(LP);
-            editarFila(F1,LP); //modifica alguma tarefa
+
+            if(F1->ini == NULL && LP == NULL){
+                system("pause");
+            }else{
+                AuxT = SelecionarTarefa_F_LP(F1,LP);
+                if(AuxT.cod != 0){
+                    editarTarefa(AuxT); //modifica alguma tarefa
+                }
+            }
             break;
 
         case 4:
@@ -60,26 +69,50 @@ int main(){
             if(F1->ini == NULL){
                 system("pause");
             }else{
-                LC = ConcluirTarefa(F1,LC);
-                F1 = ExcluirTarefaFila(F1,LC);
+                AuxT = SelecionarTarefa(F1);
+                if(AuxT.cod != 0){
+                    LC = ConcluirTarefa(AuxT,LC);
+                    F1 = ExcluirTarefaFila(F1,LC);
+                }
             }
             break;
 
         case 5:
             printf("Atualizacao do status da tarefa\n");
+            imprimirFila(F1);
+            if(F1->ini == NULL){
+                system("pause");
+            }else{
+                AuxT = SelecionarTarefa(F1);
+                if(AuxT.cod != 0){
+                    LP = TarefaPendente(AuxT,LP);
+                    F1 = ExcluirTarefaFila(F1,LP);
+                }
+            }
             break;
 
-        case 6:
+            case 6:
+            printf("Atualizacao do status da tarefa\n");
+            imprimirFila(F1);
+            if(F1->ini == NULL){
+                system("pause");
+            }else{
+                //LP = RemoverTarefaPendente(LP);
+                //InsereFilaTarefa(F1,LP);
+            }
+            break;
+
+        case 7:
             printf("Listar tarefas pendentes\n");
             imprimirLista(LP);
             system("pause");
             break;
 
-        case 7:
+        case 8:
             imprimirListaConcluidas(LC);
             break;
 
-        case 8:
+        case 9:
             printf("\n\t=========Fila de tarefas===========\n");
             imprimirFila(F1);
             printf("\n\t====Lista de tarefas pendentes=====\n");
@@ -89,7 +122,7 @@ int main(){
             excluir_geral(F1,&LP,&LC);
             break;
 
-        case 9:
+        case 10:
             printf("Sair do programa\n");
             // Salvando data
             salvarFila(Arq_F1, F1);
@@ -116,9 +149,10 @@ void menu(){
     printf("\n\t2 - Listar tarefas");
     printf("\n\t3 - Modificar uma tarefa");
     printf("\n\t4 - Concluir uma tarefa");
-    printf("\n\t5 - Atualizacao do status de uma tarefa");
-    printf("\n\t6 - Listar tarefas pendentes");
-    printf("\n\t7 - Listar tarefas concluidas");
-    printf("\n\t8 - Excluir tarefa");
-    printf("\n\t9 - Sair do programa\n");
+    printf("\n\t5 - Adicionar tarefa pendente");
+    printf("\n\t6 - Remover tarefa pendente");
+    printf("\n\t7 - Listar tarefas pendentes");
+    printf("\n\t8 - Listar tarefas concluidas");
+    printf("\n\t9 - Excluir tarefa");
+    printf("\n\t10 - Sair do programa\n");
 }
