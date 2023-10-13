@@ -13,9 +13,13 @@ int main(){
     const char *Arq_F1 = "database_F1.txt";
     const char *Arq_F2 = "database_F2.txt";
     const char *Arq_F3 = "database_F3.txt";
+    const char *Arq_LP = "database_LP.txt";
+    const char *Arq_LC = "database_LC.txt";
     carregarFila(Arq_F1,F1);
     carregarFila(Arq_F2,F2);
     carregarFila(Arq_F3,F3);
+    //LP = carregarLista(Arq_LP,LP);
+    //LC = carregarLista(Arq_LC,LC);
     
     // variaveis auxiliares
     Tarefa AuxT;

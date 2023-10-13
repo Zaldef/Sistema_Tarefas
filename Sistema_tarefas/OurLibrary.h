@@ -59,7 +59,7 @@
     void imprimirListaConcluidas(Lista *l);
     No* removerNoLista(Lista *l, int n);            // nao sei se funciona
     void liberarLista(Lista *l);
-    void carregarLista(const char *n, Lista *l);
+    Lista* carregarLista(const char *n, Lista *l);
     void salvarLista(const char *n, Lista *l);
     
 
@@ -245,7 +245,7 @@
         }
         // fecha o arquivo pois nao necessita mais ser usado
         fclose(arq);
-    }
+}
 
     void salvarFila(const char *n, Fila *f){
         FILE *arq;
@@ -564,7 +564,7 @@
         free(l);
     }
 
-    void carregarLista(const char *n, Lista *l){
+    Lista* carregarLista(const char *n, Lista *l){
         FILE *arq = fopen(n, "r");
         // FILE *arq, ponteiro do tipo file que vai percorrer o arquivo
         // fopen(arquivo a ser aberto, r- read_only);
@@ -600,6 +600,7 @@
         }
         // fecha o arquivo pois nao necessita mais ser usado
         fclose(arq);
+        return l;
     }
 
     void salvarLista(const char *n, Lista *l){
