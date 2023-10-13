@@ -46,7 +46,7 @@
 
     //LISTA
     Lista* inicializarLista();
-    Lista* inserirListaInicio(Lista *l, Tarefa t);
+    Lista* inserirListaInicio(Lista *l, No* n); //FUNCAO TESTE
     int vaziaLista(Lista* l);
     void imprimirLista(Lista *l);
     int buscarNoPendente(Lista *lp);
@@ -198,12 +198,9 @@
         return l;
     }
 
-    Lista* inserirListaInicio(Lista *l, Tarefa t){
-        system("pause");
-        No *novo = (No*) malloc(sizeof(No));
-        novo->info = t;
-        novo->prox = l->ini;
-        l->ini = novo;
+    Lista* inserirListaInicio(Lista *l, No* n){ //FUNCAO TESTE
+        n->prox = l->ini;
+        l->ini = n;
         return l;
     }
 
@@ -365,10 +362,6 @@
         while(aux != NULL && aux->info.cod != n){
             ant = aux;
             aux = aux->prox;
-        }
-        if(aux == NULL){
-            printf("Deu ruim remoção lista"); // Não e para dar ruim
-            exit(1);
         }
         if(ant == NULL){ //remover o primeiro
             l->ini = aux->prox;

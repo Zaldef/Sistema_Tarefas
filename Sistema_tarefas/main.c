@@ -89,13 +89,13 @@ int main(){
             }else if(AuxInt >0){
                 if(flag == 1){
                     F1 = removerNoFila(F1,AuxInt,&AuxNo);
-                    inserirNoListaConcluida(LC,AuxNo);
+                    //inserirNoListaConcluida(LC,AuxNo);
                 }else if(flag == 2){
                     F2 = removerNoFila(F2,AuxInt,&AuxNo);
-                    inserirNoListaConcluida(LC,AuxNo);
+                    //inserirNoListaConcluida(LC,AuxNo);
                 }else if(flag == 3){
                     F3 = removerNoFila(F3,AuxInt,&AuxNo);
-                    inserirNoListaConcluida(LC,AuxNo);
+                    //inserirNoListaConcluida(LC,AuxNo);
                 }
                 system("pause");
             }
@@ -118,15 +118,15 @@ int main(){
                 if(flag == 1){
                     F1 = removerNoFila(F1,AuxInt,&AuxNo);
                     AuxNo->info.status = -1;
-                    inserirNoListaPendente(LP,AuxNo);
+                    //inserirNoListaPendente(LP,AuxNo);
                 }else if(flag == 2){
                     F2 = removerNoFila(F2,AuxInt,&AuxNo);
                     AuxNo->info.status = -1;
-                    inserirNoListaPendente(LP,AuxNo);
+                    //inserirNoListaPendente(LP,AuxNo);
                 }else if(flag == 3){
                     F3 = removerNoFila(F3,AuxInt,&AuxNo);
                     AuxNo->info.status = -1;
-                    inserirNoListaPendente(LP,AuxNo);
+                    //inserirNoListaPendente(LP,AuxNo);
                 }
                 system("pause");
             }
@@ -140,14 +140,14 @@ int main(){
                 printf("\n\tTarefa não encontrada\n\t");
                 system("pause");
             }else if(AuxInt >0){ // remover da lista pendente e inserir na fila correta
-               // AuxNo = removerNoLista(LP,AuxInt);
+                AuxNo = removerNoLista(LP,AuxInt);
                 AuxNo->info.status = 0;
                 if(AuxNo->info.prioridade == 1){
-                    inserirNoFila(F1,AuxNo);
+                    F1 = inserirNoFila(F1,AuxNo);
                 }else if(AuxNo->info.prioridade == 2){
-                    inserirNoFila(F2,AuxNo);
+                    F2 = inserirNoFila(F2,AuxNo);
                 }else if(AuxNo->info.prioridade == 3){
-                    inserirNoFila(F3,AuxNo);
+                    F3 = inserirNoFila(F3,AuxNo);
                 }
                 system("pause");
             }
