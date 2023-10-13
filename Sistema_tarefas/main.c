@@ -9,17 +9,6 @@ int main(){
     Fila *F3 = inicializarFila();
     Lista *LP = inicializarLista();
     Lista *LC = inicializarLista();
-    // carregando data
-    const char *Arq_F1 = "database_F1.txt";
-    const char *Arq_F2 = "database_F2.txt";
-    const char *Arq_F3 = "database_F3.txt";
-    const char *Arq_LP = "database_LP.txt";
-    const char *Arq_LC = "database_LC.txt";
-    carregarFila(Arq_F1,F1);
-    carregarFila(Arq_F2,F2);
-    carregarFila(Arq_F3,F3);
-    //LP = carregarLista(Arq_LP,LP);
-    //LC = carregarLista(Arq_LC,LC);
     
     // variaveis auxiliares
     Tarefa AuxT;
@@ -128,16 +117,34 @@ int main(){
                 system("pause");
             }else if(AuxInt >0){
                 if(flag == 1){
+                    printf("\n\t-->Estou aqui 1<--\n\t");
+                    system("pause");
                     F1 = removerNoFila(F1,AuxInt,&AuxNo);
+                    printf("\n\t-->Estou aqui 2<--\n\t");
+                    system("pause");
                     AuxNo->info.status = -1;
+                    printf("\n\t-->Estou aqui 3<--\n\t");
+                    system("pause");
                     LP = inserirNoListaPendente(LP,AuxNo);
                 }else if(flag == 2){
+                    printf("\n\t-->Estou aqui 4<--\n\t");
+                    system("pause");
                     F2 = removerNoFila(F2,AuxInt,&AuxNo);
+                    printf("\n\t-->Estou aqui 5<--\n\t");
+                    system("pause");
                     AuxNo->info.status = -1;
+                    printf("\n\t-->Estou aqui 6<--\n\t");
+                    system("pause");
                     LP = inserirNoListaPendente(LP,AuxNo);
                 }else if(flag == 3){
+                    printf("\n\t-->Estou aqui 7<--\n\t");
+                    system("pause");
                     F3 = removerNoFila(F3,AuxInt,&AuxNo);
+                    printf("\n\t-->Estou aqui 8<--\n\t");
+                    system("pause");
                     AuxNo->info.status = -1;
+                    printf("\n\t-->Estou aqui 9<--\n\t");
+                    system("pause");
                     LP = inserirNoListaPendente(LP,AuxNo);
                 }
                 system("pause");
@@ -178,9 +185,6 @@ int main(){
         break;
 
         case 0:
-            salvarFila(Arq_F1, F1);
-            salvarFila(Arq_F2, F2);
-            salvarFila(Arq_F3, F3);
             liberarFila(F1);
             liberarFila(F2);
             liberarFila(F3);

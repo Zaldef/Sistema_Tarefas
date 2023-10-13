@@ -44,8 +44,6 @@
     int buscarNoFila(Fila *f1, Fila *f2, Fila *f3, int *flag);
     Fila* removerNoFila(Fila *f,int n, No **AuxN);
     void liberarFila(Fila *f);
-    void carregarFila(const char *n, Fila *f);
-    void salvarFila(const char *n, Fila *f);
 
     //LISTA
     Lista* inicializarLista();
@@ -207,64 +205,6 @@
         free(f);
     }
 
-    void carregarFila(const char *n, Fila *f){
-        FILE *arq = fopen(n, "r");
-        // FILE *arq, ponteiro do tipo file que vai percorrer o arquivo
-        // fopen(arquivo a ser aberto, r- read_only);
-        Tarefa T;
-        // Verificando se o arquivo foi aberto corretamente
-        if (arq == NULL)
-        {
-            printf("Erro ao abrir o arquivo.");
-            exit(1);
-        }
-        // cria um novo no para cada informacao salva no arquivo
-        while (fread(&T, sizeof(Tarefa), 1, arq) == 1)
-        {
-            // fread(local aonde vai ser guardado a informacao lida, tamanho da informacao a ser lida, quantas informacoes vao ser lidas, daonde vai ser lido)
-            No *novoNo = (No *)malloc(sizeof(No));
-            if (novoNo == NULL)
-            {
-                printf("Erro ao alocar memoria para n0 da fila.\n");
-                exit(1);
-            }
-
-            novoNo->info = T;
-            novoNo->prox = NULL;
-
-            if (f->ini == NULL)
-            {
-                f->ini = novoNo;
-                f->fim = novoNo;
-            }
-            else
-            {
-                f->fim->prox = novoNo;
-                f->fim = novoNo;
-            }
-        }
-        // fecha o arquivo pois nao necessita mais ser usado
-        fclose(arq);
-}
-
-    void salvarFila(const char *n, Fila *f){
-        FILE *arq;
-        arq = fopen(n, "wt");
-        if (arq == NULL)
-        {
-            printf("Erro ao abrir o arquivo.");
-            exit(1);
-        }
-        No *q = f->ini;
-        while (q != NULL)
-        {
-            fwrite(&q->info, sizeof(Tarefa), 1, arq);
-            // fwrite(o que sera armazenado, qual o tamanho da infoi a ser salva, quantas infos serao salvas, aonde sera salvo
-            q = q->prox;
-        }
-        fclose(arq);
-    }
-
 
 // FUNCOES LISTA
     Lista* inicializarLista(){
@@ -390,8 +330,6 @@
                 anterior = aux;
                 aux = aux->prox;
             }
-            anterior = aux;
-            aux = aux->prox;
             // Insere o no na lista
             n->prox = aux;
             if(anterior != NULL){
@@ -408,8 +346,6 @@
                 anterior = aux;
                 aux = aux->prox;
             }
-            anterior = aux;
-            aux = aux->prox;
             // Insere o no na lista
             n->prox = aux;
             if(anterior != NULL){
@@ -421,62 +357,6 @@
         // Retorna a lista atualizada
         return l;
     }
-
-
-
-        /*No *aux_l = (*l)->ini;
-        int flag = 0;
-
-        if (aux_l == NULL) { // se a lista estiver vazia insira o nó escolhido no início
-            n->prox = NULL;
-            (*l)->ini = n;
-            return; // Saia da função após inserção na lista vazia
-        }
-
-        No *anterior = NULL;
-        // Prioridade alta
-        if(n->info.prioridade == 1){
-            // Loop para encontrar a posição de inserção com base na prioridade
-            while (aux_l != NULL && (aux_l->info.prioridade != 1)) {
-                anterior = aux_l;
-                aux_l = aux_l->prox;
-            }
-
-        }
-        // Prioridade normal
-        else if(n->info.prioridade == 2){
-            // Loop para encontrar a posição de inserção com base na prioridade
-            while (aux_l != NULL && (aux_l->info.prioridade != 2)) {
-                anterior = aux_l;
-                aux_l = aux_l->prox;
-            }
-        }
-        // Prioridade baixa
-        else if(n->info.prioridade == 3){
-            // Loop para encontrar a posição de inserção com base na prioridade
-            while (aux_l != NULL && (aux_l->info.prioridade != 3)) {
-                anterior = aux_l;
-                aux_l = aux_l->prox;
-            }
-        }
-
-        // Verifique se a prioridade coincide e compare as datas de término
-        while (aux_l != NULL && (aux_l->info.prioridade == n->info.prioridade) && flag != 1) {
-            if (comparaData(aux_l, n) != 1) { // Comparar data de término
-                anterior = aux_l;
-                aux_l = aux_l->prox;
-            } else {
-                flag = 1; // Pare o loop interno quando a data de término do nó for maior
-            }
-        }
-
-        n->prox = aux_l; // O próximo do nó escolhido aponta para o nó da lista com data maior
-        if (anterior != NULL) {
-            anterior->prox = n; // Se o nó anterior não for nulo, atualize o próximo do nó anterior
-        } else {
-            (*l)->ini = n; // Se o nó anterior for nulo, atualize o início da lista
-        }
-    }*/
 
     void imprimirListaConcluidas(Lista *l){
         printf("Listar tarefas concluidas\n");
@@ -562,63 +442,6 @@
             aux = aux2;
         }
         free(l);
-    }
-
-    Lista* carregarLista(const char *n, Lista *l){
-        FILE *arq = fopen(n, "r");
-        // FILE *arq, ponteiro do tipo file que vai percorrer o arquivo
-        // fopen(arquivo a ser aberto, r- read_only);
-        Tarefa T;
-        // Verificando se o arquivo foi aberto corretamente
-        if (arq == NULL)
-        {
-            printf("Erro ao abrir o arquivo.");
-            exit(1);
-        }
-        // cria um novo no para cada informacao salva no arquivo
-        while (fread(&T, sizeof(Tarefa), 1, arq) == 1)
-        {
-            // fread(local aonde vai ser guardado a informacao lida, tamanho da informacao a ser lida, quantas informacoes vao ser lidas, daonde vai ser lido)
-            No *novoNo = (No *)malloc(sizeof(No));
-            if (novoNo == NULL)
-            {
-                printf("Erro ao alocar memoria para n0 da fila.\n");
-                exit(1);
-            }
-
-            novoNo->info = T;
-            novoNo->prox = NULL;
-
-            if (l->ini == NULL)
-            {
-                l->ini = novoNo;
-            }
-            else
-            {
-                l->ini->prox = novoNo;
-            }
-        }
-        // fecha o arquivo pois nao necessita mais ser usado
-        fclose(arq);
-        return l;
-    }
-
-    void salvarLista(const char *n, Lista *l){
-        FILE *arq;
-        arq = fopen(n, "wt");
-        if (arq == NULL)
-        {
-            printf("Erro ao abrir o arquivo.");
-            exit(1);
-        }
-        No *q = l->ini;
-        while (q != NULL)
-        {
-            fwrite(&q->info, sizeof(Tarefa), 1, arq);
-            // fwrite(o que sera armazenado, qual o tamanho da infoi a ser salva, quantas infos serao salvas, aonde sera salvo
-            q = q->prox;
-        }
-        fclose(arq);
     }
 
 // OUTRAS FUNCOES
