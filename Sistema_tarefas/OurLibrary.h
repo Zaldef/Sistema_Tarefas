@@ -36,22 +36,25 @@
 
 //PROTOTIPOS
     //FILA
-    Fila* inicializarrFila();
+    Fila* inicializarFila();
     Fila* inserirFila(Fila *f, Tarefa t);
+    Fila* inserirNoFila(Fila *f, No *n);
     int vaziaFila(Fila *f);
     void imprimirFila(Fila *f);
-    Fila* removerNoFila(Fila *f, int n, No** AuxN);
+    int buscarNoFila(Fila *f1, Fila *f2, Fila *f3, int *flag);
+    Fila* removerNoFila(Fila *f,int n, No **AuxN);
 
     //LISTA
     Lista* inicializarLista();
     Lista* inserirListaInicio(Lista *l, Tarefa t);
     int vaziaLista(Lista* l);
     void imprimirLista(Lista *l);
-    void inserirNoListaConcluida(Lista *l, No *n);
-    void atualizarData(No* aux);
-    void inserirNoListaPendente(Lista *l, No *n);
-    void imprimirListaConcluidas(Lista *l);
-    No* removerNoLista(Lista *l, int n);
+    int buscarNoPendente(Lista *lp);
+    void inserirNoListaConcluida(Lista *l,  No *n); // nao funcionando
+    void atualizarData(No* aux);                    // nao funcionando
+    void inserirNoListaPendente(Lista *l, No *n);   // nao funcionando
+    void imprimirListaConcluidas(Lista *l);     
+    No* removerNoLista(Lista *l, int n);            // nao sei se funciona
 
     //OUTRAS
     Tarefa novaTarefa(Fila *f1, Fila *f2, Fila *f3, Lista *lc, Lista *lp);
@@ -60,10 +63,8 @@
     void imprimirTarefa(Tarefa T);
     int editar(Fila* f1,Fila* f2,Fila* f3, Lista* lp);
     Tarefa editarTarefa(Tarefa old);
-    int buscarNoFila(Fila *f1, Fila *f2, Fila *f3, int *flag);
-    void verificarStatus(Fila *f1, Fila *f2, Fila *f3);
-    int buscarNoPendente(Lista *lp);
-    int comparaData(No *n1, No *n2);
+    void verificarStatus(Fila *f1, Fila *f2, Fila *f3);                
+    int comparaData(No *n1, No *n2);                // nao sei se funciona
 
 
 
@@ -222,6 +223,38 @@
             }
         }
     }
+
+    int buscarNoPendente(Lista *lp){
+        int code;
+        No *aux;
+        int check = 1;
+
+        do{
+            if (check == 0){
+                printf("\tFalha na leitura do codigo tente novamente.");
+            }
+            printf("\n\tCaso deseje sair, digite 0");
+            printf("\n\tDigite o codigo da tarefa que deseja editar:");
+            fflush(stdin);
+            check = scanf("%d", &code); // verificação de leitura
+        } while (check == 0);
+
+        if(code == 0){
+            return 0; // retorna 0 caso o usuario deseje sair
+        }else if(code < 0){
+            return -1; // retorna -1 caso o codigo seja invalido
+        }
+        // Lista pendentes
+        if(vaziaLista(lp) == 0){
+            for (aux = lp->ini; aux!=NULL; aux=aux->prox){
+                if(aux->info.cod == code){
+                    return code;
+                }
+            }
+        }
+        return -1;
+    }
+
 
     void inserirNoListaConcluida(Lista *l,  No *n){
         No *aux = l->ini;
@@ -808,37 +841,6 @@
             }
             faux = faux->prox;
         }
-    }
-
-    int buscarNoPendente(Lista *lp){
-        int code;
-        No *aux;
-        int check = 1;
-
-        do{
-            if (check == 0){
-                printf("\tFalha na leitura do codigo tente novamente.");
-            }
-            printf("\n\tCaso deseje sair, digite 0");
-            printf("\n\tDigite o codigo da tarefa que deseja editar:");
-            fflush(stdin);
-            check = scanf("%d", &code); // verificação de leitura
-        } while (check == 0);
-
-        if(code == 0){
-            return 0; // retorna 0 caso o usuario deseje sair
-        }else if(code < 0){
-            return -1; // retorna -1 caso o codigo seja invalido
-        }
-        // Lista pendentes
-        if(vaziaLista(lp) == 0){
-            for (aux = lp->ini; aux!=NULL; aux=aux->prox){
-                if(aux->info.cod == code){
-                    return code;
-                }
-            }
-        }
-        return -1;
     }
 
     int comparaData(No *A, No *B){ // retorna 1 se A for maior, 0 se B maior
