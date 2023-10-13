@@ -40,7 +40,7 @@
     Fila* inserirFila(Fila *f, Tarefa t);
     int vaziaFila(Fila *f);
     void imprimirFila(Fila *f);
-    No* removerNoFila(Fila *f, int n);
+    Fila* removerNoFila(Fila *f, int n, No** AuxN);
 
     //LISTA
     Lista* inicializarLista();
@@ -80,11 +80,22 @@
         novo->info = t;
         novo->prox = NULL;
         if (f->fim != NULL){
-            f->fim->prox = novo;
+            f->fim->prox = novo; // se a fila nao estiver vazia
         }else{
-            f->ini = novo;
+            f->ini = novo; // se a fila estiver vazia
         }
         f->fim = novo;
+        return f;
+    }
+
+    Fila* inserirNoFila(Fila *f, No *n){
+        n->prox = NULL;
+        if (f->fim != NULL){ // se a fila nao estiver vazia
+            f->fim->prox = n;
+        }else{ // se a fila estiver vazia
+            f->ini = n;
+        }
+        f->fim = n; // o fim da fila recebe o novo nó
         return f;
     }
 
@@ -104,30 +115,79 @@
         }
     }
 
-    No* removerNoFila(Fila *f, int n){
-        No *aux = f->ini;
-        No *ant = NULL;
-        while(aux != NULL && aux->info.cod != n){
-            ant = aux;
-            aux = aux->prox;
+    int buscarNoFila(Fila *f1, Fila *f2, Fila *f3, int *flag){
+        int code;
+        No *aux;
+        int check = 1;
+
+        do{
+            if (check == 0){
+                printf("\tFalha na leitura do codigo tente novamente.");
+            }
+            printf("\n\tCaso deseje sair, digite 0");
+            printf("\n\tDigite o codigo da tarefa que deseja editar:");
+            fflush(stdin);
+            check = scanf("%d", &code); // verificação de leitura
+        } while (check == 0);
+
+        if(code == 0){
+            return 0; // retorna 0 caso o usuario deseje sair
+        }else if(code < 0){
+            return -1; // retorna -1 caso o codigo seja invalido
         }
-        if(aux == NULL){
-            printf("Deu ruim remoção fila"); // Não e para dar ruim
-            exit(1);
+        // Fila 1
+        for (aux=f1->ini; aux!=NULL; aux=aux->prox){
+            if(aux->info.cod == code){
+                *flag = 1; // flag 1 caso a tarefa seja encontrada na fila 1
+                return code;
+            }
         }
-        if(ant == NULL){ //remover o primeiro
-            f->ini = aux->prox;
-        }else{ //remover do meio ou do fim
-            ant->prox = aux->prox;
+        // Fila 2
+        for (aux=f2->ini; aux!=NULL; aux=aux->prox){
+            if(aux->info.cod == code){
+                *flag = 2; // flag 2 caso a tarefa seja encontrada na fila 2
+                return code;
+            }
         }
-        //se for o ultimo
-        if(aux->prox == NULL){
-            f->fim = ant;
+        // Fila 3
+        for (aux=f3->ini; aux!=NULL; aux=aux->prox){
+            if(aux->info.cod == code){
+                *flag = 3; // flag 3 caso a tarefa seja encontrada na fila 3
+                return code;
+            }
         }
-        return aux;
+        *flag = -1; // flag -1 caso o codigo seja invalido
+        return -1;
+        // retorna 0 caso o usuario deseje sair, ou caso o codigo seja invalido
     }
 
-
+    Fila* removerNoFila(Fila *f,int n, No **AuxN){
+        Fila* auxf = inicializarFila();
+        No* aux = f->ini;
+        No* aux2;
+        // vai rodar a lista ate achar o no que a gente quer remover, enquanto nao achar
+        // ele vai inserindo os nos na fila auxiliar
+        while(aux->info.cod != n){
+            // guardando a info do prox, pois ao inserir na fila auxiliar, aux->prox vai ser perdido
+            aux2 = aux->prox;
+            auxf = inserirNoFila(auxf, aux);
+            aux = aux2; // aux recebe o prox
+        }
+        // achou o no que a gente quer remover, ele envia pra main atraves de um ponteiro
+        *AuxN = aux;
+        aux = aux->prox;
+        // vai inserindo os resto dos nos na fila auxiliar
+        while(aux != NULL){
+            // guardando a info do prox, pois ao inserir na fila auxiliar, aux->prox vai ser perdido
+            aux2 = aux->prox;
+            auxf = inserirNoFila(auxf, aux);
+            aux = aux2; // aux recebe o prox
+        }
+        // seta a fila original como a auxiliar e libera a auxiliar antes de retornar a fila
+        free(f);
+        imprimirFila(auxf);
+        return auxf;
+    }
 
 
 // FUNCOES LISTA
@@ -163,17 +223,20 @@
         }
     }
 
-    void inserirNoListaConcluida(Lista *l, No *n){
+    void inserirNoListaConcluida(Lista *l,  No *n){
         No *aux = l->ini;
 
         if (l->ini == NULL || comparaData(aux, n) == 1) { // se a lista estiver vazia ou se o n no for menor que o primeiro
             n->prox = l->ini;
             l->ini = n;
-        }   
+        }
+
         // se o n no for maior que o primeiro
         while (aux->prox != NULL && comparaData((aux->prox), n) == 0) { // enquanto nao achar um menor nao insere na lista
             aux = aux->prox;
         }
+        printf("\n-->Estou aqui<--\n");
+        system("pause");
         n->prox = aux->prox;
         aux->prox = n;
     }
@@ -194,7 +257,7 @@
         if (l->ini == NULL || comparaData(aux, n) == 1) { // se a lista estiver vazia ou se o n no for menor que o primeiro
             n->prox = l->ini;
             l->ini = n;
-        }   
+        }
         // se o n no for maior que o primeiro
         while (aux->prox != NULL && comparaData((aux->prox), n) == 0) { // enquanto nao achar um menor nao insere na lista
             aux = aux->prox;
@@ -212,7 +275,7 @@
         printf("\n\t0 - Retornar\n");
 
         //variaveis auxiliares
-        
+
         //variaveis de controle
         int opcao_LC;
         scanf("%d", &opcao_LC);
@@ -260,7 +323,7 @@
             default:
                 printf("Opcao invalida\n");
                 break;
-        }    
+        }
     }
 
     No* removerNoLista(Lista *l, int n){
@@ -669,52 +732,6 @@
         return old; // caso der erro ele cancela
     }
 
-    int buscarNoFila(Fila *f1, Fila *f2, Fila *f3, int *flag){
-        int code;
-        No *aux;
-        int check = 1;
-
-        do{
-            if (check == 0){
-                printf("\tFalha na leitura do codigo tente novamente.");
-            }
-            printf("\n\tCaso deseje sair, digite 0");
-            printf("\n\tDigite o codigo da tarefa que deseja editar:");
-            fflush(stdin);
-            check = scanf("%d", &code); // verificação de leitura
-        } while (check == 0);
-
-        if(code == 0){
-            return 0; // retorna 0 caso o usuario deseje sair
-        }else if(code < 0){
-            return -1; // retorna -1 caso o codigo seja invalido
-        }
-        // Fila 1
-        for (aux=f1->ini; aux!=NULL; aux=aux->prox){
-            if(aux->info.cod == code){
-                *flag = 1; // flag 1 caso a tarefa seja encontrada na fila 1
-                return code;
-            }
-        }
-        // Fila 2
-        for (aux=f2->ini; aux!=NULL; aux=aux->prox){
-            if(aux->info.cod == code){
-                *flag = 2; // flag 2 caso a tarefa seja encontrada na fila 2
-                return code;
-            }
-        }
-        // Fila 3
-        for (aux=f3->ini; aux!=NULL; aux=aux->prox){
-            if(aux->info.cod == code){
-                *flag = 3; // flag 3 caso a tarefa seja encontrada na fila 3
-                return code;
-            }
-        }
-        *flag = -1; // flag -1 caso o codigo seja invalido
-        return -1;
-        // retorna 0 caso o usuario deseje sair, ou caso o codigo seja invalido
-    }
-
     void verificarStatus(Fila *f1, Fila *f2, Fila *f3) {
         // Obtendo a data e a hora atuais
         time_t tempoAtual;
@@ -731,7 +748,7 @@
             DataTerminoTarefa.tm_mon = faux->info.ter.mes - 1;     // Mês (0 a 11)
             DataTerminoTarefa.tm_mday = faux->info.ter.dia;
             tempoTerminoTarefa = mktime(&DataTerminoTarefa);
-            // Cai dentro if provavelmente por receber datas menores que 1900, que na conversao se torna um int negativo
+            // Cai dentro if provavelmente por receber datas menores que 1900 ou maiores de 2030, que na conversao se torna um int negativo
             if(tempoTerminoTarefa == -1){
                 // Erro na conversão da data
                 faux->info.status = 1; // Status -1 para atrasada
@@ -745,7 +762,7 @@
             }
             faux = faux->prox;
         }
-        
+
         // atualizando as tarefas na fila 2
         faux = f2->ini;
         while (faux != NULL) {
@@ -754,7 +771,7 @@
             DataTerminoTarefa.tm_mon = faux->info.ter.mes - 1;     // Mês (0 a 11)
             DataTerminoTarefa.tm_mday = faux->info.ter.dia;
             tempoTerminoTarefa = mktime(&DataTerminoTarefa);
-            // Cai dentro if provavelmente por receber datas menores que 1900, que na conversao se torna um int negativo
+            // Cai dentro if provavelmente por receber datas menores que 1900 ou maiores de 2030, que na conversao se torna um int negativo
             if(tempoTerminoTarefa == -1){
                 // Erro na conversão da data
                 faux->info.status = 1; // Status -1 para atrasada
@@ -777,7 +794,7 @@
             DataTerminoTarefa.tm_mon = faux->info.ter.mes - 1;     // Mês (0 a 11)
             DataTerminoTarefa.tm_mday = faux->info.ter.dia;
             tempoTerminoTarefa = mktime(&DataTerminoTarefa);
-            // Cai dentro if provavelmente por receber datas menores que 1900, que na conversao se torna um int negativo
+            // Cai dentro if provavelmente por receber datas menores que 1900 ou maiores de 2030, que na conversao se torna um int negativo
             if(tempoTerminoTarefa == -1){
                 // Erro na conversão da data
                 faux->info.status = 1; // Status -1 para atrasada

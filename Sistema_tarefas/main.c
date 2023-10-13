@@ -81,21 +81,23 @@ int main(){
             imprimirFila(F2);
             printf("\n\t=========Prioridade Baixa==========\n");
             imprimirFila(F3);
-            
+
             AuxInt = buscarNoFila(F1, F2, F3, &flag);
-            
             if(AuxInt == -1){
                 printf("\n\tTarefa não encontrada\n\t");
                 system("pause");
             }else if(AuxInt >0){
                 if(flag == 1){
-                    AuxNo = removerNoFila(F1,AuxInt);
+                    F1 = removerNoFila(F1,AuxInt,&AuxNo);
+                    system("pause");
+                    imprimirFila(F1);
+                    system("pause");
                     inserirNoListaConcluida(LC,AuxNo);
                 }else if(flag == 2){
-                    AuxNo = removerNoFila(F2,AuxInt);
+                    //AuxNo = removerNoFila(&F2,AuxInt);
                     inserirNoListaConcluida(LC,AuxNo);
                 }else if(flag == 3){
-                    AuxNo = removerNoFila(F3,AuxInt);
+                    //AuxNo = removerNoFila(&F3,AuxInt);
                     inserirNoListaConcluida(LC,AuxNo);
                 }
                 system("pause");
@@ -117,16 +119,16 @@ int main(){
                 system("pause");
             }else if(AuxInt >0){
                 if(flag == 1){
-                    AuxNo = removerNoFila(F1,AuxInt);
+                    //AuxNo = removerNoFila(&F1,AuxInt);
                     AuxNo->info.status = -1;
                     inserirNoListaPendente(LP,AuxNo);
                 }else if(flag == 2){
-                    AuxNo = removerNoFila(F2,AuxInt);
-                    AuxNo->info.status = -1;   
+                    //AuxNo = removerNoFila(&F2,AuxInt);
+                    AuxNo->info.status = -1;
                     inserirNoListaPendente(LP,AuxNo);
                 }else if(flag == 3){
-                    AuxNo = removerNoFila(F3,AuxInt);
-                    AuxNo->info.status = -1;    
+                   // AuxNo = removerNoFila(&F3,AuxInt);
+                    AuxNo->info.status = -1;
                     inserirNoListaPendente(LP,AuxNo);
                 }
                 system("pause");
@@ -135,19 +137,20 @@ int main(){
 
         case 6:
             printf("Remover tarefa pendente\n");
+            imprimirLista(LP);
             AuxInt = buscarNoPendente(LP);
             if(AuxInt == -1){
                 printf("\n\tTarefa não encontrada\n\t");
                 system("pause");
-            }else{
-                AuxNo = removerNoLista(LP,AuxInt);
+            }else if(AuxInt >0){ // remover da lista pendente e inserir na fila correta
+               // AuxNo = removerNoLista(LP,AuxInt);
                 AuxNo->info.status = 0;
                 if(AuxNo->info.prioridade == 1){
-                    inserirFila(F1,AuxNo->info);
+                    inserirNoFila(F1,AuxNo);
                 }else if(AuxNo->info.prioridade == 2){
-                    inserirFila(F2,AuxNo->info);
+                    inserirNoFila(F2,AuxNo);
                 }else if(AuxNo->info.prioridade == 3){
-                    inserirFila(F3,AuxNo->info);
+                    inserirNoFila(F3,AuxNo);
                 }
                 system("pause");
             }
