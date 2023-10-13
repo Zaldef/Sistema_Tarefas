@@ -51,7 +51,7 @@
     void imprimirLista(Lista *l);
     int buscarNoPendente(Lista *lp);
     void inserirNoListaConcluida(Lista *l,  No *n); // nao funcionando
-    void atualizarData(No* aux);                    // nao funcionando
+    void atualizarData(No* aux);                    // nao sei se funciona
     void inserirNoListaPendente(Lista *l, No *n);   // nao funcionando
     void imprimirListaConcluidas(Lista *l);     
     No* removerNoLista(Lista *l, int n);            // nao sei se funciona
