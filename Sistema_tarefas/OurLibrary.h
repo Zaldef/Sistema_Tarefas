@@ -50,7 +50,7 @@
     int vaziaLista(Lista* l);
     void imprimirLista(Lista *l);
     int buscarNoPendente(Lista *lp);
-    void inserirNoListaConcluida(Lista **l,  No *n); // funcionando
+    Lista* inserirNoListaConcluida(Lista *l, No *n);// funcionando
     void atualizarData(No* aux);                    // funciona
     void inserirNoListaPendente(Lista **l, No *n);   // nao funcionando
     void imprimirListaConcluidas(Lista *l);     
@@ -257,18 +257,19 @@
         return -1;
     }
 
-
-    void inserirNoListaConcluida(Lista **l, No *n) {
-        No *aux_l = (*l)->ini;
+    Lista* inserirNoListaConcluida(Lista *l, No *n) {
+        No *aux_l = l->ini;
+        atualizarData(n);
 
         if (aux_l == NULL) { // se a lista estiver vazia insira o nó escolhido no início
             n->prox = NULL;
-            (*l)->ini = n;
+            l->ini = n;
+            return l; // Saia da função após inserção na lista vazia
         }
 
         No *anterior = NULL;
-        
-        while (comparaData(aux_l, n) != 1 && aux_l != NULL) {
+        // Loop para encontrar a posição de inserção com base na data de término
+        while(comparaData(aux_l, n) != 1 && aux_l != NULL) {
             anterior = aux_l;
             aux_l = aux_l->prox;
         }
@@ -277,8 +278,9 @@
         if (anterior != NULL) {
             anterior->prox = n; // Se o nó anterior não for nulo, atualize o próximo do nó anterior
         } else {
-            (*l)->ini = n; // Se o nó anterior for nulo, atualize o início da lista
+            l->ini = n; // Se o nó anterior for nulo, atualize o início da lista
         }
+        return l; // Retorna a lista atualizada
     }
 
 
@@ -306,7 +308,7 @@
         // Prioridade alta
         if(n->info.prioridade == 1){
             // Loop para encontrar a posição de inserção com base na prioridade
-            while (aux_l != NULL && (aux_l->info.prioridade <= 1)) {
+            while (aux_l != NULL && (aux_l->info.prioridade != 1)) {
                 anterior = aux_l;
                 aux_l = aux_l->prox;
             }
@@ -315,7 +317,7 @@
         // Prioridade normal
         else if(n->info.prioridade == 2){
             // Loop para encontrar a posição de inserção com base na prioridade
-            while (aux_l != NULL && (aux_l->info.prioridade > 1 && aux_l->info.prioridade == 2 && aux_l->info.prioridade > 3)) {
+            while (aux_l != NULL && (aux_l->info.prioridade != 2)) {
                 anterior = aux_l;
                 aux_l = aux_l->prox;
             }
@@ -323,7 +325,7 @@
         // Prioridade baixa
         else if(n->info.prioridade == 3){
             // Loop para encontrar a posição de inserção com base na prioridade
-            while (aux_l != NULL && (aux_l->info.prioridade <= 3)) {
+            while (aux_l != NULL && (aux_l->info.prioridade != 3)) {
                 anterior = aux_l;
                 aux_l = aux_l->prox;
             }

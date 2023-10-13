@@ -89,13 +89,13 @@ int main(){
             }else if(AuxInt >0){
                 if(flag == 1){
                     F1 = removerNoFila(F1,AuxInt,&AuxNo);
-                    inserirNoListaConcluida(&LC,AuxNo);
+                    LC = inserirNoListaConcluida(LC,AuxNo);
                 }else if(flag == 2){
                     F2 = removerNoFila(F2,AuxInt,&AuxNo);
-                    inserirNoListaConcluida(&LC,AuxNo);
+                    LC = inserirNoListaConcluida(LC,AuxNo);
                 }else if(flag == 3){
                     F3 = removerNoFila(F3,AuxInt,&AuxNo);
-                    inserirNoListaConcluida(&LC,AuxNo);
+                    LC = inserirNoListaConcluida(LC,AuxNo);
                 }
                 system("pause");
             }
