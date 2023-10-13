@@ -89,13 +89,13 @@ int main(){
             }else if(AuxInt >0){
                 if(flag == 1){
                     F1 = removerNoFila(F1,AuxInt,&AuxNo);
-                    //inserirNoListaConcluida(LC,AuxNo);
+                    inserirNoListaConcluida(&LC,AuxNo);
                 }else if(flag == 2){
                     F2 = removerNoFila(F2,AuxInt,&AuxNo);
-                    //inserirNoListaConcluida(LC,AuxNo);
+                    inserirNoListaConcluida(&LC,AuxNo);
                 }else if(flag == 3){
                     F3 = removerNoFila(F3,AuxInt,&AuxNo);
-                    //inserirNoListaConcluida(LC,AuxNo);
+                    inserirNoListaConcluida(&LC,AuxNo);
                 }
                 system("pause");
             }
@@ -118,15 +118,15 @@ int main(){
                 if(flag == 1){
                     F1 = removerNoFila(F1,AuxInt,&AuxNo);
                     AuxNo->info.status = -1;
-                    //inserirNoListaPendente(LP,AuxNo);
+                    inserirNoListaPendente(&LP,AuxNo);
                 }else if(flag == 2){
                     F2 = removerNoFila(F2,AuxInt,&AuxNo);
                     AuxNo->info.status = -1;
-                    //inserirNoListaPendente(LP,AuxNo);
+                    inserirNoListaPendente(&LP,AuxNo);
                 }else if(flag == 3){
                     F3 = removerNoFila(F3,AuxInt,&AuxNo);
                     AuxNo->info.status = -1;
-                    //inserirNoListaPendente(LP,AuxNo);
+                    inserirNoListaPendente(&LP,AuxNo);
                 }
                 system("pause");
             }

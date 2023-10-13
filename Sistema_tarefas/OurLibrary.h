@@ -50,9 +50,9 @@
     int vaziaLista(Lista* l);
     void imprimirLista(Lista *l);
     int buscarNoPendente(Lista *lp);
-    void inserirNoListaConcluida(Lista *l,  No *n); // nao funcionando
-    void atualizarData(No* aux);                    // nao sei se funciona
-    void inserirNoListaPendente(Lista *l, No *n);   // nao funcionando
+    void inserirNoListaConcluida(Lista **l,  No *n); // funcionando
+    void atualizarData(No* aux);                    // funciona
+    void inserirNoListaPendente(Lista **l, No *n);   // nao funcionando
     void imprimirListaConcluidas(Lista *l);     
     No* removerNoLista(Lista *l, int n);            // nao sei se funciona
 
@@ -198,11 +198,16 @@
         return l;
     }
 
-    Lista* inserirListaInicio(Lista *l, No* n){ //FUNCAO TESTE
-        n->prox = l->ini;
-        l->ini = n;
-        return l;
-    }
+    // Lista* inserirListaInicio(Lista *l, No* n){ //FUNCAO TESTE
+    //     if(l->ini == NULL){
+    //         l->ini = n;
+    //         n->prox = NULL;
+    //     }else{
+    //         n->prox = l->ini;
+    //         l->ini = n;
+    //     }
+    //     return l;
+    // }
 
     int vaziaLista(Lista* l){
         return (l->ini == NULL);
@@ -253,23 +258,29 @@
     }
 
 
-    void inserirNoListaConcluida(Lista *l,  No *n){
-        No *aux = l->ini;
+    void inserirNoListaConcluida(Lista **l, No *n) {
+        No *aux_l = (*l)->ini;
 
-        if (l->ini == NULL || comparaData(aux, n) == 1) { // se a lista estiver vazia ou se o n no for menor que o primeiro
-            n->prox = l->ini;
-            l->ini = n;
+        if (aux_l == NULL) { // se a lista estiver vazia insira o nó escolhido no início
+            n->prox = NULL;
+            (*l)->ini = n;
         }
 
-        // se o n no for maior que o primeiro
-        while (aux->prox != NULL && comparaData((aux->prox), n) == 0) { // enquanto nao achar um menor nao insere na lista
-            aux = aux->prox;
+        No *anterior = NULL;
+        
+        while (comparaData(aux_l, n) != 1 && aux_l != NULL) {
+            anterior = aux_l;
+            aux_l = aux_l->prox;
         }
-        printf("\n-->Estou aqui<--\n");
-        system("pause");
-        n->prox = aux->prox;
-        aux->prox = n;
+
+        n->prox = aux_l; // O próximo do nó escolhido aponta para o nó da lista com data maior
+        if (anterior != NULL) {
+            anterior->prox = n; // Se o nó anterior não for nulo, atualize o próximo do nó anterior
+        } else {
+            (*l)->ini = n; // Se o nó anterior for nulo, atualize o início da lista
+        }
     }
+
 
     void atualizarData(No* aux){
         time_t tempoAtual;
@@ -281,19 +292,59 @@
         aux->info.ter.ano = tempoInfo->tm_year + 1900; // Os anos são desde 1900
     }
 
-    void inserirNoListaPendente(Lista *l, No *n){
-        No *aux = l->ini;
+    void inserirNoListaPendente(Lista **l, No *n){
+        No *aux_l = (*l)->ini;
+        int flag = 0;
 
-        if (l->ini == NULL || comparaData(aux, n) == 1) { // se a lista estiver vazia ou se o n no for menor que o primeiro
-            n->prox = l->ini;
-            l->ini = n;
+        if (aux_l == NULL) { // se a lista estiver vazia insira o nó escolhido no início
+            n->prox = NULL;
+            (*l)->ini = n;
+            return; // Saia da função após inserção na lista vazia
         }
-        // se o n no for maior que o primeiro
-        while (aux->prox != NULL && comparaData((aux->prox), n) == 0) { // enquanto nao achar um menor nao insere na lista
-            aux = aux->prox;
+
+        No *anterior = NULL;
+        // Prioridade alta
+        if(n->info.prioridade == 1){
+            // Loop para encontrar a posição de inserção com base na prioridade
+            while (aux_l != NULL && (aux_l->info.prioridade <= 1)) {
+                anterior = aux_l;
+                aux_l = aux_l->prox;
+            }
+
         }
-        n->prox = aux->prox;
-        aux->prox = n;
+        // Prioridade normal
+        else if(n->info.prioridade == 2){
+            // Loop para encontrar a posição de inserção com base na prioridade
+            while (aux_l != NULL && (aux_l->info.prioridade > 1 && aux_l->info.prioridade == 2 && aux_l->info.prioridade > 3)) {
+                anterior = aux_l;
+                aux_l = aux_l->prox;
+            }
+        }
+        // Prioridade baixa
+        else if(n->info.prioridade == 3){
+            // Loop para encontrar a posição de inserção com base na prioridade
+            while (aux_l != NULL && (aux_l->info.prioridade <= 3)) {
+                anterior = aux_l;
+                aux_l = aux_l->prox;
+            }
+        }
+
+        // Verifique se a prioridade coincide e compare as datas de término
+        while (aux_l != NULL && (aux_l->info.prioridade == n->info.prioridade) && flag != 1) {
+            if (comparaData(aux_l, n) != 1) { // Comparar data de término
+                anterior = aux_l;
+                aux_l = aux_l->prox;
+            } else {
+                flag = 1; // Pare o loop interno quando a data de término do nó for maior
+            }
+        }        
+        
+        n->prox = aux_l; // O próximo do nó escolhido aponta para o nó da lista com data maior
+        if (anterior != NULL) {
+            anterior->prox = n; // Se o nó anterior não for nulo, atualize o próximo do nó anterior
+        } else {
+            (*l)->ini = n; // Se o nó anterior for nulo, atualize o início da lista
+        }
     }
 
     void imprimirListaConcluidas(Lista *l){
