@@ -9,6 +9,14 @@ int main(){
     Fila *F3 = inicializarFila();
     Lista *LP = inicializarLista();
     Lista *LC = inicializarLista();
+    // carregando data
+    const char *Arq_F1 = "database_F1.txt";
+    const char *Arq_F2 = "database_F2.txt";
+    const char *Arq_F3 = "database_F3.txt";
+    carregarFila(Arq_F1,F1);
+    carregarFila(Arq_F2,F2);
+    carregarFila(Arq_F3,F3);
+    
     // variaveis auxiliares
     Tarefa AuxT;
     No *AuxNo;
@@ -84,7 +92,7 @@ int main(){
 
             AuxInt = buscarNoFila(F1, F2, F3, &flag);
             if(AuxInt == -1){
-                printf("\n\tTarefa não encontrada\n\t");
+                printf("\n\tTarefa nao encontrada\n\t");
                 system("pause");
             }else if(AuxInt >0){
                 if(flag == 1){
@@ -112,21 +120,21 @@ int main(){
             imprimirFila(F3);
             AuxInt = buscarNoFila(F1, F2, F3, &flag);
             if(AuxInt == -1){
-                printf("\n\tTarefa não encontrada\n\t");
+                printf("\n\tTarefa nao encontrada\n\t");
                 system("pause");
             }else if(AuxInt >0){
                 if(flag == 1){
                     F1 = removerNoFila(F1,AuxInt,&AuxNo);
                     AuxNo->info.status = -1;
-                    inserirNoListaPendente(&LP,AuxNo);
+                    LP = inserirNoListaPendente(LP,AuxNo);
                 }else if(flag == 2){
                     F2 = removerNoFila(F2,AuxInt,&AuxNo);
                     AuxNo->info.status = -1;
-                    inserirNoListaPendente(&LP,AuxNo);
+                    LP = inserirNoListaPendente(LP,AuxNo);
                 }else if(flag == 3){
                     F3 = removerNoFila(F3,AuxInt,&AuxNo);
                     AuxNo->info.status = -1;
-                    inserirNoListaPendente(&LP,AuxNo);
+                    LP = inserirNoListaPendente(LP,AuxNo);
                 }
                 system("pause");
             }
@@ -137,7 +145,7 @@ int main(){
             imprimirLista(LP);
             AuxInt = buscarNoPendente(LP);
             if(AuxInt == -1){
-                printf("\n\tTarefa não encontrada\n\t");
+                printf("\n\tTarefa nao encontrada\n\t");
                 system("pause");
             }else if(AuxInt >0){ // remover da lista pendente e inserir na fila correta
                 AuxNo = removerNoLista(LP,AuxInt);
@@ -149,6 +157,7 @@ int main(){
                 }else if(AuxNo->info.prioridade == 3){
                     F3 = inserirNoFila(F3,AuxNo);
                 }
+                printf("\n\tTarefa removida com sucesso!\n\t");
                 system("pause");
             }
         break;
@@ -165,6 +174,14 @@ int main(){
         break;
 
         case 0:
+            salvarFila(Arq_F1, F1);
+            salvarFila(Arq_F2, F2);
+            salvarFila(Arq_F3, F3);
+            liberarFila(F1);
+            liberarFila(F2);
+            liberarFila(F3);
+            liberarLista(LP);
+            liberarLista(LC);
             end = 1;
         break;
 
