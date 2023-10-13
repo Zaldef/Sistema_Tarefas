@@ -11,7 +11,8 @@ int main(){
     Lista *LC = inicializarLista();
     // variaveis auxiliares
     Tarefa AuxT;
-    No *AuxN;
+    No *AuxNo;
+    int AuxInt;
     int flag;
     // variaveis do loop principal do program
     int opcao = 0;
@@ -23,6 +24,7 @@ int main(){
         menu();
         scanf("%d", &opcao);
         system("cls");
+        verificarStatus(F1,F2,F3);
     switch (opcao){
 
         case 1:
@@ -63,14 +65,103 @@ int main(){
             imprimirFila(F3);
             printf("\n==============Lista de tarefas pendentes============\n");
             imprimirLista(LP);
-            system("pause");
+            AuxInt = editar(F1,F2,F3,LP);
+            if(AuxInt == -1){
+                printf("\n\tTarefa não encontrada\n\t");
+                system("pause");
+            }
+        break;
 
-            if(F1->ini == NULL && F2 == NULL && F3 ==NULL && LP == NULL){
+        case 4:
+            printf("Concluir uma tarefa\n");
+            printf("\n==================Fila de tarefas===================\n");
+            printf("\n\t=========Prioridade Alta===========\n");
+            imprimirFila(F1);
+            printf("\n\t=========Prioridade Normal=========\n");
+            imprimirFila(F2);
+            printf("\n\t=========Prioridade Baixa==========\n");
+            imprimirFila(F3);
+            
+            AuxInt = buscarNoFila(F1, F2, F3, &flag);
+            
+            if(AuxInt == -1){
+                printf("\n\tTarefa não encontrada\n\t");
+                system("pause");
+            }else if(AuxInt >0){
+                if(flag == 1){
+                    AuxNo = removerNoFila(F1,AuxInt);
+                    inserirNoListaConcluida(LC,AuxNo);
+                }else if(flag == 2){
+                    AuxNo = removerNoFila(F2,AuxInt);
+                    inserirNoListaConcluida(LC,AuxNo);
+                }else if(flag == 3){
+                    AuxNo = removerNoFila(F3,AuxInt);
+                    inserirNoListaConcluida(LC,AuxNo);
+                }
+                system("pause");
+            }
+        break;
+
+        case 5:
+            printf("Adicionar tarefa pendente\n");
+            printf("\n==================Fila de tarefas===================\n");
+            printf("\n\t=========Prioridade Alta===========\n");
+            imprimirFila(F1);
+            printf("\n\t=========Prioridade Normal=========\n");
+            imprimirFila(F2);
+            printf("\n\t=========Prioridade Baixa==========\n");
+            imprimirFila(F3);
+            AuxInt = buscarNoFila(F1, F2, F3, &flag);
+            if(AuxInt == -1){
+                printf("\n\tTarefa não encontrada\n\t");
+                system("pause");
+            }else if(AuxInt >0){
+                if(flag == 1){
+                    AuxNo = removerNoFila(F1,AuxInt);
+                    AuxNo->info.status = -1;
+                    inserirNoListaPendente(LP,AuxNo);
+                }else if(flag == 2){
+                    AuxNo = removerNoFila(F2,AuxInt);
+                    AuxNo->info.status = -1;   
+                    inserirNoListaPendente(LP,AuxNo);
+                }else if(flag == 3){
+                    AuxNo = removerNoFila(F3,AuxInt);
+                    AuxNo->info.status = -1;    
+                    inserirNoListaPendente(LP,AuxNo);
+                }
+                system("pause");
+            }
+        break;
+
+        case 6:
+            printf("Remover tarefa pendente\n");
+            AuxInt = buscarNoPendente(LP);
+            if(AuxInt == -1){
+                printf("\n\tTarefa não encontrada\n\t");
                 system("pause");
             }else{
-
+                AuxNo = removerNoLista(LP,AuxInt);
+                AuxNo->info.status = 0;
+                if(AuxNo->info.prioridade == 1){
+                    inserirFila(F1,AuxNo->info);
+                }else if(AuxNo->info.prioridade == 2){
+                    inserirFila(F2,AuxNo->info);
+                }else if(AuxNo->info.prioridade == 3){
+                    inserirFila(F3,AuxNo->info);
+                }
+                system("pause");
             }
+        break;
 
+
+        case 7:
+            printf("Listar tarefas pendentes\n");
+            imprimirLista(LP);
+            system("pause");
+        break;
+
+        case 8:
+            imprimirListaConcluidas(LC);
         break;
 
         case 0:
@@ -90,11 +181,11 @@ void menu(){
     printf("\n\t1 - Adicionar uma nova tarefa");
     printf("\n\t2 - Listar tarefas");
     printf("\n\t3 - Modificar uma tarefa");
-    //printf("\n\t4 - Concluir uma tarefa");
-    //printf("\n\t5 - Adicionar tarefa pendente");
-    //printf("\n\t6 - Remover tarefa pendente");
-    //printf("\n\t7 - Listar tarefas pendentes");
-    //printf("\n\t8 - Listar tarefas concluidas");
+    printf("\n\t4 - Concluir uma tarefa");
+    printf("\n\t5 - Adicionar tarefa pendente");
+    printf("\n\t6 - Remover tarefa pendente");
+    printf("\n\t7 - Listar tarefas pendentes");
+    printf("\n\t8 - Listar tarefas concluidas");
     //printf("\n\t9 - Excluir tarefa");
     printf("\n\t0 - Sair do programa\n");
 }
