@@ -52,6 +52,7 @@ int main(){
             imprimirFila(F2);
             printf("\n\t=========Prioridade Baixa==========\n");
             imprimirFila(F3);
+            printf("\n\t");
             system("pause");
         break;
 
@@ -64,9 +65,7 @@ int main(){
             imprimirFila(F2);
             printf("\n\t=========Prioridade Baixa==========\n");
             imprimirFila(F3);
-            printf("\n==============Lista de tarefas pendentes============\n");
-            imprimirLista(LP);
-            AuxInt = editar(F1,F2,F3,LP);
+            AuxInt = editar(F1,F2,F3);
             if(AuxInt == -1){
                 printf("\n\tTarefa não encontrada\n\t");
                 system("pause");
@@ -98,7 +97,6 @@ int main(){
                     F3 = removerNoFila(F3,AuxInt,&AuxNo);
                     LC = inserirNoListaConcluida(LC,AuxNo);
                 }
-                system("pause");
             }
         break;
 
@@ -129,7 +127,6 @@ int main(){
                     AuxNo->info.status = -1;
                     LP = inserirNoListaPendente(LP,AuxNo);
                 }
-                system("pause");
             }
         break;
 
@@ -185,6 +182,7 @@ int main(){
 
 void menu(){
     system("cls");
+    printf("\n\t ===============Gerenciador de tarefas===============\n");
     printf("\n\t1 - Adicionar uma nova tarefa");
     printf("\n\t2 - Listar tarefas");
     printf("\n\t3 - Modificar uma tarefa");
@@ -193,6 +191,5 @@ void menu(){
     printf("\n\t6 - Remover tarefa pendente");
     printf("\n\t7 - Listar tarefas pendentes");
     printf("\n\t8 - Listar tarefas concluidas");
-    //printf("\n\t9 - Excluir tarefa");
     printf("\n\t0 - Sair do programa\n");
 }

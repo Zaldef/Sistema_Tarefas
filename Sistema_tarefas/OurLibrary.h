@@ -2,7 +2,8 @@
 #define OurLibrary_H_INCLUDED
 #define NUM_CHAR 30
 #include <time.h>    // utilizar hora
-#include <string.h>
+#include <string.h>  // utilizar strings
+
 // ESTRUTURAS
     typedef struct data{
         int dia;
@@ -66,7 +67,7 @@
     int verificarCod(Fila *f1, Fila *f2, Fila *f3, Lista *lc, Lista *lp, int t);
     int DataValida(int dia, int mes, int ano);
     void imprimirTarefa(Tarefa T);
-    int editar(Fila* f1,Fila* f2,Fila* f3, Lista* lp);
+    int editar(Fila* f1,Fila* f2,Fila* f3);
     Tarefa editarTarefa(Tarefa old);
     void verificarStatus(Fila *f1, Fila *f2, Fila *f3);
     int comparaData(No *n1, No *n2);                // nao sei se funciona
@@ -298,65 +299,54 @@
     }
 
     Lista* inserirNoListaPendente(Lista *l, No *n){
-        // Loop para encontrar a posição de inserção com base na prioridade
-        No* aux = l->ini;
-        No* anterior = NULL;
-        // Se a lista estiver vazia insira o nó escolhido no início
-        if(aux == NULL){
+    No* aux = l->ini;
+    No* anterior = NULL;
+    // Loop para encontrar a posição de inserção com base na prioridade
+    if (aux == NULL) {
+        // Se a lista estiver vazia, insira o nó no início
+        n->prox = NULL;
+        l->ini = n;
+    } else {
+        while (aux != NULL) {
+            if (n->info.prioridade < aux->info.prioridade) {
+                // A prioridade de 'n' é menor do que a de 'aux'
+                n->prox = aux;
+                if (anterior != NULL) {
+                    anterior->prox = n;
+                } else {
+                    l->ini = n;
+                }
+                return l;
+            } else if (n->info.prioridade == aux->info.prioridade) {
+                if (comparaData(n, aux) <= 0) {
+                    // A prioridade de 'n' é igual a de 'aux' e a data de término de 'n' é menor ou igual a de 'aux'
+                    n->prox = aux;
+                    if (anterior != NULL) {
+                        anterior->prox = n;
+                    } else {
+                        l->ini = n;
+                    }
+                    return l;
+                } else {
+                    // Continue procurando a próxima posição
+                    anterior = aux;
+                    aux = aux->prox;
+                }
+            } else {
+                // A prioridade de 'n' é maior do que a de 'aux', continue procurando
+                anterior = aux;
+                aux = aux->prox;
+            }
+        }
+
+        if (aux == NULL) {
+            // Chegou ao final da lista, insira 'n' no final
+            anterior->prox = n;
             n->prox = NULL;
-            l->ini = n;
-            return l;
         }
-        // Busca a posicao de insercao com base na prioridade
-        // Se a prioridade for igual, busca a posicao de insercao com base na data de termino
-        if(n->info.prioridade == 1){
-            while(comparaData(aux, n) != 1 && n->info.prioridade == aux->info.prioridade && aux != NULL){
-                anterior = aux;
-                aux = aux->prox;
-            }
-            // Insere o no na lista
-            n->prox = aux;
-            if(anterior != NULL){
-                anterior->prox = n;
-            }else{
-                l->ini = n;
-            }
-        }else if(n->info.prioridade == 2){
-            while(n->info.prioridade != aux->info.prioridade && aux != NULL && aux->info.prioridade != 3){
-                anterior = aux;
-                aux = aux->prox;
-            }
-            while(comparaData(aux, n) != 1 && n->info.prioridade == aux->info.prioridade && aux != NULL){
-                anterior = aux;
-                aux = aux->prox;
-            }
-            // Insere o no na lista
-            n->prox = aux;
-            if(anterior != NULL){
-                anterior->prox = n;
-            }else{
-                l->ini = n;
-            }
-        }else{
-            while(n->info.prioridade != aux->info.prioridade && aux != NULL){
-                anterior = aux;
-                aux = aux->prox;
-            }
-            while(comparaData(aux, n) != 1 && n->info.prioridade == aux->info.prioridade && aux != NULL){
-                anterior = aux;
-                aux = aux->prox;
-            }
-            // Insere o no na lista
-            n->prox = aux;
-            if(anterior != NULL){
-                anterior->prox = n;
-            }else{
-                l->ini = n;
-            }
-        }
-        // Retorna a lista atualizada
-        return l;
     }
+    return l;
+}
 
     void imprimirListaConcluidas(Lista *l){
         printf("Listar tarefas concluidas\n");
@@ -410,11 +400,11 @@
             break;
 
             case 0:
-                break;
+            break;
 
             default:
                 printf("Opcao invalida\n");
-                break;
+            break;
         }
     }
 
@@ -647,7 +637,7 @@
         }
     }
 
-    int editar(Fila* f1,Fila* f2,Fila* f3, Lista* lp){
+    int editar(Fila* f1,Fila* f2,Fila* f3){
         int code;
         No* aux;
         int check = 1;
@@ -688,16 +678,7 @@
                 return 1;
             }
         }
-        // busca na Lista pendentes
-        if(vaziaLista(lp) == 0){
-            for (aux = lp->ini; aux!=NULL; aux=aux->prox){
-                if(aux->info.cod == code){
-                    aux->info = editarTarefa(aux->info); //modifica a tarefa selecionada
-                    return 1;
-                }
-            }
-        }
-        // retorna 0 caso o codigo seja invalido
+        // retorna -1 caso o codigo seja invalido
         return -1;
     }
 
