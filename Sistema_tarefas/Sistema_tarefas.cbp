@@ -31,16 +31,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="FILA.h" />
-		<Unit filename="TAREFA.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="database.txt" />
+		<Unit filename="OurLibrary.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Extensions>
-			<lib_finder disable_auto="1" />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

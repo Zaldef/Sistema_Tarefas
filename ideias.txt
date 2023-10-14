@@ -1,2 +1,0 @@
-Exibir todas as tarefas e selecionar uma, a partir disso dar as opções
-https://www.inf.pucrs.br/~pinho/LaproI/Arquivos/Arquivos.htm

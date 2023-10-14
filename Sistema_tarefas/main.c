@@ -1,153 +1,188 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "FILA.h"    // gerenciamento de fila/lista
-#include <stdbool.h> // trabalhar com booleanos
-
-
-#define NUM_CHAR 30
-
-void menu();
+#include "OurLibrary.h"
 
 int main(){
-    Fila *F1 = CriaFila(); // Criando a Fila principal
-    No *LP = inicializa(); // ''     Lista de pendentes
-    No *LC = inicializa(); // ''     Lista de concluidos
+    // TADS
+    Fila *F1 = inicializarFila();
+    Fila *F2 = inicializarFila();
+    Fila *F3 = inicializarFila();
+    Lista *LP = inicializarLista();
+    Lista *LC = inicializarLista();
+    
+    // variaveis auxiliares
     Tarefa AuxT;
-
-    // carregando data
-    const char *Arq_F1 = "database_F1.txt";
-    const char *Arq_LP = "database_LP.txt";
-    const char *Arq_LC = "database_LC.txt";
-    carregarFila(Arq_F1,F1);
-    LP = carregarLista(Arq_LP);
-    LC = carregarLista(Arq_LC);
-
+    No *AuxNo;
+    int AuxInt;
+    int flag;
     // variaveis do loop principal do program
     int opcao = 0;
-    bool end = false;
+    int end = 0;
 
-    // loop principal
-    while (end == false){
+    void menu();
+
+    while (end == 0){
         menu();
         scanf("%d", &opcao);
         system("cls");
-        verificarStatus(F1); // função que roda s Fila principal atualizando seus status de atrasada
-
-        switch (opcao){
+        verificarStatus(F1,F2,F3);
+    switch (opcao){
 
         case 1:
             printf("Adicionar uma nova tarefa\n");
-            inserirFila(F1,LC,LP); // a nova tarefa é inserida em F1, mas é passado LC e LP, para verificação de codigo
-            break;
+            AuxT = novaTarefa(F1,F2,F3,LP,LC);
+            // inserir na fila correta
+            if(AuxT.prioridade == 1){
+                inserirFila(F1,AuxT);
+            }else if(AuxT.prioridade == 2){
+                inserirFila(F2,AuxT);
+            }else if(AuxT.prioridade == 3){
+                inserirFila(F3,AuxT);
+            }
+            printf("\n\tTarefa adicionada com sucesso!\n\t");
+            system("pause");
+        break;
 
         case 2:
             printf("Listar tarefas\n");
-            imprimirFila(F1); //imprime lista completa de tarefas
+            printf("\n==================Fila de tarefas===================\n");
+            printf("\n\t=========Prioridade Alta===========\n");
+            imprimirFila(F1);
+            printf("\n\t=========Prioridade Normal=========\n");
+            imprimirFila(F2);
+            printf("\n\t=========Prioridade Baixa==========\n");
+            imprimirFila(F3);
+            printf("\n\t");
             system("pause");
-            break;
+        break;
 
         case 3:
             printf("Modificar uma tarefa\n");
-            printf("\n\t=========Fila de tarefas==========\n");
+            printf("\n==================Fila de tarefas===================\n");
+            printf("\n\t=========Prioridade Alta===========\n");
             imprimirFila(F1);
-            printf("\n\t====Lista de tarefas pendentes====\n");
-            imprimirLista(LP);
-
-            if(F1->ini == NULL && LP == NULL){
+            printf("\n\t=========Prioridade Normal=========\n");
+            imprimirFila(F2);
+            printf("\n\t=========Prioridade Baixa==========\n");
+            imprimirFila(F3);
+            AuxInt = editar(F1,F2,F3);
+            if(AuxInt == -1){
+                printf("\n\tTarefa nÃ£o encontrada\n\t");
                 system("pause");
-            }else{
-                AuxT = SelecionarTarefa_F_LP(F1,LP);
-                if(AuxT.cod != 0){
-                    editarTarefa(AuxT); //modifica alguma tarefa
-                }
             }
-            break;
+        break;
 
         case 4:
             printf("Concluir uma tarefa\n");
+            printf("\n==================Fila de tarefas===================\n");
+            printf("\n\t=========Prioridade Alta===========\n");
             imprimirFila(F1);
-            if(F1->ini == NULL){
+            printf("\n\t=========Prioridade Normal=========\n");
+            imprimirFila(F2);
+            printf("\n\t=========Prioridade Baixa==========\n");
+            imprimirFila(F3);
+
+            AuxInt = buscarNoFila(F1, F2, F3, &flag);
+            if(AuxInt == -1){
+                printf("\n\tTarefa nao encontrada\n\t");
                 system("pause");
-            }else{
-                AuxT = SelecionarTarefa(F1);
-                if(AuxT.cod != 0){
-                    LC = ConcluirTarefa(AuxT,LC);
-                    F1 = ExcluirTarefaFila(F1,LC);
+            }else if(AuxInt >0){
+                if(flag == 1){
+                    F1 = removerNoFila(F1,AuxInt,&AuxNo);
+                    LC = inserirNoListaConcluida(LC,AuxNo);
+                }else if(flag == 2){
+                    F2 = removerNoFila(F2,AuxInt,&AuxNo);
+                    LC = inserirNoListaConcluida(LC,AuxNo);
+                }else if(flag == 3){
+                    F3 = removerNoFila(F3,AuxInt,&AuxNo);
+                    LC = inserirNoListaConcluida(LC,AuxNo);
                 }
             }
-            break;
+        break;
 
         case 5:
-            printf("Atualizacao do status da tarefa\n");
+            printf("Adicionar tarefa pendente\n");
+            printf("\n==================Fila de tarefas===================\n");
+            printf("\n\t=========Prioridade Alta===========\n");
             imprimirFila(F1);
-            if(F1->ini == NULL){
+            printf("\n\t=========Prioridade Normal=========\n");
+            imprimirFila(F2);
+            printf("\n\t=========Prioridade Baixa==========\n");
+            imprimirFila(F3);
+            AuxInt = buscarNoFila(F1, F2, F3, &flag);
+            if(AuxInt == -1){
+                printf("\n\tTarefa nao encontrada\n\t");
                 system("pause");
-            }else{
-                AuxT = SelecionarTarefa(F1);
-                if(AuxT.cod != 0){
-                    LP = TarefaPendente(AuxT,LP);
-                    F1 = ExcluirTarefaFila(F1,LP);
+            }else if(AuxInt >0){
+                if(flag == 1){
+                    F1 = removerNoFila(F1,AuxInt,&AuxNo);
+                    AuxNo->info.status = -1;
+                    LP = inserirNoListaPendente(LP,AuxNo);
+                }else if(flag == 2){
+                    F2 = removerNoFila(F2,AuxInt,&AuxNo);
+                    AuxNo->info.status = -1;
+                    LP = inserirNoListaPendente(LP,AuxNo);
+                }else if(flag == 3){
+                    F3 = removerNoFila(F3,AuxInt,&AuxNo);
+                    AuxNo->info.status = -1;
+                    LP = inserirNoListaPendente(LP,AuxNo);
                 }
             }
-            break;
+        break;
 
         case 6:
-            printf("Atualizacao do status da tarefa\n");
+            printf("Remover tarefa pendente\n");
             imprimirLista(LP);
-            if(LP == NULL){
+            AuxInt = buscarNoPendente(LP);
+            if(AuxInt == -1){
+                printf("\n\tTarefa nao encontrada\n\t");
                 system("pause");
-            }else{
-                AuxT = SelecionarTarefaLista(LP);
-                if(AuxT.cod != 0){
-                    retiraTarefaPendente(&LP,AuxT);
-                    InsereFilaTarefaPendente(F1,AuxT);
+            }else if(AuxInt >0){ // remover da lista pendente e inserir na fila correta
+                AuxNo = removerNoLista(LP,AuxInt);
+                AuxNo->info.status = 0;
+                if(AuxNo->info.prioridade == 1){
+                    F1 = inserirNoFila(F1,AuxNo);
+                }else if(AuxNo->info.prioridade == 2){
+                    F2 = inserirNoFila(F2,AuxNo);
+                }else if(AuxNo->info.prioridade == 3){
+                    F3 = inserirNoFila(F3,AuxNo);
                 }
+                printf("\n\tTarefa removida com sucesso!\n\t");
+                system("pause");
             }
-            break;
+        break;
+
 
         case 7:
             printf("Listar tarefas pendentes\n");
             imprimirLista(LP);
             system("pause");
-            break;
+        break;
 
         case 8:
             imprimirListaConcluidas(LC);
-            break;
+        break;
 
-        case 9:
-            printf("\n\t=========Fila de tarefas===========\n");
-            imprimirFila(F1);
-            printf("\n\t====Lista de tarefas pendentes=====\n");
-            imprimirLista(LP);
-            printf("\n\t====Lista de tarefas concluidas====\n");
-            imprimirLista(LC);
-            excluir_geral(F1,&LP,&LC);
-            break;
-
-        case 10:
-            printf("Sair do programa\n");
-            // Salvando data
-            salvarFila(Arq_F1, F1);
-            salvarLista(Arq_LP, LP);
-            salvarLista(Arq_LC, LC);
+        case 0:
             liberarFila(F1);
-            liberaLista(LP);
-            liberaLista(LC);
-            end = true;
-            break;
+            liberarFila(F2);
+            liberarFila(F3);
+            liberarLista(LP);
+            liberarLista(LC);
+            end = 1;
+        break;
 
         default:
             printf("Opcao invalida\n");
-            break;
+        break;
+
         }
     }
-    return 0;
 }
-
 
 void menu(){
     system("cls");
+    printf("\n\t ===============Gerenciador de tarefas===============\n");
     printf("\n\t1 - Adicionar uma nova tarefa");
     printf("\n\t2 - Listar tarefas");
     printf("\n\t3 - Modificar uma tarefa");
@@ -156,6 +191,5 @@ void menu(){
     printf("\n\t6 - Remover tarefa pendente");
     printf("\n\t7 - Listar tarefas pendentes");
     printf("\n\t8 - Listar tarefas concluidas");
-    printf("\n\t9 - Excluir tarefa");
-    printf("\n\t10 - Sair do programa\n");
+    printf("\n\t0 - Sair do programa\n");
 }

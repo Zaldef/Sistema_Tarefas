@@ -1,43 +1,19 @@
 # depslib dependency file v1.0
-1696875178 source:c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\main.c
+1697120877 source:c:\eu\sistema_tarefas2\sistema_tarefas\main.c
 	<stdlib.h>
 	<stdio.h>
-	"FILA.h"
-	<stdbool.h>
+	"OurLibrary.h"
 
-1696875247 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\fila.h
+1697121107 c:\eu\sistema_tarefas2\sistema_tarefas\ourlibrary.h
 	<time.h>
 	<string.h>
 
-1696522551 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\tarefa.h
-
-1695309680 c:\users\22899140\documents\github\sistema_tarefas\sistema_tarefas\data.h
-
-1696814539 source:c:\eu\sistema_tarefas\sistema_tarefas\main.c
+1697248970 source:c:\eu\sistema_tarefas\sistema_tarefas\main.c
 	<stdlib.h>
 	<stdio.h>
-	"FILA.h"
-	<stdbool.h>
+	"OurLibrary.h"
 
-1696816469 c:\eu\sistema_tarefas\sistema_tarefas\fila.h
-	<time.h>
-	<string.h>
-
-1695567221 c:\eu\sistema_tarefas\sistema_tarefas\tarefa.h
-
-1695564824 c:\eu\sistema_tarefas\sistema_tarefas\/\fila.h
-	"Tarefa.h"
-
-1695565137 c:\eu\sistema_tarefas\sistema_tarefas\\\tarefa.h
-	"/FILA.h"
-
-1696801510 source:c:\users\thay4\onedrive\documentos\github\sistema_tarefas\sistema_tarefas\main.c
-	<stdlib.h>
-	<stdio.h>
-	"FILA.h"
-	<stdbool.h>
-
-1696801664 c:\users\thay4\onedrive\documentos\github\sistema_tarefas\sistema_tarefas\fila.h
+1697248810 c:\eu\sistema_tarefas\sistema_tarefas\ourlibrary.h
 	<time.h>
 	<string.h>
 
